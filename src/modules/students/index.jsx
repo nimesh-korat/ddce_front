@@ -66,21 +66,7 @@ function Students() {
                   </select>
                 </div>
               </div>
-              <div className="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
-                <span className="text-lg">
-                  <i className="ph ph-layout" />
-                </span>
-                <select
-                  className="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center"
-                  id="exportOptions"
-                >
-                  <option value selected disabled>
-                    Export
-                  </option>
-                  <option value="csv">CSV</option>
-                  <option value="json">JSON</option>
-                </select>
-              </div>
+              
             </div>
             {/* Breadcrumb Right End */}
           </div>
