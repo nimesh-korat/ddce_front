@@ -6,34 +6,38 @@ import { Link } from "react-router-dom";
 // Helper function to calculate time ago
 function timeAgo(date) {
   const now = new Date();
-  const diffInSeconds = Math.floor((now - date) / 1000); // difference in seconds
+  // Convert both the current time and the input date to UTC
+  const nowUTC = new Date(now.toUTCString());
+  const dateUTC = new Date(date.toUTCString());
+
+  const diffInSeconds = Math.floor((nowUTC - dateUTC) / 1000); // difference in seconds
 
   if (diffInSeconds < 60) {
-    return `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;
+    return `${diffInSeconds} second${diffInSeconds === 1 ? "" : "s"} ago`;
   }
 
   const diffInMinutes = Math.floor(diffInSeconds / 60);
   if (diffInMinutes < 60) {
-    return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`;
+    return `${diffInMinutes} minute${diffInMinutes === 1 ? "" : "s"} ago`;
   }
 
   const diffInHours = Math.floor(diffInMinutes / 60);
   if (diffInHours < 24) {
-    return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`;
+    return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
   }
 
   const diffInDays = Math.floor(diffInHours / 24);
   if (diffInDays < 30) {
-    return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`;
+    return `${diffInDays} day${diffInDays === 1 ? "" : "s"} ago`;
   }
 
   const diffInMonths = Math.floor(diffInDays / 30);
   if (diffInMonths < 12) {
-    return `${diffInMonths} month${diffInMonths === 1 ? '' : 's'} ago`;
+    return `${diffInMonths} month${diffInMonths === 1 ? "" : "s"} ago`;
   }
 
   const diffInYears = Math.floor(diffInMonths / 12);
-  return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
+  return `${diffInYears} year${diffInYears === 1 ? "" : "s"} ago`;
 }
 
 function Notification() {
