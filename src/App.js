@@ -22,6 +22,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./utils/PrivateRoutes";
 import ProtectedRoute from "./utils/ProtectedRoutes";
+import Error404 from "./errorPages/Error404";
 
 
 function App() {
@@ -54,7 +55,7 @@ function App() {
           <Route path="/two_step_verification" element={<TwoStepVerification />} />
           <Route path="/live_class" element={<LiveClass />} /> */}
 
-          <Route path="*" element={<h1>404 Page Not Found</h1>} />
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </BrowserRouter>
     </>
