@@ -123,7 +123,7 @@ function StudentTable() {
           <li className="page-item active">
             <Link
               className="page-link h-44 w-44 flex-center text-15 rounded-8 fw-medium"
-              to={"/"}
+              to={"/#"}
             >
               1
             </Link>
