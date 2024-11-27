@@ -2,6 +2,39 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { fetchRecentRegNotification } from "../../../apis/apis";
 
+// Helper function to calculate time ago
+function timeAgo(date) {
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - date) / 1000); // difference in seconds
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;
+  }
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`;
+  }
+
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) {
+    return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`;
+  }
+
+  const diffInDays = Math.floor(diffInHours / 24);
+  if (diffInDays < 30) {
+    return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`;
+  }
+
+  const diffInMonths = Math.floor(diffInDays / 30);
+  if (diffInMonths < 12) {
+    return `${diffInMonths} month${diffInMonths === 1 ? '' : 's'} ago`;
+  }
+
+  const diffInYears = Math.floor(diffInMonths / 12);
+  return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
+}
+
 function StudentTable() {
   const { data, isError, isLoading } = useQuery({
     queryKey: ["getNotification"],
@@ -26,9 +59,6 @@ function StudentTable() {
   // Limit to first 20 records
   const limitedStudentData = studentData.slice(0, 20);
 
-  // Log the fetched data to ensure it's correct
-  console.log("Fetched student data:", limitedStudentData);
-
   return (
     <div className="card overflow-hidden">
       <div className="card-body p-0 overflow-x-auto">
@@ -43,30 +73,35 @@ function StudentTable() {
           </thead>
           <tbody>
             {limitedStudentData.length > 0 ? (
-              limitedStudentData.map((student, index) => (
-                <tr key={index}>
-                  <td className="h6 mb-0 fw-medium text-gray-300">
-                    {index + 1}
-                  </td>
-                  <td>
-                    <div className="flex-align gap-8">
+              limitedStudentData.map((student, index) => {
+                // Format the "timeAgo" field
+                const formattedTimeAgo = timeAgo(new Date(student.timeAgo));
+
+                return (
+                  <tr key={index}>
+                    <td className="h6 mb-0 fw-medium text-gray-300">
+                      {index + 1}
+                    </td>
+                    <td>
+                      <div className="flex-align gap-8">
+                        <span className="h6 mb-0 fw-medium text-gray-300">
+                          {student.name}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
                       <span className="h6 mb-0 fw-medium text-gray-300">
-                        {student.name}
+                        {student.collegeName || "N/A"}
                       </span>
-                    </div>
-                  </td>
-                  <td>
-                    <span className="h6 mb-0 fw-medium text-gray-300">
-                      {student.collegeName || "N/A"}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="h6 mb-0 fw-medium text-gray-300">
-                      {student.timeAgo + " Minutes Ago" || "N/A"}
-                    </span>
-                  </td>
-                </tr>
-              ))
+                    </td>
+                    <td>
+                      <span className="h6 mb-0 fw-medium text-gray-300">
+                        {formattedTimeAgo || "N/A"}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
                 <td colSpan="7" className="text-center text-gray-400">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 // remove position-relative from parent class when unlocks
 
@@ -113,12 +113,12 @@ function Sidebar({ isActive, closeSidebar }) {
                 </ul>
               </li> */}
               <li className="sidebar-menu__item ">
-                <p to="/" className="sidebar-menu__link">
+                <Link to="/" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-squares-four" />
                   </span>
                   <span className="text">Dashboard</span>
-                </p>
+                </Link>
               </li>
               <li
                 className={`sidebar-menu__item position-relative ${
@@ -182,22 +182,12 @@ function Sidebar({ isActive, closeSidebar }) {
               </li>
 
               <li className="sidebar-menu__item">
-                <p
-                  to="/students"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
-                >
+                <Link to="/students" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-users-three" />
                   </span>
                   <span className="text">Students</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
+                </Link>
               </li>
 
               <li className="sidebar-menu__item">
