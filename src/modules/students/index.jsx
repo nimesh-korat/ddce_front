@@ -1,23 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer";
 import StudentTable from "./components/table";
 import { Link } from "react-router-dom";
+import Preloader from "../../utils/Preloader";
 
 function Students() {
+  const [isSidebarActive, setIsSidebarActive] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarActive((prevState) => !prevState);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarActive(false);
+  };
   return (
     <>
-      {/*==================== Preloader Start ====================*/}
-      <div className="preloader">
-        <div className="loader" />
-      </div>
-      {/*==================== Preloader End ====================*/}
-      {/*==================== Sidebar Overlay End ====================*/}
-      <Sidebar />
-      {/* ============================ Sidebar End  ============================ */}
+      <Preloader />
+      <Sidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
       <div className="dashboard-main-wrapper">
-        <Header />
+        <Header toggleSidebar={toggleSidebar} />
         <div className="dashboard-body">
           <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
             {/* Breadcrumb Start */}

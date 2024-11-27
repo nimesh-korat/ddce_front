@@ -13,7 +13,7 @@ function HomeThree() {
   const [isReady, setIsReady] = useState(false);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
 
-  const toggleSidebar = () => {
+  const toggleSidebar = () => { 
     setIsSidebarActive((prevState) => !prevState);
   };
 
