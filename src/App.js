@@ -31,28 +31,28 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ProtectedRoute><HomeThree /></ProtectedRoute>} />
-          <Route path="/home2" element={<HomeTwo />} />
+          {/* <Route path="/home2" element={<HomeTwo />} />
           <Route path="/home3" element={<Home />} />
           <Route path="/student_course" element={<StudentCourse />} />
-          <Route path="/mentor_course" element={<StudentCourse />} />
+          <Route path="/mentor_course" element={<StudentCourse />} /> */}
           <Route path="/students" element={<Students />} />
-          <Route path="/mentors" element={<Mentor />} />
+          {/* <Route path="/mentors" element={<Mentor />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/events" element={<Events />} />
           <Route path="/library" element={<Library />} />
           <Route path="/pricing" element={<Pricing />} />
-          <Route path="/account_setting" element={<AccountSetting />} />
+          <Route path="/account_setting" element={<AccountSetting />} /> */}
 
           {/* Protect signin and signup routes */}
           <Route path="/signin" element={<PrivateRoute><SignIn /></PrivateRoute>} />
           <Route path="/signup" element={<PrivateRoute><Signup /></PrivateRoute>} />
 
-          <Route path="/forget_password" element={<ForgetPassword />} />
+          {/* <Route path="/forget_password" element={<ForgetPassword />} />
           <Route path="/reset_password" element={<ResetPassword />} />
           <Route path="/two_step_verification" element={<TwoStepVerification />} />
-          <Route path="/live_class" element={<LiveClass />} />
+          <Route path="/live_class" element={<LiveClass />} /> */}
 
           <Route path="*" element={<h1>404 Page Not Found</h1>} />
         </Routes>
