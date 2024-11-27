@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { fetchRecentRegNotification } from "../../../apis/apis";
+import { Link } from "react-router-dom";
 
 // Helper function to calculate time ago
 function timeAgo(date) {
@@ -8,31 +9,31 @@ function timeAgo(date) {
   const diffInSeconds = Math.floor((now - date) / 1000); // difference in seconds
 
   if (diffInSeconds < 60) {
-    return `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;
+    return `${diffInSeconds} second${diffInSeconds === 1 ? "" : "s"} ago`;
   }
 
   const diffInMinutes = Math.floor(diffInSeconds / 60);
   if (diffInMinutes < 60) {
-    return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`;
+    return `${diffInMinutes} minute${diffInMinutes === 1 ? "" : "s"} ago`;
   }
 
   const diffInHours = Math.floor(diffInMinutes / 60);
   if (diffInHours < 24) {
-    return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`;
+    return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
   }
 
   const diffInDays = Math.floor(diffInHours / 24);
   if (diffInDays < 30) {
-    return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`;
+    return `${diffInDays} day${diffInDays === 1 ? "" : "s"} ago`;
   }
 
   const diffInMonths = Math.floor(diffInDays / 30);
   if (diffInMonths < 12) {
-    return `${diffInMonths} month${diffInMonths === 1 ? '' : 's'} ago`;
+    return `${diffInMonths} month${diffInMonths === 1 ? "" : "s"} ago`;
   }
 
   const diffInYears = Math.floor(diffInMonths / 12);
-  return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
+  return `${diffInYears} year${diffInYears === 1 ? "" : "s"} ago`;
 }
 
 function StudentTable() {
@@ -120,12 +121,12 @@ function StudentTable() {
         <ul className="pagination flex-align flex-wrap">
           {/* Pagination controls (add logic for actual pagination if needed) */}
           <li className="page-item active">
-            <a
+            <Link
               className="page-link h-44 w-44 flex-center text-15 rounded-8 fw-medium"
-              href="/#"
+              to={"/"}
             >
               1
-            </a>
+            </Link>
           </li>
           {/* Add more pagination items here */}
         </ul>
