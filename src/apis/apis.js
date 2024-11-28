@@ -17,14 +17,14 @@ export async function checkSession() {
     try {
         await axios.get(`${api}/session`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         });
         return true; // Session is valid
     } catch (error) {
         console.log("checkSession() Err: ", error);
         if (error.response && error.response.status === 401) {
-            localStorage.removeItem("authtoken");
+            localStorage.removeItem("token");
             return false; // Session is not valid
         }
         return false; // Session is not valid

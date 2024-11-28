@@ -42,7 +42,7 @@ function Signup() {
             <p className="mt-32 text-gray-600 text-center">
               Already have an account? &nbsp;
               <Link
-                to={"/login"}
+                to={"/signin"}
                 className="text-main-600 hover-text-decoration-underline"
               >
                 Log In

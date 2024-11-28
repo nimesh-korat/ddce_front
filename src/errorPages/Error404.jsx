@@ -453,7 +453,7 @@ function Error404() {
                 strokeWidth: "1.23488784",
               }}
               transform="matrix(0.97168718,0,0,1.0291378,170.14515,0.038164)"
-              aria-label={4}
+              aria-label={"4"}
             >
               <path
                 id="path4555"
@@ -476,7 +476,7 @@ function Error404() {
                 strokeWidth: "1.23488784",
               }}
               transform="matrix(0.97168718,0,0,1.0291378,377.95605,103.2934)"
-              aria-label={4}
+              aria-label={"4"}
             >
               <path
                 id="path4558"

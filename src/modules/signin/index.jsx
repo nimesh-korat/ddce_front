@@ -44,7 +44,7 @@ function SignIn() {
         onClose: () => {
           // Update the context with the logged-in user's data
           setUser(data.user); // Set user data in the context
-          localStorage.setItem("user", JSON.stringify(data.user)); // Store user in localStorage (for persistence)
+          localStorage.setItem("user", JSON.stringify(data.user), {expires : 1}); // Store user in localStorage (for persistence)
           localStorage.setItem("token", data.token); // Store the token
           navigate("/"); // Redirect to the home page after successful login
         },
@@ -69,7 +69,7 @@ function SignIn() {
             <a href="index.html" className="auth-right__logo">
               <img src="assets/images/logo/logo.png" alt="" />
             </a>
-            <h2 className="mb-8">Welcome to Back! 👋</h2>
+            <h2 className="mb-8">Welcome Back! 👋</h2>
             <p className="text-gray-600 text-15 mb-32">
               Please sign in to your account and start the adventure
             </p>
@@ -160,7 +160,7 @@ function SignIn() {
                   Create an account
                 </Link>
               </p>
-              <div className="divider my-32 position-relative text-center">
+              {/* <div className="divider my-32 position-relative text-center">
                 <span className="divider__text text-gray-600 text-13 fw-medium px-26 bg-white">
                   or
                 </span>
@@ -190,7 +190,7 @@ function SignIn() {
                     <i className="ph ph-google-logo" />
                   </a>
                 </li>
-              </ul>
+              </ul> */}
             </form>
           </div>
         </div>

@@ -20,6 +20,7 @@ function Header({ toggleSidebar }) {
       });
     },
     onError: (error) => {
+      navigate("/signin");
       toast.error(error.response.data.message);
     },
   });

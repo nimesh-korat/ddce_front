@@ -26,6 +26,8 @@ import Error404 from "./errorPages/Error404";
 
 
 function App() {
+
+  console.log("Cookie:", document.cookie);
   return (
     <>
       <ToastContainer autoClose={1500} />
@@ -36,7 +38,7 @@ function App() {
           <Route path="/home3" element={<Home />} />
           <Route path="/student_course" element={<StudentCourse />} />
           <Route path="/mentor_course" element={<StudentCourse />} /> */}
-          <Route path="/students" element={<Students />} />
+          <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
           {/* <Route path="/mentors" element={<Mentor />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/messages" element={<Messages />} />
