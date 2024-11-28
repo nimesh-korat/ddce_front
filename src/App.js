@@ -52,9 +52,9 @@ function App() {
           <Route path="/signin" element={<PrivateRoute><SignIn /></PrivateRoute>} />
           <Route path="/signup" element={<PrivateRoute><Signup /></PrivateRoute>} />
 
-          {/* <Route path="/forget_password" element={<ForgetPassword />} />
-          <Route path="/reset_password" element={<ResetPassword />} />
-          <Route path="/two_step_verification" element={<TwoStepVerification />} />
+          <Route path="/forget_password" element={<PrivateRoute><ForgetPassword /></PrivateRoute>} />
+          <Route path="/reset_password" element={<PrivateRoute><ResetPassword /></PrivateRoute>} />
+          {/*<Route path="/two_step_verification" element={<TwoStepVerification />} />
           <Route path="/live_class" element={<LiveClass />} /> */}
 
           <Route path="*" element={<Error404 />} />

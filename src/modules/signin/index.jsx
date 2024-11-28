@@ -44,7 +44,9 @@ function SignIn() {
         onClose: () => {
           // Update the context with the logged-in user's data
           setUser(data.user); // Set user data in the context
-          localStorage.setItem("user", JSON.stringify(data.user), {expires : 1}); // Store user in localStorage (for persistence)
+          localStorage.setItem("user", JSON.stringify(data.user), {
+            expires: 1,
+          }); // Store user in localStorage (for persistence)
           localStorage.setItem("token", data.token); // Store the token
           navigate("/"); // Redirect to the home page after successful login
         },
@@ -141,12 +143,12 @@ function SignIn() {
                     Remember Me
                   </label>
                 </div>
-                <a
-                  href="forgot-password.html"
+                <Link
+                  to="/forget_password"
                   className="text-main-600 hover-text-decoration-underline text-15 fw-medium"
                 >
                   Forgot Password?
-                </a>
+                </Link>
               </div>
               <button type="submit" className="btn btn-main rounded-pill w-100">
                 Sign In

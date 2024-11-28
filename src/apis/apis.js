@@ -108,3 +108,14 @@ export async function fetchRecentRegNotification() {
         throw error;
     }
 }
+
+//?==================== SEND RESET PASSWORD OTP API ====================
+export async function sendResetPasswordOtp(data) {
+    try {
+        const response = await axios.post(`${api}/send_reset_pass_otp`, data);
+        return response.data;
+    } catch (error) {
+        console.log("sendResetPasswordOtp() Err: ", error);
+        throw error;
+    }
+}

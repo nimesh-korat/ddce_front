@@ -20,8 +20,9 @@ function Header({ toggleSidebar }) {
       });
     },
     onError: (error) => {
-      navigate("/signin");
-      toast.error(error.response.data.message);
+      toast.error(error.response.data.message, {
+        onClose: () => navigate("/signin"),
+      });
     },
   });
 
