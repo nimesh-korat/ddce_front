@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Preloader from "../../utils/Preloader";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
-import { sendResetPasswordOtp } from "../../apis/apis";
+import { Link } from "react-router-dom";
+import {
+  resetPasswordOtpVerification,
+  sendResetPasswordOtp,
+} from "../../apis/apis";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
+import OTPInput from "react-otp-input";
 const validationSchema = yup.object().shape({
   Phone: yup
     .string()
@@ -15,7 +19,10 @@ const validationSchema = yup.object().shape({
 });
 
 function ForgetPassword() {
-  const navigate = useNavigate();
+  const [otpSent, setOtpSent] = useState(false);
+  const [Phone_OTP, setPhone_OTP] = useState("");
+  const [timer, setTimer] = useState(90); // 90 seconds for the timer
+  const [isResendEnabled, setIsResendEnabled] = useState(false); // To control "Resend OTP" button visibility
   const {
     register,
     handleSubmit,
@@ -30,16 +37,45 @@ function ForgetPassword() {
       toast.error(error.response.data.message);
     },
     onSuccess: (data) => {
-      toast.success(data.message, {
-        onClose: () => {
-          navigate("/"); // Redirect to the home page after successful login
-        },
-      });
+      toast.success(data.message);
+      setOtpSent(true);
+      startTimer(); // Start timer on successful OTP send
     },
   });
 
+  // Start countdown timer when OTP is sent
+  const startTimer = () => {
+    const interval = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setIsResendEnabled(true); // Enable resend OTP button after timer reaches 0
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000); // Update timer every second
+  };
+
+  // Format time as MM:SS
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secondsRemaining = seconds % 60;
+    return `${minutes}:${secondsRemaining < 10 ? "0" : ""}${secondsRemaining}`;
+  };
+
   const onSubmit = (data) => {
     sendOtpQuery.mutate({ ...data, method: "phone" });
+  };
+
+  const handleOtpVerification = () => {
+    if (Phone_OTP.length === 6) {
+      console.log("Phone_OTP:", Phone_OTP);
+
+      resetPasswordOtpVerification.mutate({
+        Phone_OTP,
+      }); // Pass phone number to the parent (Signup)
+    }
   };
 
   return (
@@ -76,6 +112,28 @@ function ForgetPassword() {
                   <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
                     <i className="ph ph-phone" />
                   </span>
+                  {otpSent && timer > 0 ? (
+                    <div
+                      className="position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y text-primary"
+                      style={{ right: "16px" }}
+                    >
+                      {formatTime(timer)} {/* Show the countdown timer */}
+                    </div>
+                  ) : (
+                    isResendEnabled && (
+                      <button
+                        type="button"
+                        className="position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y text-primary"
+                        onClick={() => {
+                          // Trigger resend OTP logic here
+                          setTimer(90);
+                          setIsResendEnabled(false);
+                        }}
+                      >
+                        Resend OTP
+                      </button>
+                    )
+                  )}
                 </div>
                 {/* Error message directly under input */}
                 {errors.Phone && (
@@ -86,10 +144,53 @@ function ForgetPassword() {
                     {errors.Phone?.message}
                   </span>
                 )}
+                {otpSent && (
+                  <>
+                    <div className="mb-16">
+                      <label htmlFor="otp-input" className="form-label mb-8 h6">
+                        Verify Phone Number
+                      </label>
+                      <OTPInput
+                        id="otp-input"
+                        className="form-control"
+                        value={Phone_OTP}
+                        inputType="number"
+                        onChange={setPhone_OTP}
+                        numInputs={6}
+                        renderSeparator={<span>-</span>}
+                        inputStyle={{
+                          borderRadius: "8px",
+                          fontWeight: "400",
+                          outline: "none",
+                          width: "100%",
+                          padding: "13px 16px",
+                          border: "1px solid var(--gray-100)",
+                          lineHeight: "1 ",
+                        }}
+                        renderInput={(props) => <input {...props} />}
+                      />
+                    </div>
+                    <div className="mb-32 d-flex flex-wrap gap-8 justify-content-end w-100">
+                      <button
+                        onClick={handleOtpVerification}
+                        type="button"
+                        className="btn btn-main rounded-pill "
+                        disabled={Phone_OTP.length !== 6}
+                      >
+                        Verify OTP
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
-              <button type="submit" className="btn btn-main rounded-pill w-100">
-                Send OTP
-              </button>
+              {!otpSent && (
+                <button
+                  type="submit"
+                  className="btn btn-main rounded-pill w-100"
+                >
+                  Send OTP
+                </button>
+              )}
               <Link
                 to="/signin"
                 className="my-32 text-main-600 flex-align gap-8 justify-content-center"

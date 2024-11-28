@@ -46,7 +46,7 @@ function Step1({ onNext }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState(null);
-  const [timer, setTimer] = useState(180); // 180 seconds for the timer
+  const [timer, setTimer] = useState(90); // 180 seconds for the timer
   const [isResendEnabled, setIsResendEnabled] = useState(false); // To control "Resend OTP" button visibility
 
   const {

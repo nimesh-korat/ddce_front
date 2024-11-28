@@ -7,9 +7,9 @@ const ProtectedRoute = ({ children }) => {
     .find((c) => c.trim().startsWith("token_id="));
   console.log("Cookie:", document.cookie);
   
-  if (!cookie) {
-    localStorage.removeItem("token");
-  }
+  // if (!cookie) {
+  //   localStorage.removeItem("token");
+  // }
   const token =
     localStorage.getItem("token") ||
     document.cookie.split(";").find((c) => c.trim().startsWith("token_id="));

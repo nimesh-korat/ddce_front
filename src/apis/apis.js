@@ -119,3 +119,14 @@ export async function sendResetPasswordOtp(data) {
         throw error;
     }
 }
+
+//?==================== SEND RESET PASSWORD OTP VERIFICATION API ====================
+export async function resetPasswordOtpVerification(data) {
+    try {
+        const response = await axios.post(`${api}/verify_reset_pass_otp`, data);
+        return response.data;
+    } catch (error) {
+        console.log("resetPasswordOtpVerification() Err: ", error);
+        throw error;
+    }
+}
