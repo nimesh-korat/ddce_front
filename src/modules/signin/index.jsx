@@ -128,21 +128,8 @@ function SignIn() {
                   </span>
                 </div>
               </div>
-              <div className="mb-32 flex-between flex-wrap gap-8">
-                <div className="form-check mb-0 flex-shrink-0">
-                  <input
-                    className="form-check-input flex-shrink-0 rounded-4"
-                    type="checkbox"
-                    defaultValue
-                    id="remember"
-                  />
-                  <label
-                    className="form-check-label text-15 flex-grow-1"
-                    htmlFor="remember"
-                  >
-                    Remember Me
-                  </label>
-                </div>
+              <div className="mb-32 flex-between flex-wrap gap-8 justify-content-end" >
+                
                 <Link
                   to="/forget_password"
                   className="text-main-600 hover-text-decoration-underline text-15 fw-medium"

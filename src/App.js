@@ -23,11 +23,11 @@ import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./utils/PrivateRoutes";
 import ProtectedRoute from "./utils/ProtectedRoutes";
 import Error404 from "./errorPages/Error404";
+import TestTopicListing from "./modules/testTopicListing";
 
 
 function App() {
 
-  console.log("Cookie:", document.cookie);
   return (
     <>
       <ToastContainer autoClose={1500} />
@@ -39,6 +39,7 @@ function App() {
           <Route path="/student_course" element={<StudentCourse />} />
           <Route path="/mentor_course" element={<StudentCourse />} /> */}
           <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
+          <Route path="/testTopicListing" element={<TestTopicListing />} />
           {/* <Route path="/mentors" element={<Mentor />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/messages" element={<Messages />} />

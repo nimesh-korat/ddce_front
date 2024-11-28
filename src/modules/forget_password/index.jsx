@@ -3,8 +3,9 @@ import Preloader from "../../utils/Preloader";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
+  resetPasswordOtpQuery,
   resetPasswordOtpVerification,
   sendResetPasswordOtp,
 } from "../../apis/apis";
@@ -19,8 +20,10 @@ const validationSchema = yup.object().shape({
 });
 
 function ForgetPassword() {
+  const navigate = useNavigate();
   const [otpSent, setOtpSent] = useState(false);
   const [Phone_OTP, setPhone_OTP] = useState("");
+  const [phone, setPhone] = useState("");
   const [timer, setTimer] = useState(90); // 90 seconds for the timer
   const [isResendEnabled, setIsResendEnabled] = useState(false); // To control "Resend OTP" button visibility
   const {
@@ -65,16 +68,34 @@ function ForgetPassword() {
   };
 
   const onSubmit = (data) => {
+    setPhone(data.Phone); // Save the phone number
     sendOtpQuery.mutate({ ...data, method: "phone" });
   };
 
+  const resetPasswordOtpQuery = useMutation({
+    mutationFn: resetPasswordOtpVerification,
+    onError: (error) => {
+      toast.error(error.response.data.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data.message, {
+        onClose: () => {
+          navigate("/reset_password", { state: { phone } });
+        },
+      });
+    },
+  });
+
   const handleOtpVerification = () => {
     if (Phone_OTP.length === 6) {
-      console.log("Phone_OTP:", Phone_OTP);
+      console.log("Phone_OTP:", Phone_OTP, "Phone:", phone);
 
-      resetPasswordOtpVerification.mutate({
-        Phone_OTP,
-      }); // Pass phone number to the parent (Signup)
+      resetPasswordOtpQuery.mutate({
+        otp: Phone_OTP,
+        Phone: phone, // Include the phone number
+      });
+    } else {
+      toast.error("Please enter a valid 6-digit OTP.");
     }
   };
 

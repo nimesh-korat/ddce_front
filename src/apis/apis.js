@@ -130,3 +130,47 @@ export async function resetPasswordOtpVerification(data) {
         throw error;
     }
 }
+
+//?==================== RESET PASSWORD API ====================
+export async function resetPassword(data) {
+    try {
+        const response = await axios.post(`${api}/reset_password`, data);
+        return response.data;
+    } catch (error) {
+        console.log("resetPassword() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== GET SUBJECT API ====================
+export async function getSubjects() {
+    try {
+        const response = await axios.get(`${api}/getSubjects`);
+        return response.data;
+    } catch (error) {
+        console.log("getSubjects() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== GET TOPIC API ====================
+export async function getTopics(data) {
+    try {
+        const response = await axios.post(`${api}/getTopics`, data);
+        return response.data;
+    } catch (error) {
+        console.log("getTopics() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== GET SUB TOPIC API ====================
+export async function getSubTopics(data) {
+    try {
+        const response = await axios.post(`${api}/getSubTopics`, data);
+        return response.data;
+    } catch (error) {
+        console.log("getSubTopics() Err: ", error);
+        throw error;
+    }
+}

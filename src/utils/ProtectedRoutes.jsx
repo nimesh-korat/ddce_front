@@ -6,7 +6,7 @@ const ProtectedRoute = ({ children }) => {
     .split(";")
     .find((c) => c.trim().startsWith("token_id="));
   console.log("Cookie:", document.cookie);
-  
+
   // if (!cookie) {
   //   localStorage.removeItem("token");
   // }
