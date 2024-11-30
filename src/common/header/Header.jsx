@@ -209,7 +209,8 @@ function Header({ toggleSidebar }) {
                       className="w-54 h-54 rounded-circle"
                     />
                     <div>
-                      <h4 className="mb-0">{user && user.name}</h4>
+                      {/* <h4 className="mb-0">{user && user.name}</h4> */}
+                      <h4 className="mb-0">Hey, Explore Unity</h4>
                       <p className="fw-medium text-13 text-gray-200">
                         {user && user.email}
                       </p>
