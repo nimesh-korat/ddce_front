@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Step1 from "./components/step1";
 import Step2 from "./components/step2";
 import { Step, StepLabel, Stepper } from "@mui/material";
+import UnityLogo from "../../utils/UnityLogo";
 
 function Signup() {
   const [activeStep, setActiveStep] = useState(0);
@@ -23,11 +24,12 @@ function Signup() {
       <div className="auth-right py-40 px-24 flex-center flex-column">
         <div className="auth-right__inner mx-auto w-100">
           <a href="index.html" className="auth-right__logo">
-            <img src="assets/images/logo/logo.png" alt="a" />
+            {/* <img src="assets/images/logo/logo.png" alt="a" /> */}
+            <UnityLogo />
           </a>
           <h2 className="mb-8">Sign Up</h2>
           <p className="text-gray-600 text-15 mb-32">
-            Please sign up to your account and start the adventure
+            Please sign up to your account and start the session
           </p>
           <div>
             <Stepper activeStep={activeStep} alternativeLabel>

@@ -16,10 +16,10 @@ function Greetings() {
                   <img src="assets/images/icons/wave-hand.png" alt="" />
                 </h2>
                 <h2 className="fw-medium mb-16">
-                  What do you want to learn today with your partner?
+                  What do you want to learn today with your <b>Unity</b> partner?
                 </h2>
                 <p className="text-15 text-gray-400">
-                  Discover courses, track progress, and achieve your learning
+                  Discover unique questions, track progress, and achieve your learning
                   goods seamlessly.
                 </p>
                 {/* <a

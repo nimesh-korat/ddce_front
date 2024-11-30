@@ -68,7 +68,7 @@ function Step2({ phoneNumber }) {
               type="text"
               className="form-control py-11 ps-40"
               id="College_Name"
-              placeholder="Type your college name"
+              placeholder="Enter College Name"
               {...register("College_Name")}
             />
             <span className="position-absolute ms-16 text-gray-600 d-flex">
@@ -96,7 +96,7 @@ function Step2({ phoneNumber }) {
               type="text"
               className="form-control py-11 ps-40"
               id="Enrollment_No"
-              placeholder="Type your enrollment number"
+              placeholder="Enter Enrollment Number"
               {...register("Enrollment_No")}
             />
             <span className="position-absolute ms-16 text-gray-600 d-flex">
@@ -125,10 +125,11 @@ function Step2({ phoneNumber }) {
               id="Branch_Name"
               {...register("Branch_Name")}
             >
-              <option value="">Select Your Branch</option>
-              <option value="it">Information Technology</option>
+              <option value="">Select Branch</option>
+              <option value="cs">Civil Engineering</option>
               <option value="ce">Computer Engineering</option>
-              <option value="cs">Computer Science</option>
+              <option value="it">Information Technology</option>
+              <option value="it">Mechanical Engineering</option>
             </select>
             <span className="position-absolute ms-16 text-gray-600 d-flex">
               <i className="ph ph-git-branch" style={{ fontSize: "20px" }} />
@@ -153,7 +154,7 @@ function Step2({ phoneNumber }) {
               id="Semester"
               {...register("Semester")}
             >
-              <option value="">Select Your Semester</option>
+              <option value="">Select Semester</option>
               <option value="1">1st Semester</option>
               <option value="2">2nd Semester</option>
               <option value="3">3rd Semester</option>

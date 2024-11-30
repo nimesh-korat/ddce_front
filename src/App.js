@@ -24,21 +24,25 @@ import PrivateRoute from "./utils/PrivateRoutes";
 import ProtectedRoute from "./utils/ProtectedRoutes";
 import Error404 from "./errorPages/Error404";
 import TestTopicListing from "./modules/testTopicListing";
+import AdminLogin from "./admin/login";
+import AddQuestion from "./admin/AddQuestions";
+import AdminRoutes from "./utils/AdminRoutes";
+import ShowQuestions from "./admin/ShowQuestions";
 
 
 function App() {
 
   return (
     <>
-      <ToastContainer autoClose={1500} />
+      <ToastContainer autoClose={3000} />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ProtectedRoute><HomeThree /></ProtectedRoute>} />
+          <Route path="/" element={<HomeThree />} />
           {/* <Route path="/home2" element={<HomeTwo />} />
           <Route path="/home3" element={<Home />} />
           <Route path="/student_course" element={<StudentCourse />} />
           <Route path="/mentor_course" element={<StudentCourse />} /> */}
-          <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
+          <Route path="/students" element={<Students />} />
           <Route path="/testTopicListing" element={<TestTopicListing />} />
           {/* <Route path="/mentors" element={<Mentor />} />
           <Route path="/resources" element={<Resources />} />
@@ -50,13 +54,19 @@ function App() {
           <Route path="/account_setting" element={<AccountSetting />} /> */}
 
           {/* Protect signin and signup routes */}
-          <Route path="/signin" element={<PrivateRoute><SignIn /></PrivateRoute>} />
-          <Route path="/signup" element={<PrivateRoute><Signup /></PrivateRoute>} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<Signup />} />
 
-          <Route path="/forget_password" element={<PrivateRoute><ForgetPassword /></PrivateRoute>} />
-          <Route path="/reset_password" element={<PrivateRoute><ResetPassword /></PrivateRoute>} />
+          <Route path="/forget_password" element={<ForgetPassword />} />
+          <Route path="/reset_password" element={<ResetPassword />} />
           {/*<Route path="/two_step_verification" element={<TwoStepVerification />} />
           <Route path="/live_class" element={<LiveClass />} /> */}
+
+
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/addQuestion" element={<AddQuestion />} />
+          <Route path="/admin/showQuestions" element={<ShowQuestions />} />
 
           <Route path="*" element={<Error404 />} />
         </Routes>

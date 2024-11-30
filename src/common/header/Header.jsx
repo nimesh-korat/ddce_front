@@ -27,7 +27,12 @@ function Header({ toggleSidebar }) {
   });
 
   const handleLogout = () => {
-    logoutQuery.mutate();
+    localStorage.removeItem("token");
+    localStorage.removeItem("admin");
+    localStorage.removeItem("user");
+    toast.success("Logged out successfully", {
+      onClose: () => navigate("/signin"),
+    });
   };
 
   return (
@@ -43,7 +48,7 @@ function Header({ toggleSidebar }) {
             <i className="ph ph-list" />
           </button>
           {/* Toggle Button End */}
-          <form className="w-350 d-sm-block d-none">
+          {/* <form className="w-350 d-sm-block d-none">
             <div className="position-relative">
               <button
                 type="button"
@@ -57,7 +62,7 @@ function Header({ toggleSidebar }) {
                 placeholder="Search..."
               />
             </div>
-          </form>
+          </form> */}
         </div>
         <div className="flex-align gap-16">
           <div className="flex-align gap-8">
@@ -65,7 +70,7 @@ function Header({ toggleSidebar }) {
             <Notification />
             {/* Notification Start */}
             {/* Language Start */}
-            <div className="dropdown">
+            {/* <div className="dropdown">
               <button
                 className="text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center"
                 type="button"
@@ -174,7 +179,7 @@ function Header({ toggleSidebar }) {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* Language Start */}
           </div>
           {/* User Profile Start */}
@@ -187,7 +192,7 @@ function Header({ toggleSidebar }) {
             >
               <span className="position-relative">
                 <img
-                  src="assets/images/thumbs/user-img.png"
+                  src="../assets/images/thumbs/user-img.png"
                   alt=""
                   className="h-32 w-32 rounded-circle"
                 />
@@ -199,14 +204,14 @@ function Header({ toggleSidebar }) {
                 <div className="card-body">
                   <div className="flex-align gap-8 mb-20 pb-20 border-bottom border-gray-100">
                     <img
-                      src="assets/images/thumbs/user-img.png"
+                      src="../assets/images/thumbs/user-img.png"
                       alt=""
                       className="w-54 h-54 rounded-circle"
                     />
                     <div>
-                      <h4 className="mb-0">{user.name}</h4>
+                      <h4 className="mb-0">{user && user.name}</h4>
                       <p className="fw-medium text-13 text-gray-200">
-                        {user.email}
+                        {user && user.email}
                       </p>
                     </div>
                   </div>
@@ -263,7 +268,7 @@ function Header({ toggleSidebar }) {
                         <span className="text-2xl text-primary-600 d-flex">
                           <i className="ph ph-envelope-simple" />
                         </span>
-                        <span className="text">Email</span>
+                        <span className="text">Ask Doubts</span>
                       </Link>
                     </li>
                     <li className="pt-8 border-top border-gray-100">

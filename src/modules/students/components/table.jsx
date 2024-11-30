@@ -74,7 +74,7 @@ function StudentTable() {
               <th className="h6 text-gray-300">#</th>
               <th className="h6 text-gray-300">Students</th>
               <th className="h6 text-gray-300">College Name</th>
-              <th className="h6 text-gray-300">Minutes Ago</th>
+              <th className="h6 text-gray-300">Joining Info</th>
             </tr>
           </thead>
           <tbody>
@@ -120,8 +120,8 @@ function StudentTable() {
       </div>
       <div className="card-footer flex-between flex-wrap">
         <span className="text-gray-900">
-          Showing 1 to {limitedStudentData.length} of {studentData.length}{" "}
-          entries
+          Showing recent 1 to {limitedStudentData.length} of {studentData.length}{" "}
+          students
         </span>
         <ul className="pagination flex-align flex-wrap">
           {/* Pagination controls (add logic for actual pagination if needed) */}

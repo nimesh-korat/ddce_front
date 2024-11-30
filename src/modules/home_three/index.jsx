@@ -43,8 +43,8 @@ function HomeThree() {
                 <HomeWidgets
                   bgColor={"bg-main-600"}
                   img="ph-fill ph-graduation-cap"
-                  title="Total Courses"
-                  count="55"
+                  title="Total Questions"
+                  count="10,000"
                 />
                 <HomeWidgets
                   bgColor={"bg-main-two-600 "}

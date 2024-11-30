@@ -148,7 +148,7 @@ function Step1({ onNext }) {
               type="text"
               className="form-control py-11 ps-40"
               id="Name"
-              placeholder="Type your Name"
+              placeholder="Enter Name"
               {...register("Name")}
             />
             <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
@@ -173,7 +173,7 @@ function Step1({ onNext }) {
               type="email"
               className="form-control py-11 ps-40"
               id="Email_Id"
-              placeholder="Type your email address"
+              placeholder="Enter Email"
               {...register("Email_Id")}
             />
             <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
@@ -266,7 +266,7 @@ function Step1({ onNext }) {
               type="tel"
               className="form-control py-11 ps-40"
               id="Phone_Number"
-              placeholder="Type your phone number"
+              placeholder="Enter Phone Number"
               {...register("Phone_Number")}
             />
             <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
@@ -338,7 +338,7 @@ function Step1({ onNext }) {
                 renderInput={(props) => <input {...props} />}
               />
             </div>
-            <div className="mb-32 d-flex flex-wrap gap-8 justify-content-end w-100">
+            <div className="mb-32  w-100">
               <button
                 onClick={handleOtpVerification}
                 type="button"
@@ -350,6 +350,15 @@ function Step1({ onNext }) {
             </div>
           </>
         )}
+        <div className="mb-32 d-flex flex-wrap gap-8 justify-content-end w-100">
+          <button
+            type="submit"
+            disabled
+            className="btn btn-main rounded-pill ms-auto"
+          >
+            Register
+          </button>
+        </div>
       </form>
     </>
   );

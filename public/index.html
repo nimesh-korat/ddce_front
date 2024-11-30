@@ -11,31 +11,94 @@
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <title> Portal </title>
 
+  <style>
+    .question-card {
+      margin: 20px auto;
+      border-radius: 8px;
+    }
 
+    .option-card {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out, box-shadow 0.2s;
+    }
+
+    .option-card:hover {
+      background-color: #f8f9fa;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .question-bullet-icon {
+      width: 25px;
+      height: 25px;
+      margin-right: 10px;
+      background-color: #6c757d;
+      color: #fff;
+      font-size: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+    }
+
+    .question-row-gap {
+      row-gap: 12px;
+    }
+
+    .correct-answer-section {
+      margin-top: 10px;
+      /* Added space between options and correct answer */
+      padding: 10px;
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #155724;
+      display: flex;
+      align-items: center;
+    }
+
+    .correct-answer-section .icon {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      background-color: #28a745;
+      color: #fff;
+      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+    }
+  </style>
   <!-- Favicon -->
   <link rel="shortcut icon" href="./assets/images/logo/favicon.jpeg">
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
   <!-- file upload -->
-  <link rel="stylesheet" href="./assets/css/file-upload.css">
+  <link rel="stylesheet" href="../assets/css/file-upload.css">
   <!-- file upload -->
-  <link rel="stylesheet" href="./assets/css/plyr.css">
+  <link rel="stylesheet" href="../assets/css/plyr.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
   <!-- full calendar -->
-  <link rel="stylesheet" href="./assets/css/full-calendar.css">
+  <link rel="stylesheet" href="../assets/css/full-calendar.css">
   <!-- jquery Ui -->
-  <link rel="stylesheet" href="./assets/css/jquery-ui.css">
+  <link rel="stylesheet" href="../assets/css/jquery-ui.css">
   <!-- editor quill Ui -->
-  <link rel="stylesheet" href="./assets/css/editor-quill.css">
+  <link rel="stylesheet" href="../assets/css/editor-quill.css">
   <!-- apex charts Css -->
-  <!-- <link rel="stylesheet" href="./assets/css/apexcharts.css"> -->
+  <!-- <link rel="stylesheet" href="../assets/css/apexcharts.css"> -->
   <!-- calendar Css -->
-  <link rel="stylesheet" href="./assets/css/calendar.css">
+  <link rel="stylesheet" href="../assets/css/calendar.css">
   <!-- jvector map Css -->
-  <link rel="stylesheet" href="./assets/css/jquery-jvectormap-2.0.5.css">
+  <link rel="stylesheet" href="../assets/css/jquery-jvectormap-2.0.5.css">
   <!-- Main css -->
-  <link rel="stylesheet" href="./assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
 
 </head>
 
@@ -44,35 +107,53 @@
   <div id="root"></div>
 
   <!-- Jquery js -->
-  <!-- <script src="./assets/js/jquery-3.7.1.min.js"></script> -->
+  <!-- <script src="../assets/js/jquery-3.7.1.min.js"></script> -->
   <!-- Bootstrap Bundle Js -->
-  <script src="./assets/js/boostrap.bundle.min.js"></script>
+  <script src="../assets/js/boostrap.bundle.min.js"></script>
   <!-- Phosphor Js -->
-  <script src="./assets/js/phosphor-icon.js"></script>
+  <script src="../assets/js/phosphor-icon.js"></script>
   <!-- file upload -->
-  <script src="./assets/js/file-upload.js"></script>
+  <script src="../assets/js/file-upload.js"></script>
   <!-- file upload -->
-  <script src="./assets/js/plyr.js"></script>
+  <script src="../assets/js/plyr.js"></script>
   <!-- dataTables -->
   <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
   <!-- full calendar -->
-  <script src="./assets/js/full-calendar.js"></script>
+  <script src="../assets/js/full-calendar.js"></script>
   <!-- jQuery UI -->
-  <script src="./assets/js/jquery-ui.js"></script>
+  <script src="../assets/js/jquery-ui.js"></script>
   <!-- jQuery UI -->
-  <script src="./assets/js/editor-quill.js"></script>
+  <script src="../assets/js/editor-quill.js"></script>
   <!-- apex charts -->
-  <!-- <script src="./assets/js/apexcharts.min.js"></script> -->
+  <!-- <script src="../assets/js/apexcharts.min.js"></script> -->
   <!-- Calendar Js -->
-  <script src="./assets/js/calendar.js"></script>
+  <script src="../assets/js/calendar.js"></script>
   <!-- jvectormap Js -->
-  <script src="./assets/js/jquery-jvectormap-2.0.5.min.js"></script>
+  <script src="../assets/js/jquery-jvectormap-2.0.5.min.js"></script>
   <!-- jvectormap world Js -->
-  <script src="./assets/js/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="../assets/js/jquery-jvectormap-world-mill-en.js"></script>
 
   <!-- main js -->
-  <script src="./assets/js/main.js"></script>
-
+  <script src="../assets/js/main.js"></script>
+  <!-- Add jQuery and DataTables JS/CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" charset="utf8"
+    src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#myTable').DataTable({
+        paging: true,         // Enables pagination
+        searching: true,      // Enables search bar
+        ordering: true,       // Enables sorting
+        info: true,           // Shows info about the table (e.g., "Showing 1 to 10 of 20 entries")
+        responsive: true,     // Makes the table responsive for smaller screens
+        columnDefs: [
+          { orderable: false, targets: [2, 3] }  // Disable sorting on Edit and Delete columns
+        ]
+      });
+    });
+  </script>
   <script>
 
     // ========================== Export Js Start ==============================

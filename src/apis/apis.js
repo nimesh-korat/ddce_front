@@ -174,3 +174,61 @@ export async function getSubTopics(data) {
         throw error;
     }
 }
+
+//?==================== ADMIN LOGIN API ====================
+export async function adminLogin(data) {
+    try {
+        const response = await axios.post(`${api}/admin/login`, data);
+        return response.data;
+    } catch (error) {
+        console.log("adminLogin() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== ADD QUESTIONS API ====================
+export async function adminAddQuestions(data) {
+    try {
+        const response = await axios.post(`${api}/admin/addQuestion`, data);
+        return response.data;
+    } catch (error) {
+        console.log("adminAddQuestions() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== GET QUESTIONS API ====================
+
+export const adminGetQuestions = async ({ pageParam = 1 }) => {
+    try {
+        // Make the API request using axios
+        const response = await axios.get(`${api}/api/questions`, {
+            params: {
+                page: pageParam,
+                limit: 10,
+            },
+        });
+
+        // Ensure the response includes the necessary data
+        if (!response.data || !response.data.data) {
+            throw new Error('Invalid response format');
+        }
+
+        return response.data; // Returns the data from the response
+    } catch (error) {
+        // Handle error properly
+        if (error.response) {
+            // Request was made, but server responded with a status outside of the 2xx range
+            console.error('Error response from server:', error.response);
+            throw new Error(error.response.data.message || 'Failed to fetch questions');
+        } else if (error.request) {
+            // Request was made but no response received
+            console.error('No response received:', error.request);
+            throw new Error('No response from server');
+        } else {
+            // Something else caused the error
+            console.error('Error setting up the request:', error.message);
+            throw new Error('Error in the request setup');
+        }
+    }
+};

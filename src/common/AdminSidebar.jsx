@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 // remove position-relative from parent class when unlocks
 
-function Sidebar({ isActive, closeSidebar }) {
+function AdminSidebar({ isActive, closeSidebar }) {
   const location = useLocation();
   // eslint-disable-next-line
   const [openMenu, setOpenMenu] = useState(null);
@@ -11,20 +11,11 @@ function Sidebar({ isActive, closeSidebar }) {
 
   useEffect(() => {
     switch (location.pathname) {
-      case "/":
-        setActiveItem("Home");
+      case "/admin/addQuestion":
+        setActiveItem("Add Questions");
         break;
-      case "/home2":
-        setActiveItem("Home2");
-        break;
-      case "/home3":
-        setActiveItem("Home3");
-        break;
-      case "/student_course":
-        setActiveItem("student_course");
-        break;
-      case "/mentor_course":
-        setActiveItem("mentor_course");
+      case "/admin/showQuestions":
+        setActiveItem("Show Questions");
         break;
 
       default:
@@ -62,66 +53,31 @@ function Sidebar({ isActive, closeSidebar }) {
         <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
           <div className="p-20 pt-10">
             <ul className="sidebar-menu">
-              {/* <li
-                className={`sidebar-menu__item has-dropdown  ${
-                  activeItem === "Home" ||
-                  activeItem === "Home2" ||
-                  activeItem === "Home3"
-                    ? "activePage"
-                    : ""
-                }`}
-                onClick={() => toggleMenu("menu1")}
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Add Questions" ? "activePage" : ""
+                } `}
               >
-                <p className="sidebar-menu__link">
+                <Link to="/admin/addQuestion" className="sidebar-menu__link ">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-squares-four" />
                   </span>
-                  <span className="text">Dashboard</span>
-                  <span className="link-badge">3</span>
-                </p>
-                <ul
-                  className="sidebar-submenu"
-                  id="dashboard"
-                  style={{ display: openMenu === "menu1" ? "block " : "none" }}
-                >
-                  <li
-                    className={`sidebar-submenu__item ${
-                      activeItem === "Home" ? "activePage" : ""
-                    }`}
-                  >
-                    <p to="/" className="sidebar-submenu__link">
-                      Dashboard One
-                    </p>
-                  </li>
-                  <li
-                    className={`sidebar-submenu__item ${
-                      activeItem === "Home2" ? "activePage" : ""
-                    }`}
-                  >
-                    <p to="/home2" className="sidebar-submenu__link">
-                      Dashboard Two
-                    </p>
-                  </li>
-                  <li
-                    className={`sidebar-submenu__item ${
-                      activeItem === "Home3" ? "activePage" : ""
-                    }`}
-                  >
-                    <p to="/home3" className="sidebar-submenu__link">
-                      Dashboard Three
-                    </p>
-                  </li>
-                </ul>
-              </li> */}
-              <li className="sidebar-menu__item">
-                <Link to="/" className="sidebar-menu__link">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-squares-four" />
-                  </span>
-                  <span className="text">Dashboard</span>
+                  <span className="text">Add Question</span>
                 </Link>
               </li>
               <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Show Questions" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/showQuestions" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-squares-four" />
+                  </span>
+                  <span className="text">Show Questions</span>
+                </Link>
+              </li>
+              {/* <li
                 className={`sidebar-menu__item position-relative ${
                   activeItem === "mentor_course" ||
                   activeItem === "student_course"
@@ -136,7 +92,6 @@ function Sidebar({ isActive, closeSidebar }) {
                   </span>
                   <span className="text">Schedule</span>
 
-                  {/* Lock icon positioned at the far right */}
                   <i
                     className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
                     style={{
@@ -146,7 +101,6 @@ function Sidebar({ isActive, closeSidebar }) {
                   />
                 </p>
 
-                {/* Submenu start */}
                 <ul
                   className="sidebar-submenu"
                   id="courses"
@@ -179,7 +133,6 @@ function Sidebar({ isActive, closeSidebar }) {
                     </p>
                   </li>
                 </ul>
-                {/* Submenu End */}
               </li>
 
               <li className="sidebar-menu__item">
@@ -189,7 +142,6 @@ function Sidebar({ isActive, closeSidebar }) {
                   </span>
                   <span className="text">Exam / Quiz</span>
 
-                  {/* Lock icon positioned at the far right */}
                   <i
                     className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
                     style={{
@@ -394,22 +346,40 @@ function Sidebar({ isActive, closeSidebar }) {
                   style={{ display: openMenu === "menu3" ? "block" : "none" }}
                 >
                   <li className="sidebar-submenu__item">
-                    <Link to="/" className="sidebar-submenu__link">
-                      Profile
-                    </Link>
-                  </li>
-                  <li className="sidebar-submenu__item">
-                    <Link to="/" className="sidebar-submenu__link">
+                    <p to="/signin" className="sidebar-submenu__link">
                       Change Password
-                    </Link>
+                    </p>
                   </li>
                   <li className="sidebar-submenu__item">
-                    <Link to="/" className="sidebar-submenu__link">
+                    <p to="/signup" className="sidebar-submenu__link">
                       Logout
-                    </Link>
+                    </p>
+                  </li>
+                  <li className="sidebar-submenu__item">
+                    <p to="/forget_password" className="sidebar-submenu__link">
+                      Forgot Password
+                    </p>
+                  </li>
+                  <li className="sidebar-submenu__item">
+                    <p to="/reset_password" className="sidebar-submenu__link">
+                      Reset Password
+                    </p>
+                  </li>
+                  <li className="sidebar-submenu__item">
+                    <p to="/verify_email" className="sidebar-submenu__link">
+                      Verify Email
+                    </p>
+                  </li>
+                  <li className="sidebar-submenu__item">
+                    <p
+                      to="/two_step_verification"
+                      className="sidebar-submenu__link"
+                    >
+                      Two Step Verification
+                    </p>
                   </li>
                 </ul>
-              </li>
+              </li> */}
             </ul>
           </div>
           {/* <div className="p-20 pt-80">
@@ -443,4 +413,4 @@ function Sidebar({ isActive, closeSidebar }) {
   );
 }
 
-export default Sidebar;
+export default AdminSidebar;

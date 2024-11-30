@@ -49,7 +49,7 @@ function Students() {
             </div>
             {/* Breadcrumb End */}
             {/* Breadcrumb Right Start */}
-            <div className="flex-align gap-8 flex-wrap">
+            {/* <div className="flex-align gap-8 flex-wrap">
               <div className="position-relative text-gray-500 flex-align gap-4 text-13">
                 <span className="text-inherit">Sort by: </span>
                 <div className="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
@@ -67,7 +67,7 @@ function Students() {
                 </div>
               </div>
               
-            </div>
+            </div> */}
             {/* Breadcrumb Right End */}
           </div>
           <StudentTable />

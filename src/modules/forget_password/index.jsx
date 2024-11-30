@@ -12,6 +12,7 @@ import {
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import OTPInput from "react-otp-input";
+import UnityLogo from "../../utils/UnityLogo";
 const validationSchema = yup.object().shape({
   Phone: yup
     .string()
@@ -110,12 +111,13 @@ function ForgetPassword() {
         <div className="auth-right py-40 px-24 flex-center flex-column">
           <div className="auth-right__inner mx-auto w-100">
             <Link to="/" className="auth-right__logo">
-              <img src="assets/images/logo/logo.png" alt="a" />
+              {/* <img src="assets/images/logo/logo.png" alt="a" /> */}
+              <UnityLogo />
             </Link>
             <h2 className="mb-8">Forgot Password?</h2>
             <p className="text-gray-600 text-15 mb-32">
-              Lost your password? Please enter your email address. You will
-              receive a link to create a new password via email.
+              Lost your password? Please enter your phone number. You will
+              receive an OTP to create a new password via SMS.
             </p>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-24">
@@ -127,7 +129,7 @@ function ForgetPassword() {
                     type="tel"
                     className="form-control py-11 ps-40"
                     id="Phone"
-                    placeholder="Type your phone number"
+                    placeholder="Enter phone number"
                     {...register("Phone")}
                   />
                   <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
