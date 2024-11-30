@@ -132,7 +132,7 @@ function Sidebar({ isActive, closeSidebar }) {
               >
                 <p className="sidebar-menu__link d-flex align-items-center position-relative">
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-graduation-cap" />
+                    <i className="ph ph-calendar-dots" />
                   </span>
                   <span className="text">Schedule</span>
 
@@ -224,7 +224,7 @@ function Sidebar({ isActive, closeSidebar }) {
                   className="sidebar-menu__link   d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-bookmarks" />
+                    <i className="ph ph-folder-open" />
                   </span>
                   <span className="text">Materials</span>
                   <i
@@ -242,7 +242,7 @@ function Sidebar({ isActive, closeSidebar }) {
                   className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-chats-teardrop" />
+                    <i className="ph ph-seal-question" />
                   </span>
                   <span className="text">Doubts</span>
                   <i
@@ -278,7 +278,7 @@ function Sidebar({ isActive, closeSidebar }) {
                   className="sidebar-menu__link  d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-calendar-dots" />
+                    <i className="ph ph-chat-teardrop-dots" />
                   </span>
                   <span className="text">Messages</span>
                   <i
@@ -314,7 +314,7 @@ function Sidebar({ isActive, closeSidebar }) {
                   className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-coins" />
+                    <i className="ph ph-chart-pie-slice" />
                   </span>
                   <span className="text">Topic & Weightage</span>
                   <i
@@ -341,7 +341,7 @@ function Sidebar({ isActive, closeSidebar }) {
                   className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-coins" />
+                    <i className="ph ph-flag-checkered" />
                   </span>
                   <span className="text">Tournaments</span>
                   <i
@@ -360,7 +360,7 @@ function Sidebar({ isActive, closeSidebar }) {
                   className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-coins" />
+                    <i className="ph ph-tag" />
                   </span>
                   <span className="text">Pricing</span>
                   <i
