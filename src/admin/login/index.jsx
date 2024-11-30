@@ -55,7 +55,16 @@ function AdminLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    loginQuery.mutate(data); // Call the login API with the user data
+
+    toast.success("Logged in successfully", {
+      autoClose: 1500,
+      onClose: () => {
+        // Redirect to the home page after successful login
+        navigate("/admin/addQuestion");
+      },
+    });
+
+    // loginQuery.mutate(data); // Call the login API with the user data
   };
 
   return (

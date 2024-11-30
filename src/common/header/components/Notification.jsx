@@ -6,11 +6,15 @@ import { Link } from "react-router-dom";
 // Helper function to calculate time ago
 function timeAgo(date) {
   const now = new Date();
-  // Convert both the current time and the input date to UTC
-  const nowUTC = new Date(now.toUTCString());
-  const dateUTC = new Date(date.toUTCString());
 
-  const diffInSeconds = Math.floor((nowUTC - dateUTC) / 1000); // difference in seconds
+  // Convert the input date to a Date object
+  let dateUTC = new Date(date);
+
+  // Adjust the date by adding 5 hours and 30 minutes (19800 seconds)
+  dateUTC = new Date(dateUTC.getTime() + 5 * 60 * 60 * 1000 + 30 * 60 * 1000);
+
+  const diffInSeconds = Math.floor((now - dateUTC) / 1000); // difference in seconds
+  console.log(diffInSeconds);
 
   if (diffInSeconds < 60) {
     return `${diffInSeconds} second${diffInSeconds === 1 ? "" : "s"} ago`;
