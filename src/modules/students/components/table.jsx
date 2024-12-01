@@ -70,8 +70,11 @@ function StudentTable() {
 
   return (
     <div className="card overflow-hidden">
-      <div className="card-body p-0 overflow-x-auto">
-        <table id="studentTable" className="table table-striped table-bordered">
+      <div className="card-body p-0 overflow-x-auto p-16">
+        <table
+          id="studentTable"
+          className="table table-striped table-bordered"
+        >
           <thead>
             <tr>
               <th className="h6 text-gray-300">#</th>
