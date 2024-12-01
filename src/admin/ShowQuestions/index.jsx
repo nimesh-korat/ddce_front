@@ -7,16 +7,6 @@ import Footer from "../../common/footer";
 import AdminQuestionCard from "./components/QuestionCard";
 import { adminGetQuestions } from "../../apis/apis";
 
-// Fisher-Yates Shuffle Function
-const shuffleArray = (array) => {
-  let shuffledArray = [...array]; // Clone the array to avoid mutating the original
-  for (let i = shuffledArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-  }
-  return shuffledArray;
-};
-
 function ShowQuestions() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
 
@@ -40,7 +30,7 @@ function ShowQuestions() {
   } = useInfiniteQuery({
     queryKey: ["questions"],
     queryFn: adminGetQuestions,
-    getNextPageParam: (lastPage) => lastPage.nextPage || false, // `nextPage` is returned by the API
+    getNextPageParam: (lastPage) => lastPage.nextPage || false, // nextPage is returned by the API
     staleTime: 5 * 60 * 1000,
   });
 
@@ -76,9 +66,6 @@ function ShowQuestions() {
   // Ensure data is defined before accessing it
   const questions = data?.pages?.flatMap((page) => page.data) || [];
 
-  // Shuffle the questions array
-  const shuffledQuestions = shuffleArray(questions);
-
   return (
     <>
       <AdminSidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
@@ -86,8 +73,8 @@ function ShowQuestions() {
         <Header toggleSidebar={toggleSidebar} />
         <div className="dashboard-body">
           <div className="container-fluid dashboard-content">
-            {shuffledQuestions.map((question, index) => {
-              if (index === shuffledQuestions.length - 1) {
+            {questions.map((question, index) => {
+              if (index === questions.length - 1) {
                 return (
                   <AdminQuestionCard
                     key={index}
