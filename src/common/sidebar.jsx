@@ -14,8 +14,8 @@ function Sidebar({ isActive, closeSidebar }) {
       case "/":
         setActiveItem("Home");
         break;
-      case "/home2":
-        setActiveItem("Home2");
+      case "/exams":
+        setActiveItem("Exam");
         break;
       case "/home3":
         setActiveItem("Home3");
@@ -113,7 +113,11 @@ function Sidebar({ isActive, closeSidebar }) {
                   </li>
                 </ul>
               </li> */}
-              <li className="sidebar-menu__item">
+              <li
+                className={`sidebar-menu__item  ${
+                  activeItem === "Home" ? "activePage" : ""
+                }`}
+              >
                 <Link to="/" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-squares-four" />
@@ -182,22 +186,20 @@ function Sidebar({ isActive, closeSidebar }) {
                 {/* Submenu End */}
               </li>
 
-              <li className="sidebar-menu__item">
-                <p className="sidebar-menu__link d-flex align-items-center position-relative">
+              <li
+                className={`sidebar-menu__item  ${
+                  activeItem === "Exam" ? "activePage" : ""
+                }`}
+              >
+                <Link
+                  to="/exams"
+                  className="sidebar-menu__link d-flex align-items-center"
+                >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-clipboard-text" />
                   </span>
                   <span className="text">Exam / Quiz</span>
-
-                  {/* Lock icon positioned at the far right */}
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
+                </Link>
               </li>
 
               <li className="sidebar-menu__item">

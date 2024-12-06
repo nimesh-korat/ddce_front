@@ -17,6 +17,12 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/showQuestions":
         setActiveItem("Show Questions");
         break;
+      case "/admin/createTest":
+        setActiveItem("Add Test");
+        break;
+      case "/admin/showTests":
+        setActiveItem("Show Test");
+        break;
 
       default:
         setActiveItem("");
@@ -24,6 +30,7 @@ function AdminSidebar({ isActive, closeSidebar }) {
     }
   }, [location.pathname]);
 
+  //eslint-disable-next-line
   const toggleMenu = (menuId) => {
     setOpenMenu((prevMenu) => (prevMenu === menuId ? null : menuId));
   };
@@ -75,6 +82,30 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-squares-four" />
                   </span>
                   <span className="text">Show Questions</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Add Test" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/createTest" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-squares-four" />
+                  </span>
+                  <span className="text">Create Quiz</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Show Test" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/showTests" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-squares-four" />
+                  </span>
+                  <span className="text">Show Quiz</span>
                 </Link>
               </li>
               {/* <li

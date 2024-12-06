@@ -1,10 +1,12 @@
 import { Navigate } from "react-router-dom";
 
 // A simple utility to check for the token
+// This routes will be for non-logged in users
 const PrivateRoute = ({ children }) => {
   const token =
     localStorage.getItem("token") ||
-    document.cookie.split(";").find((c) => c.trim().startsWith("token_id="));
+    localStorage.getItem("user") ||
+    localStorage.getItem("session");
 
   if (token) {
     // If the user is logged in, redirect to the home/dashboard page

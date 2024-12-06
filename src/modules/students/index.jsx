@@ -4,7 +4,6 @@ import Header from "../../common/header/Header";
 import Footer from "../../common/footer";
 import StudentTable from "./components/table";
 import { Link } from "react-router-dom";
-import Preloader from "../../utils/Preloader";
 
 function Students() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
@@ -18,7 +17,6 @@ function Students() {
   };
   return (
     <>
-      <Preloader />
       <Sidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
       <div className="dashboard-main-wrapper">
         <Header toggleSidebar={toggleSidebar} />

@@ -49,10 +49,6 @@ function ShowQuestions() {
     [isFetchingNextPage, hasNextPage, fetchNextPage]
   );
 
-  if (isLoading) {
-    return <Preloader />;
-  }
-
   if (isError) {
     console.log("Error:", error);
 
@@ -68,6 +64,7 @@ function ShowQuestions() {
 
   return (
     <>
+      {isLoading && <Preloader />}
       <AdminSidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
       <div className="dashboard-main-wrapper">
         <Header toggleSidebar={toggleSidebar} />

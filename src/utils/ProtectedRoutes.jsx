@@ -1,20 +1,19 @@
 import { Navigate } from "react-router-dom";
 
 // A simple utility to check for the token
+// This routes will be for logged in users
 const ProtectedRoute = ({ children }) => {
-  const cookie = document.cookie
-    .split(";")
-    .find((c) => c.trim().startsWith("token_id="));
-  console.log("Cookie:", document.cookie);
-
-  // if (!cookie) {
-  //   localStorage.removeItem("token");
-  // }
   const token =
     localStorage.getItem("token") ||
-    document.cookie.split(";").find((c) => c.trim().startsWith("token_id="));
+    localStorage.getItem("user") ||
+    localStorage.getItem("session");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!token) {
+  if (user?.role === 1) {
+    return <Navigate to="/admin" />;
+  }
+
+  if (!token || user.role !== 0) {
     // If the user is not logged in, redirect them to the sign-in page
     return <Navigate to="/signin" />;
   }

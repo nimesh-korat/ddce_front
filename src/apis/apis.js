@@ -88,9 +88,9 @@ export async function smsOtpVerification(data) {
 }
 
 //?==================== LOGOUT API ====================
-export async function logout() {
+export async function logout(data) {
     try {
-        const response = await axios.post(`${api}/logout`);
+        const response = await axios.post(`${api}/logout`, data);
         return response.data;
     } catch (error) {
         console.log("logout() Err: ", error);
@@ -175,6 +175,17 @@ export async function getSubTopics(data) {
     }
 }
 
+//?==================== GET QUESTIONS FOR ADDING IN QUIZ API ====================
+export async function getQuestionsForTest(data) {
+    try {
+        const response = await axios.post(`${api}/admin/getQuestionsForTest`, data);
+        return response.data;
+    } catch (error) {
+        console.log("getQuestionsForTest() Err: ", error);
+        throw error;
+    }
+}
+
 //?==================== ADMIN LOGIN API ====================
 export async function adminLogin(data) {
     try {
@@ -201,34 +212,102 @@ export async function adminAddQuestions(data) {
 
 export const adminGetQuestions = async ({ pageParam = 1 }) => {
     try {
-        // Make the API request using axios
-        const response = await axios.get(`${api}/api/questions`, {
+        const response = await axios.get(`${api}/admin/questions`, {
             params: {
                 page: pageParam,
                 limit: 10,
             },
         });
 
-        // Ensure the response includes the necessary data
         if (!response.data || !response.data.data) {
             throw new Error('Invalid response format');
         }
 
-        return response.data; // Returns the data from the response
+        return response.data;
     } catch (error) {
-        // Handle error properly
         if (error.response) {
-            // Request was made, but server responded with a status outside of the 2xx range
             console.error('Error response from server:', error.response);
             throw new Error(error.response.data.message || 'Failed to fetch questions');
-        } else if (error.request) {
-            // Request was made but no response received
-            console.error('No response received:', error.request);
-            throw new Error('No response from server');
         } else {
-            // Something else caused the error
             console.error('Error setting up the request:', error.message);
             throw new Error('Error in the request setup');
         }
     }
 };
+
+//?==================== ADMIN ADD TEST API ====================
+export async function adminAddTest(data) {
+    try {
+        const response = await axios.post(`${api}/admin/addTest`, data);
+        return response.data;
+    } catch (error) {
+        console.log("adminAddTest() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== ADMIN ADD TEST API ====================
+export async function addTestQuestions(data) {
+    try {
+        const response = await axios.post(`${api}/admin/addTestQuestions`, data);
+        return response.data;
+    } catch (error) {
+        console.log("addTestQuestions() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== GET QUIZ API ====================
+export async function getQuiz() {
+    try {
+        const response = await axios.get(`${api}/admin/getTests`);
+        return response.data;
+    } catch (error) {
+        console.error("getQuiz() error", error);
+        throw error;
+    }
+}
+
+//?==================== GET QUIZ QUESTIONS API ====================
+export async function getQuizQuestions(data) {
+    try {
+        const response = await axios.post(`${api}/getTestQuestions`, data);
+        return response.data;
+    } catch (error) {
+        console.error("getQuizQuestions() error", error);
+        throw error;
+    }
+}
+
+//?==================== GET QUIZ FOR STUDENT API ====================
+export async function getTestForStudent(data) {
+    try {
+        const response = await axios.post(`${api}/getTest`, data);
+        return response.data;
+    } catch (error) {
+        console.error("getTestForStudent() error", error);
+        throw error;
+    }
+}
+
+//?==================== SUBMIT QUIZ API ====================
+export async function studentSubmitTest(data) {
+    try {
+        const response = await axios.post(`${api}/addStudentAnswer`, data);
+        return response.data;
+    } catch (error) {
+        console.error("studentSubmitTest() error", error);
+        throw error;
+    }
+}
+
+//?==================== STUDENT GET RESULT API ====================
+export async function studentGetResult(data) {
+    try {
+        const response = await axios.post(`${api}/getResultByStudent`, data);
+        return response.data;
+    } catch (error) {
+        console.error("studentGetResult() error", error);
+        throw error;
+    }
+}

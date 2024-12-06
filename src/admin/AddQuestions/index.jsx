@@ -6,22 +6,19 @@ import {
   getSubTopics,
   getTopics,
 } from "../../apis/apis";
-import Sidebar from "../../common/sidebar";
 import Preloader from "../../utils/Preloader";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer";
 import Question from "./components/Question";
-import QuestionList from "./components/QuestionList";
 import { toast } from "react-toastify";
 import AdminSidebar from "../../common/AdminSidebar";
+import ParagraphBasedQuestion from "./components/ParagraphBasedQuestion";
 
 function AddQuestion() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [subjectId, setSubjectId] = useState(null);
   const [topicId, setTopicId] = useState(null);
   const [subTopicId, setSubTopicId] = useState(null);
-  const [questionList, setQuestionList] = useState([]); // Array to store questions
-  const [editingIndex, setEditingIndex] = useState(null); // New state to track which question is being edited
 
   const admin = JSON.parse(localStorage.getItem("admin"));
   const [data, setData] = useState({
@@ -43,7 +40,7 @@ function AddQuestion() {
     prevAskedPaper: "",
     prevAskedYear: "",
     fromBook: "",
-    added_by: admin ? admin.id : null,
+    added_by: admin ? admin.id : 1,
     isImageQuestion: false,
     isImageOption: false,
     isAskedPreviously: false,
@@ -82,21 +79,18 @@ function AddQuestion() {
     setSubTopicId(null);
   };
 
-  const addQuestion = () => {
-    if (editingIndex !== null) {
-      // Update the existing question in the list
-      setQuestionList((prevList) =>
-        prevList.map(
-          (question, index) => (index === editingIndex ? { ...data } : question) // Update the question at the editingIndex
-        )
-      );
-      setEditingIndex(null); // Reset editing index after updating
-    } else {
-      // Add new question to the list
-      setQuestionList((prevList) => [...prevList, { ...data }]);
-    }
+  const addQuestionMutation = useMutation({
+    mutationFn: (formData) => adminAddQuestions(formData),
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to add question");
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || "Question added successfully");
+      resetForm();
+    },
+  });
 
-    // Reset form fields
+  const resetForm = () => {
     setData({
       ...data,
       question_text: "",
@@ -119,127 +113,34 @@ function AddQuestion() {
       isFromBook: false,
     });
   };
-  const [isEditing, setIsEditing] = useState(false);
 
-  const addQuestionQuary = useMutation({
-    mutationFn: (payload) => adminAddQuestions(payload), // Call the function with the payload
-    onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to add questions");
-    },
-    onSuccess: (data) => {
-      toast.success(data.message || "Questions added successfully");
-      setQuestionList([]); // Clear the list if needed
-    },
-  });
-
-  const handleAddQuestionToDB = () => {
-    if (questionList.length === 0) {
-      toast.error("No questions to add!");
+  const addQuestion = () => {
+    if (
+      !data.tbl_subtopic ||
+      !data.question_text ||
+      !data.answer_text ||
+      !data.question_marks
+    ) {
+      toast.error("Please fill all required fields!");
       return;
     }
 
-    // Create a new FormData object
     const formData = new FormData();
-    questionList.forEach((question, index) => {
-      // Add non-file data
-      formData.append(
-        `questions[${index}][tbl_subtopic]`,
-        question.tbl_subtopic
-      );
-      formData.append(
-        `questions[${index}][question_text]`,
-        question.question_text
-      );
 
-      // Add file fields
-      if (question.question_image) {
-        formData.append(
-          `questions[${index}][question_image]`,
-          question.question_image
-        );
-      }
-      if (question.option_a_image) {
-        formData.append(
-          `questions[${index}][option_a_image]`,
-          question.option_a_image
-        );
-      }
-      if (question.option_b_image) {
-        formData.append(
-          `questions[${index}][option_b_image]`,
-          question.option_b_image
-        );
-      }
-      if (question.option_c_image) {
-        formData.append(
-          `questions[${index}][option_c_image]`,
-          question.option_c_image
-        );
-      }
-      if (question.option_d_image) {
-        formData.append(
-          `questions[${index}][option_d_image]`,
-          question.option_d_image
-        );
-      }
-      if (question.answer_image) {
-        formData.append(
-          `questions[${index}][answer_image]`,
-          question.answer_image
-        );
-      }
-
-      // Add other text data
-      formData.append(
-        `questions[${index}][option_a_text]`,
-        question.option_a_text
-      );
-      formData.append(
-        `questions[${index}][option_b_text]`,
-        question.option_b_text
-      );
-      formData.append(
-        `questions[${index}][option_c_text]`,
-        question.option_c_text
-      );
-      formData.append(
-        `questions[${index}][option_d_text]`,
-        question.option_d_text
-      );
-      formData.append(`questions[${index}][answer_text]`, question.answer_text);
-      formData.append(
-        `questions[${index}][isImageQuestion]`,
-        question.isImageQuestion
-      );
-      formData.append(
-        `questions[${index}][isImageOption]`,
-        question.isImageOption
-      );
+    // Append all data fields
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
     });
-    console.log(formData);
 
-    // Now send this FormData in the API request
-    // addQuestionQuary.mutate(formData);
+    addQuestionMutation.mutate(formData);
   };
 
-  const onEdit = (index) => {
-    const questionToEdit = questionList[index];
-    setData(questionToEdit);
-    setIsEditing(true);
-    setEditingIndex(index);
-  };
-
-  const onDelete = (index) => {
-    // If deleting the currently editing question, reset editing index
-    if (editingIndex === index) {
-      setEditingIndex(null);
-    }
-
-    setQuestionList((prevList) => prevList.filter((_, i) => i !== index));
-  };
   return (
     <>
-      <Preloader />
+      {addQuestionMutation.isLoading ||
+        isLoadingSubTopics ||
+        isLoadingTopics ||
+        (isLoadingSubjects && <Preloader />)}
       <AdminSidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
       <div className="dashboard-main-wrapper">
         <Header toggleSidebar={toggleSidebar} />
@@ -286,10 +187,10 @@ function AddQuestion() {
                     className="form-select"
                     onChange={(e) => {
                       const selectedSubTopicId = e.target.value;
-                      setSubTopicId(selectedSubTopicId); // Update subtopic ID state
+                      setSubTopicId(selectedSubTopicId);
                       setData((prevData) => ({
                         ...prevData,
-                        tbl_subtopic: selectedSubTopicId, // Update tbl_subtopic in data state
+                        tbl_subtopic: selectedSubTopicId,
                       }));
                     }}
                     disabled={isLoadingSubTopics}
@@ -308,19 +209,71 @@ function AddQuestion() {
 
             {subTopicId && (
               <div className="row pt-10">
-                <Question
+                {/* <Question
                   data={data}
                   setData={setData}
                   handleSave={addQuestion}
-                  isEditing={isEditing}
-                />
-                <QuestionList
-                  questionList={questionList}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                  onSubmit={handleAddQuestionToDB}
-                  editingIndex={editingIndex} // Pass the editingIndex down to QuestionList
-                />
+                /> */}
+                <div className="container mt-5">
+                  {/* Navigation Bar for Tabs */}
+                  <ul className="nav nav-tabs" id="questionTabs" role="tablist">
+                    <li className="nav-item" role="presentation">
+                      <a
+                        className="nav-link active"
+                        id="simple-question-tab"
+                        data-bs-toggle="tab"
+                        href="#simple-question"
+                        role="tab"
+                        aria-controls="simple-question"
+                        aria-selected="true"
+                      >
+                        Simple Question
+                      </a>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                      <a
+                        className="nav-link"
+                        id="paragraph-question-tab"
+                        data-bs-toggle="tab"
+                        href="#paragraph-question"
+                        role="tab"
+                        aria-controls="paragraph-question"
+                        aria-selected="false"
+                      >
+                        Multi Question
+                      </a>
+                    </li>
+                  </ul>
+                  {/* Tab Content */}
+                  <div className="tab-content mt-3" id="questionTabsContent">
+                    {/* Simple Question Tab */}
+                    <div
+                      className="tab-pane fade show active"
+                      id="simple-question"
+                      role="tabpanel"
+                      aria-labelledby="simple-question-tab"
+                    >
+                      <Question
+                        data={data}
+                        setData={setData}
+                        handleSave={addQuestion}
+                      />
+                    </div>
+                    {/* Paragraph-Based Question Tab */}
+                    <div
+                      className="tab-pane fade"
+                      id="paragraph-question"
+                      role="tabpanel"
+                      aria-labelledby="paragraph-question-tab"
+                    >
+                      <ParagraphBasedQuestion
+                        data={data}
+                        setData={setData}
+                        handleSave={addQuestion}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-function Question({ data, setData, handleSave }) {
+function ParagraphBasedQuestion({ data, setData, handleSave }) {
   // Check if all options are filled
   const areOptionsValid = () => {
     if (data.isImageOption) {
@@ -60,7 +60,7 @@ function Question({ data, setData, handleSave }) {
       <div className="card">
         <div className="card-header">
           <div className="row">
-            <h4 className="card-title">Add Question</h4>
+            <h4 className="card-title">Add Multi Question</h4>
           </div>
         </div>
         <div className="card-body pt-0">
@@ -68,18 +68,18 @@ function Question({ data, setData, handleSave }) {
             <div className="row g-3">
               <div className="col-lg-12">
                 <div className="form-group">
-                  <label className="form-label">Question</label>
+                  <label className="form-label">Paragraph or Description</label>
                   <textarea
                     className="form-control"
-                    id="question"
-                    placeholder="Enter question"
+                    id="paragraph"
+                    placeholder="Enter paragraph or description"
                     name="question"
                     rows="3"
-                    value={data.question_text}
+                    value={data.paragraph}
                     onChange={(e) =>
                       setData({
                         ...data,
-                        question_text: e.target.value,
+                        paragraph: e.target.value,
                       })
                     }
                   ></textarea>
@@ -101,7 +101,7 @@ function Question({ data, setData, handleSave }) {
                 }
               />
               <label className="form-check-label" htmlFor="isImageQuestion">
-                Is the question in image format?
+                Is image required?
               </label>
             </div>
             {data.isImageQuestion && (
@@ -116,6 +116,23 @@ function Question({ data, setData, handleSave }) {
                 />
               </div>
             )}
+            <div className="form-group mt-3">
+              <label className="form-label">Question</label>
+              <textarea
+                className="form-control"
+                id="question"
+                placeholder="Enter Question"
+                name="question"
+                rows="3"
+                value={data.question_text}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    question_text: e.target.value,
+                  })
+                }
+              ></textarea>
+            </div>
             {data.isImageOption ? (
               <>
                 <div className="row g-3 mt-3">
@@ -136,6 +153,7 @@ function Question({ data, setData, handleSave }) {
                     />
                   </div>
                 </div>
+
                 <div className="row g-3 mt-3">
                   <div className="col-lg-6">
                     <label>Option C</label>
@@ -393,4 +411,4 @@ function Question({ data, setData, handleSave }) {
   );
 }
 
-export default Question;
+export default ParagraphBasedQuestion;

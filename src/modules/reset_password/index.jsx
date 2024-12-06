@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Preloader from "../../utils/Preloader";
 import { useMutation } from "@tanstack/react-query";
-import { resetPassword, resetPasswordOtpVerification } from "../../apis/apis";
+import { resetPassword } from "../../apis/apis";
 import { toast } from "react-toastify";
 const validationSchema = yup.object().shape({
   newPassword: yup
@@ -28,6 +28,7 @@ function ResetPassword() {
   const phone = location.state?.phone;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  //eslint-disable-next-line
   const [formData, setFormData] = useState(null);
 
   const {
@@ -57,7 +58,7 @@ function ResetPassword() {
 
   return (
     <>
-      <Preloader />
+      {resetPasswordQuery.isLoading && <Preloader />}
       <div className="side-overlay" />
       <section className="auth d-flex">
         <div className="auth-left bg-main-50 flex-center p-24">

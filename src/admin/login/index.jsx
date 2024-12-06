@@ -2,26 +2,29 @@ import React, { useEffect, useState, useContext } from "react";
 import Preloader from "../../utils/Preloader";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { adminLogin, login } from "../../apis/apis";
+import { adminLogin } from "../../apis/apis";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../utils/UserContex";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function AdminLogin() {
   const [data, setData] = useState({
     Email: "",
     Password: "",
   });
+  const [captcha, setCaptcha] = useState("");
   const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
   const navigate = useNavigate(); // To navigate to another page
   const { setUser } = useContext(UserContext); // Access setUser from the context
+  const captchaKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY_V2;
 
   useEffect(() => {
-    // Check if the user is already logged in (by checking for a token)
     const token =
       localStorage.getItem("token") ||
-      document.cookie.split(";").find((c) => c.trim().startsWith("token_id="));
+      localStorage.getItem("admin") ||
+      localStorage.getItem("session");
     if (token) {
-      navigate("/"); // Redirect if already logged in
+      navigate("/");
     }
   }, [navigate]);
 
@@ -41,35 +44,31 @@ function AdminLogin() {
     },
     onSuccess: (data) => {
       toast.success(data.message, {
+        autoClose: 1500,
         onClose: () => {
-          setUser(data.data); // Set user data in the context
-          localStorage.setItem("admin", JSON.stringify(data.data), {
-            expires: 1,
-          });
-          localStorage.setItem("token", data.token);
-          navigate("/admin/addQuestion"); // Redirect to the home page after successful login
+          setUser(data.data);
+          localStorage.setItem("admin", JSON.stringify(data.data));
+          localStorage.setItem("token", data.auth.token);
+          localStorage.setItem("session", data.auth.session);
+          navigate("/admin/addQuestion");
         },
       });
     },
   });
 
+  const handleRecaptchaChange = (value) => {
+    // console.log("Captcha value:", value);
+    setCaptcha(value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    toast.success("Logged in successfully", {
-      autoClose: 1500,
-      onClose: () => {
-        // Redirect to the home page after successful login
-        navigate("/admin/addQuestion");
-      },
-    });
-
-    // loginQuery.mutate(data); // Call the login API with the user data
+    loginQuery.mutate(data); // Call the login API with the user data
   };
 
   return (
     <>
-      <Preloader />
+      {loginQuery.isLoading && <Preloader />}
       <section className="auth d-flex">
         <div className="auth-left bg-main-50 flex-center p-24">
           <img src="../assets/images/thumbs/auth-img1.png" alt="" />
@@ -135,7 +134,21 @@ function AdminLogin() {
                   </span>
                 </div>
               </div>
-              <button type="submit" className="btn btn-main rounded-pill w-100">
+
+              {data.Email && data.Password && (
+                <ReCAPTCHA
+                  sitekey={captchaKey}
+                  onChange={handleRecaptchaChange}
+                  onExpired={() => setCaptcha("")}
+                  onError={(error) => console.error("reCAPTCHA error:", error)}
+                />
+              )}
+
+              <button
+                type="submit"
+                className="btn btn-main rounded-pill w-100 mt-10"
+                disabled={!captcha}
+              >
                 Sign In
               </button>
             </form>

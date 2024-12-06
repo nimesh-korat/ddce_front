@@ -21,28 +21,36 @@ function TestTopicListing() {
   };
 
   // Fetching subjects using React Query
-  const { data: subjects, isLoading: isLoadingSubjects, error: subjectError } = useQuery({
+  const {
+    data: subjects,
+    isLoading: isLoadingSubjects,
+    error: subjectError,
+  } = useQuery({
     queryKey: ["subjects"],
     queryFn: getSubjects,
   });
 
   // Fetching topics based on selected subject
-  const { data: topics, isLoading: isLoadingTopics, error: topicError } = useQuery(
-    {
-      queryKey: ["topics", subjectId],
-      queryFn: () => getTopics({ subjectId }),
-      enabled: !!subjectId, // Only fetch topics when subjectId is selected
-    }
-  );
+  const {
+    data: topics,
+    isLoading: isLoadingTopics,
+    error: topicError,
+  } = useQuery({
+    queryKey: ["topics", subjectId],
+    queryFn: () => getTopics({ subjectId }),
+    enabled: !!subjectId, // Only fetch topics when subjectId is selected
+  });
 
   // Fetching subtopics based on selected topic
-  const { data: subTopics, isLoading: isLoadingSubTopics, error: subTopicError } = useQuery(
-    {
-      queryKey: ["subtopics", topicId],
-      queryFn: () => getSubTopics({ topicId }),
-      enabled: !!topicId, // Only fetch subtopics when topicId is selected
-    }
-  );
+  const {
+    data: subTopics,
+    isLoading: isLoadingSubTopics,
+    error: subTopicError,
+  } = useQuery({
+    queryKey: ["subtopics", topicId],
+    queryFn: () => getSubTopics({ topicId }),
+    enabled: !!topicId, // Only fetch subtopics when topicId is selected
+  });
 
   // Handling errors
   if (subjectError || topicError || subTopicError) {
@@ -59,7 +67,9 @@ function TestTopicListing() {
 
   return (
     <>
-      <Preloader />
+      {isLoadingSubTopics ||
+        isLoadingTopics ||
+        (isLoadingSubjects && <Preloader />)}
       <Sidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
       <div className="dashboard-main-wrapper">
         <Header toggleSidebar={toggleSidebar} />

@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  resetPasswordOtpQuery,
   resetPasswordOtpVerification,
   sendResetPasswordOtp,
 } from "../../apis/apis";
@@ -102,7 +101,7 @@ function ForgetPassword() {
 
   return (
     <>
-      <Preloader />
+      {resetPasswordOtpQuery.isLoading && <Preloader />}
       <div className="side-overlay" />
       <section className="auth d-flex">
         <div className="auth-left bg-main-50 flex-center p-24">

@@ -20,7 +20,8 @@ function SignIn() {
     // Check if the user is already logged in (by checking for a token)
     const token =
       localStorage.getItem("token") ||
-      document.cookie.split(";").find((c) => c.trim().startsWith("token_id="));
+      localStorage.getItem("user") ||
+      localStorage.getItem("session");
     if (token) {
       navigate("/"); // Redirect if already logged in
     }
@@ -42,13 +43,12 @@ function SignIn() {
     },
     onSuccess: (data) => {
       toast.success(data.message, {
+        autoClose: 1500,
         onClose: () => {
-          // Update the context with the logged-in user's data
-          setUser(data.user); // Set user data in the context
-          localStorage.setItem("user", JSON.stringify(data.user), {
-            expires: 1,
-          }); // Store user in localStorage (for persistence)
-          localStorage.setItem("token", data.token); // Store the token
+          setUser(data.user);
+          localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("token", data.auth.token);
+          localStorage.setItem("session", data.auth.session);
           navigate("/"); // Redirect to the home page after successful login
         },
       });
@@ -57,13 +57,13 @@ function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     loginQuery.mutate(data); // Call the login API with the user data
   };
 
   return (
     <>
-      <Preloader />
+      {loginQuery.isLoading && <Preloader />}
       <section className="auth d-flex">
         <div className="auth-left bg-main-50 flex-center p-24">
           <img src="assets/images/thumbs/auth-img1.png" alt="" />

@@ -181,10 +181,6 @@
   //      End Document Ready function
   // ==========================================
 
-  // ========================= Preloader Js Start =====================
-  $(window).on("load", function () {
-    $('.preloader').fadeOut();
-  })
   // ========================= Preloader Js End=====================
 
   // ========================= Header Sticky Js Start ==============

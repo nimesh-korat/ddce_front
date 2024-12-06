@@ -14,7 +14,6 @@ function timeAgo(date) {
   dateUTC = new Date(dateUTC.getTime() + 5 * 60 * 60 * 1000 + 30 * 60 * 1000);
 
   const diffInSeconds = Math.floor((now - dateUTC) / 1000); // difference in seconds
-  console.log(diffInSeconds);
 
   if (diffInSeconds < 60) {
     return `${diffInSeconds} second${diffInSeconds === 1 ? "" : "s"} ago`;

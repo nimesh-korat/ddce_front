@@ -9,12 +9,17 @@ import UserContext from "../../utils/UserContex";
 function Header({ toggleSidebar }) {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
+
   const logoutQuery = useMutation({
-    mutationFn: logout,
+    mutationFn: (data) => logout(data),
     onSuccess: () => {
-      localStorage.removeItem("token");
       toast.success("Logged out successfully", {
+        autoClose: 1500,
         onClose: () => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("session");
+          localStorage.removeItem("user");
+          localStorage.removeItem("admin");
           navigate("/signin");
         },
       });
@@ -27,12 +32,12 @@ function Header({ toggleSidebar }) {
   });
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("admin");
-    localStorage.removeItem("user");
-    toast.success("Logged out successfully", {
-      onClose: () => navigate("/signin"),
-    });
+    const session = localStorage.getItem("session");
+    if (session) {
+      logoutQuery.mutate({ session });
+    } else {
+      toast.error("No active session found");
+    }
   };
 
   return (
@@ -209,8 +214,7 @@ function Header({ toggleSidebar }) {
                       className="w-54 h-54 rounded-circle"
                     />
                     <div>
-                      {/* <h4 className="mb-0">{user && user.name}</h4> */}
-                      <h4 className="mb-0">Hey, Explore Unity</h4>
+                      <h4 className="mb-0">{user && user.name}</h4>
                       <p className="fw-medium text-13 text-gray-200">
                         {user && user.email}
                       </p>
