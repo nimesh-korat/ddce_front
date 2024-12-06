@@ -127,7 +127,7 @@ function GiveExam() {
       const updatedStatus = [...prevStatus];
       updatedStatus[currentQuestionIndex] = {
         std_answer: selectedOption ? selectedOption.text : "", // Immediately record the answer or skip
-        attempt_status: selectedOption ? "attempted" : "skipped",
+        attempt_status: selectedOption ? "0" : "skipped",
       };
       return updatedStatus;
     });
@@ -137,8 +137,7 @@ function GiveExam() {
       answers: questions.map((q, index) => ({
         question_id: q.question_id,
         std_answer: questionStatus[index]?.std_answer || "", // Ensure to capture the selected or skipped answer
-        attempt_status:
-          questionStatus[index]?.attempt_status || "not_attempted", // Ensure status is correctly captured
+        attempt_status: questionStatus[index]?.attempt_status || "1", // Ensure status is correctly captured
       })),
     };
 
