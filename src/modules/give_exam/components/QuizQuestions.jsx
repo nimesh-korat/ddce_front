@@ -76,8 +76,7 @@ function QuizQuestion({
                   onClick={handleNextQuestion}
                   disabled={
                     !selectedOption &&
-                    questionStatus[currentQuestionIndex]?.attempt_status ===
-                      "not_attempted"
+                    questionStatus[currentQuestionIndex]?.attempt_status === "1"
                   }
                 >
                   Next

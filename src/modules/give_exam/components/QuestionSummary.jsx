@@ -15,7 +15,7 @@ function QuestionSummary({ questions, questionStatus, currentQuestionIndex }) {
               const bgColor =
                 index === currentQuestionIndex
                   ? "bg-info-300"
-                  : status === "attempted"
+                  : status === "0"
                   ? "bg-success-300"
                   : status === "skipped"
                   ? "bg-warning-300"
