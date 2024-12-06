@@ -113,7 +113,7 @@ function StudentQuizCard({ test }) {
                 >
                   Give Test
                 </Link>
-              ) : testStatus === "completed" ? (
+              ) : testStatus === "completed" && test.has_taken === 1 ? (
                 <Link
                   to={`/exam-result`}
                   state={{ test }}
