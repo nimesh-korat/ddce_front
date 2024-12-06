@@ -51,7 +51,7 @@ function GiveExam() {
       setQuestionStatus(
         shuffledQuestions.map(() => ({
           std_answer: "",
-          attempt_status: "not_attempted",
+          attempt_status: "1",
         }))
       );
     },
@@ -88,7 +88,7 @@ function GiveExam() {
       const updatedStatus = [...prevStatus];
       updatedStatus[currentQuestionIndex] = {
         std_answer: selectedOption ? selectedOption.text : "", // Store selected option's text or empty string if skipped
-        attempt_status: selectedOption ? "attempted" : "skipped", // Set attempt_status based on whether an option is selected
+        attempt_status: selectedOption ? "0" : "skipped", // Set attempt_status based on whether an option is selected
       };
       return updatedStatus;
     });
@@ -174,6 +174,7 @@ function GiveExam() {
     };
 
     // Detect developer tools open by checking the console
+    //! NOTE: This is not a perfect solution.
     const detectDevTools = () => {
       const threshold = 160; // The width of the developer tools window in some browsers
       const height = window.outerHeight - window.innerHeight > threshold;
