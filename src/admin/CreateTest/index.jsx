@@ -29,6 +29,9 @@ const schema = yup.object().shape({
     .max(500, "Description must not exceed 150 characters"),
   test_duration: yup
     .number()
+    .integer("Duration must be an integer")
+    .min(1, "Duration must be at least 1 minute")
+    .max(210, "Duration must not exceed 210 minutes")
     .typeError("Duration must be a number")
     .required("Duration is required")
     .positive("Duration must be greater than zero"),
@@ -195,6 +198,7 @@ function CreateTest() {
                         <input
                           type="number"
                           className="form-control py-11"
+                          maxLength={3}
                           placeholder="e.g. 120"
                           {...register("test_duration")}
                         />
