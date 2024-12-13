@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  adminAddParagraph,
   adminAddQuestions,
+  adminGetParagraph,
   getSubjects,
   getSubTopics,
   getTopics,
@@ -19,10 +21,17 @@ function AddQuestion() {
   const [subjectId, setSubjectId] = useState(null);
   const [topicId, setTopicId] = useState(null);
   const [subTopicId, setSubTopicId] = useState(null);
-
-  const admin = JSON.parse(localStorage.getItem("admin"));
+  const [paragraphId, setParagraphId] = useState(null);
+  const [paragraphData, setParagraphData] = useState({
+    paragraph_title: "",
+    paragraph_text: "",
+    paragraph_img: null,
+    tbl_subtopic: null,
+  });
   const [data, setData] = useState({
     tbl_subtopic: null,
+    isParagraph: false,
+    tbl_paragraph: null,
     question_text: "",
     question_image: null,
     option_a_text: "",
@@ -40,7 +49,6 @@ function AddQuestion() {
     prevAskedPaper: "",
     prevAskedYear: "",
     fromBook: "",
-    added_by: admin ? admin.id : 1,
     isImageQuestion: false,
     isImageOption: false,
     isAskedPreviously: false,
@@ -72,6 +80,12 @@ function AddQuestion() {
     enabled: !!topicId,
   });
 
+  const { data: paragraphs } = useQuery({
+    queryKey: ["paragraphs", subTopicId],
+    queryFn: () => adminGetParagraph({ subtopic_id: subTopicId }),
+    enabled: !!subTopicId,
+  });
+
   const handleSubjectChange = (e) => {
     const newSubjectId = e.target.value;
     setSubjectId(newSubjectId);
@@ -90,10 +104,30 @@ function AddQuestion() {
     },
   });
 
+  const addParagraphMutation = useMutation({
+    mutationFn: (formData) => adminAddParagraph(formData),
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to add question");
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || "Paragraph added successfully", {
+        autoClose: 1500,
+      });
+      setParagraphData({
+        ...paragraphData,
+        paragraph_title: "",
+        paragraph_text: "",
+        paragraph_img: null,
+      });
+    },
+  });
+
   const resetForm = () => {
     setData({
       ...data,
       question_text: "",
+      isParagraph: false,
+      tbl_paragraph: null,
       question_image: null,
       option_a_text: "",
       option_a_image: null,
@@ -133,6 +167,18 @@ function AddQuestion() {
     });
 
     addQuestionMutation.mutate(formData);
+  };
+
+  const addParagraphBasedQuestion = () => {
+    const formData = new FormData();
+
+    // Append all data fields
+    Object.keys(paragraphData).forEach((key) => {
+      formData.append(key, paragraphData[key]);
+    });
+    console.log([...formData]);
+
+    addParagraphMutation.mutate(formData);
   };
 
   return (
@@ -192,6 +238,10 @@ function AddQuestion() {
                         ...prevData,
                         tbl_subtopic: selectedSubTopicId,
                       }));
+                      setParagraphData((prevData) => ({
+                        ...prevData,
+                        tbl_subtopic: selectedSubTopicId,
+                      }));
                     }}
                     disabled={isLoadingSubTopics}
                     value={subTopicId || ""}
@@ -227,7 +277,7 @@ function AddQuestion() {
                         aria-controls="simple-question"
                         aria-selected="true"
                       >
-                        Simple Question
+                        Add Question
                       </a>
                     </li>
                     <li className="nav-item" role="presentation">
@@ -240,7 +290,7 @@ function AddQuestion() {
                         aria-controls="paragraph-question"
                         aria-selected="false"
                       >
-                        Multi Question
+                        Add Paragraph
                       </a>
                     </li>
                   </ul>
@@ -256,6 +306,9 @@ function AddQuestion() {
                       <Question
                         data={data}
                         setData={setData}
+                        setParagraphId={setParagraphId}
+                        paragraphId={paragraphId}
+                        paragraphData={paragraphs}
                         handleSave={addQuestion}
                       />
                     </div>
@@ -267,9 +320,9 @@ function AddQuestion() {
                       aria-labelledby="paragraph-question-tab"
                     >
                       <ParagraphBasedQuestion
-                        data={data}
-                        setData={setData}
-                        handleSave={addQuestion}
+                        data={paragraphData}
+                        setData={setParagraphData}
+                        handleSave={addParagraphBasedQuestion}
                       />
                     </div>
                   </div>

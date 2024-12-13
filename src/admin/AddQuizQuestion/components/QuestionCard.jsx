@@ -21,7 +21,7 @@ const AdminAddQuizQuestionCard = forwardRef(
     <div className="card question-card shadow" ref={ref}>
       <div className="card-body">
         <h5 className="card-title d-flex">
-          {index}. {question}{" "}
+          {index}. {question}{" "} 
           <span className="text-warning-600 text-12">
             {isAsked ? "(asked)" : ""}
           </span>

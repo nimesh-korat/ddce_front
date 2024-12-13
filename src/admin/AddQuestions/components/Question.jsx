@@ -1,6 +1,13 @@
 import React from "react";
 
-function Question({ data, setData, handleSave }) {
+function Question({
+  data,
+  setData,
+  setParagraphId,
+  paragraphId,
+  paragraphData,
+  handleSave,
+}) {
   // Check if all options are filled
   const areOptionsValid = () => {
     if (data.isImageOption) {
@@ -47,7 +54,7 @@ function Question({ data, setData, handleSave }) {
     }
   };
 
-  const handleFileChange = (e, field) => {
+  const handleFileChange = (e, field) => { 
     const file = e.target.files[0];
     setData((prevData) => ({
       ...prevData,
@@ -65,45 +72,6 @@ function Question({ data, setData, handleSave }) {
         </div>
         <div className="card-body pt-0">
           <form>
-            <div className="row g-3">
-              <div className="col-lg-12">
-                <div className="form-group">
-                  <label className="form-label">Question</label>
-                  <textarea
-                    className="form-control"
-                    id="question"
-                    placeholder="Enter question"
-                    name="question"
-                    rows="3"
-                    value={data.question_text}
-                    onChange={(e) =>
-                      setData({
-                        ...data,
-                        question_text: e.target.value,
-                      })
-                    }
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-            <div className="form-check mt-3">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                id="isImageQuestion"
-                name="isImageQuestion"
-                checked={data.isImageQuestion}
-                onChange={(e) =>
-                  setData({
-                    ...data,
-                    isImageQuestion: e.target.checked,
-                  })
-                }
-              />
-              <label className="form-check-label" htmlFor="isImageQuestion">
-                Is the question in image format?
-              </label>
-            </div>
             {data.isImageQuestion && (
               <div className="input-group mt-3">
                 <input
@@ -116,10 +84,102 @@ function Question({ data, setData, handleSave }) {
                 />
               </div>
             )}
+            <div className="col-lg-12">
+              <div className="form-group">
+                <label className="form-label">Question</label>
+                <textarea
+                  className="form-control"
+                  id="question"
+                  placeholder="Enter Question"
+                  name="question"
+                  rows="3"
+                  value={data.question_text}
+                  onChange={(e) =>
+                    setData({
+                      ...data,
+                      question_text: e.target.value,
+                    })
+                  }
+                ></textarea>
+              </div>
+            </div>
+            <div className="row g-3 mt-3">
+              <div className="col-lg-6">
+                <div className="form-check mt-3">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="isParagraph"
+                    name="isParagraph"
+                    checked={data.isParagraph}
+                    onChange={(e) =>
+                      setData({
+                        ...data,
+                        isParagraph: e.target.checked,
+                      })
+                    }
+                  />
+                  <label className="form-check-label" htmlFor="isParagraph">
+                    Is the question is paragraph based?
+                  </label>
+                </div>
+                {data.isParagraph && (
+                  <select
+                    className="form-select"
+                    onChange={(e) =>
+                      setData({ ...data, tbl_paragraph: e.target.value })
+                    }
+                    value={data.tbl_paragraph || ""}
+                  >
+                    <option value="">Select Paragraph</option>
+                    {paragraphData?.data?.map((paragraph) => (
+                      <option
+                        key={paragraph.paragraph_id}
+                        value={paragraph.paragraph_id}
+                      >
+                        {paragraph.paragraph_title}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+              <div className="col-lg-6">
+                <div className="form-check mt-3">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="isImageQuestion"
+                    name="isImageQuestion"
+                    checked={data.isImageQuestion}
+                    onChange={(e) =>
+                      setData({
+                        ...data,
+                        isImageQuestion: e.target.checked,
+                      })
+                    }
+                  />
+                  <label className="form-check-label" htmlFor="isImageQuestion">
+                    Is the question in image format?
+                  </label>
+                </div>
+                {data.isImageQuestion && (
+                  <div className="input-group mt-3">
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="inputGroupFile04"
+                      aria-describedby="inputGroupFileAddon04"
+                      aria-label="Upload"
+                      onChange={(e) => handleFileChange(e, "question_image")}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
             {data.isImageOption ? (
               <>
                 <div className="row g-3 mt-3">
-                  <div className="col-lg-6">
+                  <div className="col-sm-6">
                     <label>Option A</label>
                     <input
                       type="file"
@@ -127,7 +187,7 @@ function Question({ data, setData, handleSave }) {
                       onChange={(e) => handleFileChange(e, "option_a_image")}
                     />
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-sm-6">
                     <label>Option B</label>
                     <input
                       type="file"
@@ -135,9 +195,7 @@ function Question({ data, setData, handleSave }) {
                       onChange={(e) => handleFileChange(e, "option_b_image")}
                     />
                   </div>
-                </div>
-                <div className="row g-3 mt-3">
-                  <div className="col-lg-6">
+                  <div className="col-sm-6">
                     <label>Option C</label>
                     <input
                       type="file"
@@ -145,7 +203,7 @@ function Question({ data, setData, handleSave }) {
                       onChange={(e) => handleFileChange(e, "option_c_image")}
                     />
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-sm-6">
                     <label>Option D</label>
                     <input
                       type="file"
@@ -158,7 +216,7 @@ function Question({ data, setData, handleSave }) {
             ) : (
               <>
                 <div className="row g-3 mt-3">
-                  <div className="col-lg-6">
+                  <div className="col-sm-6">
                     <label>Option A</label>
                     <input
                       type="text"
@@ -170,7 +228,7 @@ function Question({ data, setData, handleSave }) {
                       }
                     />
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-sm-6">
                     <label>Option B</label>
                     <input
                       type="text"
@@ -182,9 +240,7 @@ function Question({ data, setData, handleSave }) {
                       }
                     />
                   </div>
-                </div>
-                <div className="row g-3 mt-3">
-                  <div className="col-lg-6">
+                  <div className="col-sm-6">
                     <label>Option C</label>
                     <input
                       type="text"
@@ -196,7 +252,7 @@ function Question({ data, setData, handleSave }) {
                       }
                     />
                   </div>
-                  <div className="col-lg-6">
+                  <div className="col-sm-6">
                     <label>Option D</label>
                     <input
                       type="text"
@@ -279,6 +335,8 @@ function Question({ data, setData, handleSave }) {
                     />
                   </div>
                 </div>
+                <div className="row g-3 mt-3"></div>
+
                 <div className="row g-3 mt-3">
                   <div className="col-lg-6">
                     <div className="form-check">
@@ -301,6 +359,44 @@ function Question({ data, setData, handleSave }) {
                         Is this question previously asked?
                       </label>
                     </div>
+                    {data.isAskedPreviously && (
+                      <>
+                        <div className="row">
+                          <div className="col-sm-6">
+                            <label>Which Paper?</label>
+                            <input
+                              type="text"
+                              className="form-control py-8"
+                              value={data.prevAskedPaper}
+                              placeholder="BE01"
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  prevAskedPaper: e.target.value,
+                                })
+                              }
+                              required
+                            />
+                          </div>
+                          <div className="col-sm-6">
+                            <label>Which Year?</label>
+                            <input
+                              type="number"
+                              className="form-control py-8"
+                              value={data.prevAskedYear}
+                              placeholder="2024"
+                              onChange={(e) =>
+                                setData({
+                                  ...data,
+                                  prevAskedYear: e.target.value,
+                                })
+                              }
+                              required
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                   <div className="col-lg-6">
                     <div className="form-check">
@@ -320,58 +416,25 @@ function Question({ data, setData, handleSave }) {
                         Is this question from a book?
                       </label>
                     </div>
+                    {data.isFromBook && (
+                      <>
+                        <label>Which Book?</label>
+                        <input
+                          type="text"
+                          className="form-control py-8"
+                          value={data.fromBook}
+                          placeholder="DDCET Solutions"
+                          onChange={(e) =>
+                            setData({ ...data, fromBook: e.target.value })
+                          }
+                          required
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
               </>
             )}
-
-            <div className="row g-3 mt-3">
-              {data.isAskedPreviously && (
-                <>
-                  <div className="col-lg-3">
-                    <label>Which Paper?</label>
-                    <input
-                      type="text"
-                      className="form-control py-8"
-                      value={data.prevAskedPaper}
-                      placeholder="BE01"
-                      onChange={(e) =>
-                        setData({ ...data, prevAskedPaper: e.target.value })
-                      }
-                      required
-                    />
-                  </div>
-                  <div className="col-lg-3">
-                    <label>Which Year?</label>
-                    <input
-                      type="number"
-                      className="form-control py-8"
-                      value={data.prevAskedYear}
-                      placeholder="2024"
-                      onChange={(e) =>
-                        setData({ ...data, prevAskedYear: e.target.value })
-                      }
-                      required
-                    />
-                  </div>
-                </>
-              )}
-              {data.isFromBook && (
-                <div className="col-lg-6">
-                  <label>Which Book?</label>
-                  <input
-                    type="text"
-                    className="form-control py-8"
-                    value={data.fromBook}
-                    placeholder="DDCET Solutions"
-                    onChange={(e) =>
-                      setData({ ...data, fromBook: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-              )}
-            </div>
             <div className="row mt-4">
               <div className="col-lg-12 d-flex justify-content-end">
                 <button

@@ -6,6 +6,7 @@ import { adminLogin } from "../../apis/apis";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../utils/UserContex";
 import ReCAPTCHA from "react-google-recaptcha";
+import UnityLogo from "../../utils/UnityLogo";
 
 function AdminLogin() {
   const [data, setData] = useState({
@@ -76,7 +77,7 @@ function AdminLogin() {
         <div className="auth-right py-40 px-24 flex-center flex-column">
           <div className="auth-right__inner mx-auto w-100">
             <Link to={"/#"} className="auth-right__logo">
-              <img src="../assets/images/logo/logo.png" alt="" />
+              <UnityLogo />
             </Link>
             <h2 className="mb-8">Welcome Back! 👋</h2>
             <p className="text-gray-600 text-15 mb-32">

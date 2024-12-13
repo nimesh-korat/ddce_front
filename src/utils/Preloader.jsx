@@ -13,8 +13,6 @@ function Preloader() {
           onComplete={() => {
             console.log("anmation");
           }}
-          
-          goToAndPlay={100}
           style={{ width: 200, height: 200 }}
         />
       </div>

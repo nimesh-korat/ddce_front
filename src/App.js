@@ -21,6 +21,7 @@ import AddQuizQuestions from "./admin/AddQuizQuestion";
 import Exam from "./modules/exams";
 import GiveExam from "./modules/give_exam";
 import ExamResult from "./modules/exam_result";
+import AccountSetting from "./modules/account_settings";
 
 
 function App() {
@@ -46,8 +47,8 @@ function App() {
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/events" element={<Events />} />
           <Route path="/library" element={<Library />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/account_setting" element={<AccountSetting />} /> */}
+          <Route path="/pricing" element={<Pricing />} /> */}
+          <Route path="/account_settings" element={<AccountSetting />} />
 
           {/* Protect signin and signup routes */}
           <Route path="/signin" element={<PrivateRoute><SignIn /> </PrivateRoute>} />

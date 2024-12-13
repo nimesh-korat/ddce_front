@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import Pagination from "@mui/material/Pagination";
 import QuizCard from "./quiz";
-import "./QuizTab.css"; // Make sure to import the CSS file
+import "./QuizTab.css";
 
-function QuizTab({ activeTab, setActiveTab, children, quizes }) {
+function QuizTab({ activeTab, setActiveTab, quizes }) {
   const currentDate = new Date(); // Get the current date
 
   const determineTestStatus = (quiz) => {
@@ -22,38 +23,28 @@ function QuizTab({ activeTab, setActiveTab, children, quizes }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4; // Number of items to display per page
 
-  // Filter quizes based on the active tab and status
+  // Filter quizzes based on the active tab and status
   const filterQuizesByStatus = (status) => {
     return quizes.filter((quiz) => determineTestStatus(quiz) === status);
   };
 
-  // Calculate the total number of pages
-  const getTotalPages = (filteredQuizes) => {
-    return Math.ceil(filteredQuizes.length / itemsPerPage);
-  };
-
-  // Get the quizes for the current page
+  // Get quizzes for the current page
   const getCurrentPageQuizes = (filteredQuizes) => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return filteredQuizes.slice(startIndex, endIndex);
   };
 
-  // Handle page change
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
   const filteredQuizes = filterQuizesByStatus(activeTab);
-  const totalPages = getTotalPages(filteredQuizes);
-
-  // Check if there are any quizes for the active tab
-  const hasQuizes = filteredQuizes.length > 0;
+  const totalPages = Math.ceil(filteredQuizes.length / itemsPerPage);
 
   // Reset pagination to page 1 when activeTab changes
   useEffect(() => {
     setCurrentPage(1); // Reset to first page when tab changes
   }, [activeTab]);
+
+  // Check if there are any quizzes for the active tab
+  const hasQuizes = filteredQuizes.length > 0;
 
   return (
     <div className="card">
@@ -73,7 +64,7 @@ function QuizTab({ activeTab, setActiveTab, children, quizes }) {
                 type="button"
                 role="tab"
               >
-                Up Coming
+                Upcoming
               </button>
             </li>
             <li className="nav-item" role="presentation">
@@ -114,26 +105,16 @@ function QuizTab({ activeTab, setActiveTab, children, quizes }) {
             {!hasQuizes && <p>No quizzes found.</p>}
           </div>
 
-          {/* Show Pagination only if there are quizes to display */}
+          {/* Show Pagination only if there are quizzes to display */}
           {hasQuizes && (
             <div className="pagination-controls">
-              <button
-                className="pagination-button btn"
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-              >
-                &lt; Prev
-              </button>
-              <span className="pagination-info">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                className="pagination-button btn"
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-              >
-                Next &gt;
-              </button>
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={(event, value) => setCurrentPage(value)}
+                variant="outlined"
+                color="primary"
+              />
             </div>
           )}
         </div>

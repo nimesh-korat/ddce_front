@@ -121,6 +121,15 @@ function StudentQuizCard({ test }) {
                 >
                   View Result
                 </Link>
+              ) : testStatus === "completed" && test.has_taken !== 1 ? (
+                <button
+                  disabled
+                  to={`/exam-result`}
+                  state={{ test }}
+                  className="btn btn-outline-main rounded-pill py-9 w-100 mt-24"
+                >
+                  Quiz Not Attempted
+                </button>
               ) : null}
             </div>
           </div>

@@ -33,9 +33,9 @@ function Sidebar({ isActive, closeSidebar }) {
     }
   }, [location.pathname]);
 
-  const toggleMenu = (menuId) => {
-    setOpenMenu((prevMenu) => (prevMenu === menuId ? null : menuId));
-  };
+  // const toggleMenu = (menuId) => {
+  //   setOpenMenu((prevMenu) => (prevMenu === menuId ? null : menuId));
+  // };
 
   return (
     <>
@@ -380,37 +380,16 @@ function Sidebar({ isActive, closeSidebar }) {
                 </span>
               </li>
 
-              <li
-                className="sidebar-menu__item has-dropdown position-relative"
-                onClick={() => toggleMenu("menu3")}
-              >
-                <p className="sidebar-menu__link">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-gear" />
-                  </span>
-                  <span className="text">Account Settings</span>
-                </p>
-                <ul
-                  className="sidebar-submenu"
-                  id="authencation"
-                  style={{ display: openMenu === "menu3" ? "block" : "none" }}
+              <li className="sidebar-menu__item ">
+                <Link
+                  to="/account_settings"
+                  className="sidebar-menu__link d-flex align-items-center"
                 >
-                  <li className="sidebar-submenu__item">
-                    <Link to="/" className="sidebar-submenu__link">
-                      Profile
-                    </Link>
-                  </li>
-                  <li className="sidebar-submenu__item">
-                    <Link to="/" className="sidebar-submenu__link">
-                      Change Password
-                    </Link>
-                  </li>
-                  <li className="sidebar-submenu__item">
-                    <Link to="/" className="sidebar-submenu__link">
-                      Logout
-                    </Link>
-                  </li>
-                </ul>
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-tag" />
+                  </span>
+                  <span className="text">Profile</span>
+                </Link>
               </li>
             </ul>
           </div>

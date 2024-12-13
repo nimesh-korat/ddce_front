@@ -29,6 +29,8 @@
     .question-card {
       margin: 20px auto;
       border-radius: 8px;
+      font-size: 1rem;
+      /* Default font size for the card */
     }
 
     .option-card {
@@ -39,6 +41,8 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.2s ease-in-out, box-shadow 0.2s;
+      font-size: 0.95rem;
+      /* Slightly smaller for options */
     }
 
     .option-card:hover {
@@ -48,7 +52,9 @@
 
     .question-bullet-icon {
       width: 25px;
+      /* Fixed width */
       height: 25px;
+      /* Fixed height */
       margin-right: 10px;
       background-color: #6c757d;
       color: #fff;
@@ -57,6 +63,7 @@
       justify-content: center;
       align-items: center;
       border-radius: 50%;
+      /* Ensures it's always circular */
     }
 
     .question-row-gap {
@@ -70,7 +77,8 @@
       background-color: #d4edda;
       border: 1px solid #c3e6cb;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 1rem;
+      /* Font size for the correct answer */
       color: #155724;
       display: flex;
       align-items: center;
@@ -78,7 +86,9 @@
 
     .correct-answer-section .icon {
       width: 30px;
+      /* Fixed width */
       height: 30px;
+      /* Fixed height */
       margin-right: 10px;
       background-color: #28a745;
       color: #fff;
@@ -87,7 +97,69 @@
       justify-content: center;
       align-items: center;
       border-radius: 50%;
+      /* Ensures it's always circular */
     }
+
+    /* Responsive Adjustments */
+
+    /* Medium screens (tablets, 768px and below) */
+    @media (max-width: 768px) {
+      .question-card {
+        font-size: 0.9rem;
+        /* Slightly smaller for medium screens */
+      }
+
+      .option-card {
+        font-size: 0.85rem;
+        padding: 8px;
+        /* Reduce padding */
+      }
+
+      .question-bullet-icon {
+        font-size: 14px;
+        /* Consistent text inside circle */
+      }
+
+      .correct-answer-section {
+        font-size: 0.9rem;
+        /* Adjust font size */
+      }
+
+      .correct-answer-section .icon {
+        font-size: 16px;
+        /* Consistent text inside circle */
+      }
+    }
+
+    /* Small screens (mobile phones, 480px and below) */
+    @media (max-width: 480px) {
+      .question-card {
+        font-size: 0.8rem;
+        /* Smaller font size for small screens */
+      }
+
+      .option-card {
+        font-size: 0.75rem;
+        padding: 6px;
+        /* Reduce padding further */
+      }
+
+      .question-bullet-icon {
+        font-size: 12px;
+        /* Adjust font size without shrinking circle */
+      }
+
+      .correct-answer-section {
+        font-size: 0.8rem;
+        /* Adjust font size */
+      }
+
+      .correct-answer-section .icon {
+        font-size: 14px;
+        /* Adjust font size without shrinking circle */
+      }
+    }
+
 
     /* Custom CSS for limiting text to 2 lines */
     .two-line-text {
@@ -138,25 +210,21 @@
   <!-- Phosphor Js -->
   <script src="../assets/js/phosphor-icon.js"></script>
   <!-- file upload -->
-  <script src="../assets/js/file-upload.js"></script>
+  <!-- <script src="../assets/js/file-upload.js"></script> -->
   <!-- file upload -->
   <script src="../assets/js/plyr.js"></script>
   <!-- dataTables -->
-  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+  <!-- <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script> -->
   <!-- full calendar -->
-  <script src="../assets/js/full-calendar.js"></script>
+  <!-- <script src="../assets/js/full-calendar.js"></script> -->
   <!-- jQuery UI -->
-  <script src="../assets/js/jquery-ui.js"></script>
+  <!-- <script src="../assets/js/jquery-ui.js"></script> -->
   <!-- jQuery UI -->
   <script src="../assets/js/editor-quill.js"></script>
   <!-- apex charts -->
   <!-- <script src="../assets/js/apexcharts.min.js"></script> -->
   <!-- Calendar Js -->
-  <script src="../assets/js/calendar.js"></script>
-  <!-- jvectormap Js -->
-  <script src="../assets/js/jquery-jvectormap-2.0.5.min.js"></script>
-  <!-- jvectormap world Js -->
-  <script src="../assets/js/jquery-jvectormap-world-mill-en.js"></script>
+  <!-- <script src="../assets/js/calendar.js"></script> -->
 
   <!-- main js -->
   <script src="../assets/js/main.js"></script>
@@ -182,32 +250,32 @@
   <script>
 
     // ========================== Export Js Start ==============================
-    document.getElementById('exportOptions').addEventListener('change', function () {
-      const format = this.value;
-      const table = document.getElementById('studentTable');
-      let data = [];
-      const headers = [];
+    // document.getElementById('exportOptions').addEventListener('change', function () {
+    //   const format = this.value;
+    //   const table = document.getElementById('studentTable');
+    //   let data = [];
+    //   const headers = [];
 
-      // Get the table headers
-      table.querySelectorAll('thead th').forEach(th => {
-        headers.push(th.innerText.trim());
-      });
+    //   // Get the table headers
+    //   table.querySelectorAll('thead th').forEach(th => {
+    //     headers.push(th.innerText.trim());
+    //   });
 
-      // Get the table rows
-      table.querySelectorAll('tbody tr').forEach(tr => {
-        const row = {};
-        tr.querySelectorAll('td').forEach((td, index) => {
-          row[headers[index]] = td.innerText.trim();
-        });
-        data.push(row);
-      });
+    //   // Get the table rows
+    //   table.querySelectorAll('tbody tr').forEach(tr => {
+    //     const row = {};
+    //     tr.querySelectorAll('td').forEach((td, index) => {
+    //       row[headers[index]] = td.innerText.trim();
+    //     });
+    //     data.push(row);
+    //   });
 
-      if (format === 'csv') {
-        downloadCSV(data);
-      } else if (format === 'json') {
-        downloadJSON(data);
-      }
-    });
+    //   if (format === 'csv') {
+    //     downloadCSV(data);
+    //   } else if (format === 'json') {
+    //     downloadJSON(data);
+    //   }
+    // });
 
     function downloadCSV(data) {
       const csv = data.map(row => Object.values(row).join(',')).join('\n');

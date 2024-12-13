@@ -109,6 +109,28 @@ export async function fetchRecentRegNotification() {
     }
 }
 
+//?==================== FETCH PROFILE DETAILS API ====================
+export async function fetchProfileDetails() {
+    try {
+        const response = await axios.get(`${api}/getProfileDetails`);
+        return response.data;
+    } catch (error) {
+        console.log("fetchProfileDetails() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== UPDATE PROFILE DETAILS API ====================
+export async function updateProfileDetails(data) {
+    try {
+        const response = await axios.post(`${api}/updateProfile`, data);
+        return response.data;
+    } catch (error) {
+        console.log("updateProfileDetails() Err: ", error);
+        throw error;
+    }
+}
+
 //?==================== SEND RESET PASSWORD OTP API ====================
 export async function sendResetPasswordOtp(data) {
     try {
@@ -204,6 +226,28 @@ export async function adminAddQuestions(data) {
         return response.data;
     } catch (error) {
         console.log("adminAddQuestions() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== ADD PARAGRAPH BASED QUESTIONS API ====================
+export async function adminAddParagraph(data) {
+    try {
+        const response = await axios.post(`${api}/admin/addParagraph`, data);
+        return response.data;
+    } catch (error) {
+        console.log("adminAddParagraph() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== ADD PARAGRAPH BASED QUESTIONS API ====================
+export async function adminGetParagraph(data) {
+    try {
+        const response = await axios.post(`${api}/admin/getParagraph`, data);
+        return response.data;
+    } catch (error) {
+        console.log("adminGetParagraph() Err: ", error);
         throw error;
     }
 }

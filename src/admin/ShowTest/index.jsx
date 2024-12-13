@@ -33,7 +33,6 @@ function ShowTests() {
   React.useEffect(() => {
     if (quiz) {
       setquizes(quiz.data);
-      console.log("quiz.quizes:", quiz.data);
     }
   }, [quiz]);
 
