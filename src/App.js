@@ -21,7 +21,8 @@ import AddQuizQuestions from "./admin/AddQuizQuestion";
 import Exam from "./modules/exams";
 import GiveExam from "./modules/give_exam";
 import ExamResult from "./modules/exam_result";
-import AccountSetting from "./modules/account_settings";
+import Profile from "./modules/profile";
+import Weightage from "./modules/weightage";
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           <Route path="/exam-result" element={<ProtectedRoute><ExamResult /></ProtectedRoute>} />
           <Route path="/test" element={<ProtectedRoute><GiveExam /></ProtectedRoute>} />
           <Route path="/testTopicListing" element={<TestTopicListing />} />
+          <Route path="/weightage" element={<ProtectedRoute><Weightage /></ProtectedRoute>} />
           {/* <Route path="/mentors" element={<Mentor />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/messages" element={<Messages />} />
@@ -48,7 +50,7 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/library" element={<Library />} />
           <Route path="/pricing" element={<Pricing />} /> */}
-          <Route path="/account_settings" element={<AccountSetting />} />
+          <Route path="/profile" element={<Profile />} />
 
           {/* Protect signin and signup routes */}
           <Route path="/signin" element={<PrivateRoute><SignIn /> </PrivateRoute>} />

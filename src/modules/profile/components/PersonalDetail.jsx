@@ -2,8 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { updateProfileDetails } from "../../../apis/apis";
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import UserContext from "../../../utils/UserContex";
 
 function PersonalDetails({ data, setData }) {
+  const { user, setUser } = useContext(UserContext);
   const formatDate = (isoDate) => {
     if (!isoDate) return ""; // Handle null/undefined dates
     return format(new Date(isoDate), "yyyy-MM-dd");
@@ -22,6 +25,9 @@ function PersonalDetails({ data, setData }) {
     mutationFn: (data) => updateProfileDetails(data),
     onSuccess: () => {
       toast.success("Profile Details Updated!");
+      const updatedUser = { ...user, ...data };
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
     },
     onError: (error) => {
       toast.error("Error updating profile details!");

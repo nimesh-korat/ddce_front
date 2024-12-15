@@ -26,6 +26,12 @@ function Sidebar({ isActive, closeSidebar }) {
       case "/mentor_course":
         setActiveItem("mentor_course");
         break;
+      case "/profile":
+        setActiveItem("profile");
+        break;
+      case "/weightage":
+        setActiveItem("weightage");
+        break;
 
       default:
         setActiveItem("");
@@ -310,9 +316,13 @@ function Sidebar({ isActive, closeSidebar }) {
                   />
                 </p>
               </li>
-              <li className="sidebar-menu__item ">
+              <li
+                className={`sidebar-menu__item  ${
+                  activeItem === "weightage" ? "activePage" : ""
+                }`}
+              >
                 <p
-                  to="/pricing"
+                  to="/weightage"
                   className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">
@@ -380,9 +390,13 @@ function Sidebar({ isActive, closeSidebar }) {
                 </span>
               </li>
 
-              <li className="sidebar-menu__item ">
+              <li
+                className={`sidebar-menu__item  ${
+                  activeItem === "profile" ? "activePage" : ""
+                }`}
+              >
                 <Link
-                  to="/account_settings"
+                  to="/profile"
                   className="sidebar-menu__link d-flex align-items-center"
                 >
                   <span className="icon d-flex align-items-center">

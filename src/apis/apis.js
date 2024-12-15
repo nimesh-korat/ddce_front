@@ -131,6 +131,17 @@ export async function updateProfileDetails(data) {
     }
 }
 
+//?==================== CHANGE PASSWORD API ====================
+export async function changePassword(data) {
+    try {
+        const response = await axios.post(`${api}/change_password`, data);
+        return response.data;
+    } catch (error) {
+        console.log("changePassword() Err: ", error);
+        throw error;
+    }
+}
+
 //?==================== SEND RESET PASSWORD OTP API ====================
 export async function sendResetPasswordOtp(data) {
     try {

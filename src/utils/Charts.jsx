@@ -1,10 +1,10 @@
 import React from "react";
-import ReactApexChart from "react-apexcharts";
+import ApexCharts from "react-apexcharts";
 
 const Chart = ({ options, series, type, height }) => {
   return (
     <div>
-      <ReactApexChart
+      <ApexCharts
         options={options}
         series={series}
         type={type}

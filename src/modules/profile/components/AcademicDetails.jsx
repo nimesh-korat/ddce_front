@@ -1,10 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import React from "react";
+import React, { useContext } from "react";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { updateProfileDetails } from "../../../apis/apis";
+import UserContext from "../../../utils/UserContex";
 
 function AcademicDetails({ data, setData }) {
+  const { user, setUser } = useContext(UserContext);
   const branchOptions = [
     { value: "aeronautical_engineering", label: "Aeronautical Engineering" },
     { value: "architecture", label: "Architecture" },
@@ -87,6 +89,9 @@ function AcademicDetails({ data, setData }) {
     mutationFn: (data) => updateProfileDetails(data),
     onSuccess: () => {
       toast.success("Profile Details Updated!");
+      const updatedUser = { ...user, ...data };
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
     },
     onError: (error) => {
       toast.error("Error updating profile details!");

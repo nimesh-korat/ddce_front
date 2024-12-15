@@ -9,11 +9,11 @@ const ProtectedRoute = ({ children }) => {
     localStorage.getItem("session");
   const user = JSON.parse(localStorage.getItem("user"));
 
-  if (user?.role === 1) {
+  if (user?.Role === 1) {
     return <Navigate to="/admin" />;
   }
 
-  if (!token || user.role !== 0) {
+  if (!token || user.Role !== 0) {
     // If the user is not logged in, redirect them to the sign-in page
     return <Navigate to="/signin" />;
   }

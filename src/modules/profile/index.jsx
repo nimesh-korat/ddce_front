@@ -11,9 +11,10 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProfileDetails } from "../../apis/apis";
 import Preloader from "../../utils/Preloader";
 
-function AccountSetting() {
+function Profile() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [profileDetail, setProfileDetail] = useState({
+    Id: "",
     Name: "",
     Email_Id: "",
     Phone_Number: "",
@@ -39,9 +40,8 @@ function AccountSetting() {
   const fetchProfileQuery = useQuery({
     queryKey: ["fetchProfile"],
     queryFn: fetchProfileDetails,
-    staleTime: 1 * 60 * 1000, // 1 minute
     onSuccess: (data) => {
-      setProfileDetail(data.data); // Directly set the fetched data
+      setProfileDetail(data.data);
     },
     onError: (error) => {
       console.error("Error fetching profile:", error);
@@ -50,7 +50,7 @@ function AccountSetting() {
 
   useEffect(() => {
     if (fetchProfileQuery.data) {
-      setProfileDetail(fetchProfileQuery.data.data); // Make sure the fetched data is in the correct shape
+      setProfileDetail(fetchProfileQuery.data.data);
     }
   }, [fetchProfileQuery.data]);
 
@@ -90,7 +90,7 @@ function AccountSetting() {
           <div className="tab-content" id="pills-tabContent">
             <PersonalDetail data={profileDetail} setData={setProfileDetail} />
             <AcademicDetails data={profileDetail} setData={setProfileDetail} />
-            <PasswordChange data={profileDetail} setData={setProfileDetail} />
+            <PasswordChange id={profileDetail.Id} />
           </div>
         </div>
         <Footer />
@@ -99,4 +99,4 @@ function AccountSetting() {
   );
 }
 
-export default AccountSetting;
+export default Profile;

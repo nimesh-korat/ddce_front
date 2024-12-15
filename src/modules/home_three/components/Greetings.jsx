@@ -12,15 +12,16 @@ function Greetings() {
             <div className="col-lg-6">
               <div className="grettings-box-two__content">
                 <h2 className="fw-medium mb-0 flex-align gap-10">
-                  Hi, {user?.name}
+                  Hi, {user?.Name}
                   <img src="assets/images/icons/wave-hand.png" alt="" />
                 </h2>
                 <h2 className="fw-medium mb-16">
-                  What do you want to learn today with your <b>Unity</b> partner?
+                  What do you want to learn today with your <b>Unity</b>{" "}
+                  partner?
                 </h2>
                 <p className="text-15 text-gray-400">
-                  Discover unique questions, track progress, and achieve your learning
-                  goods seamlessly.
+                  Discover unique questions, track progress, and achieve your
+                  learning goods seamlessly.
                 </p>
                 {/* <a
                   href="student-courses.html"

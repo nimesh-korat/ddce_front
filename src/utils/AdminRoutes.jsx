@@ -9,7 +9,7 @@ const AdminRoutes = ({ children }) => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!token || user?.role !== 1) {
+  if (!token || user?.Role !== 1) {
     // If the user is not logged in, redirect them to the sign-in page
     return <Navigate to="/signin" />;
   }
