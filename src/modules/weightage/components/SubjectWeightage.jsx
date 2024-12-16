@@ -13,8 +13,7 @@ function SubjectWeightage() {
       enabled: false,
       style: {
         fontSize: "14px",
-        fontWeight: "600",
-        colors: ["#fff"],
+        color: "#fff",
       },
       formatter: (val) => `${val}%`,
     },
@@ -29,12 +28,12 @@ function SubjectWeightage() {
     },
     tooltip: {
       y: {
-        formatter: (val) => `${val}% Weightage`, // Show weightage in tooltip
+        formatter: (val) => `${val}% Weightage`,
       },
     },
     stroke: {
-      width: 1, // Add stroke to make it sharper
-      colors: ["#fff"], // White stroke around the pie slices
+      width: 1,
+      colors: ["#fff"],
     },
   };
 
