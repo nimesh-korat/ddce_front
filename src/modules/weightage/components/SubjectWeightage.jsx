@@ -53,7 +53,7 @@ function SubjectWeightage() {
       {/* Loop through each paper and create a chart */}
       {data?.success &&
         data.data.map((paper, index) => (
-          <div className="col-sm-12 col-md-6 mb-3" key={paper.PaperId}>
+          <div className="col-sm-12 col-md-6 mb-12" key={paper.PaperId}>
             <div className="card shadow">
               <div className="card-header border-bottom border-gray-100 fw-bold">
                 {`${index + 1}.  ${paper.PaperName} - (${paper.Paper})`}
