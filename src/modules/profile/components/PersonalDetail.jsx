@@ -29,7 +29,7 @@ const validationSchema = yup.object().shape({
   Address: yup.string().required("Address is required"),
 });
 
-function PersonalDetails({ data }) {
+function PersonalDetails({ data, setData }) {
   const { user, setUser } = useContext(UserContext);
 
   const formatDate = (isoDate) => {
@@ -78,6 +78,7 @@ function PersonalDetails({ data }) {
       });
     }
   }, [data, reset]);
+
   const updateProfileMutation = useMutation({
     mutationFn: (data) => updatePersonalDetails(data),
     onSuccess: () => {
@@ -104,6 +105,11 @@ function PersonalDetails({ data }) {
       Intl.DateTimeFormat().resolvedOptions().timeZone
     );
     const isoDate = format(utcDate, "yyyy-MM-dd'T'HH:mm:ss.SSSX"); // ISO string with UTC time
+    setData({
+      ...data,
+      ...formData,
+      DOB: isoDate,
+    });
 
     // Send the isoDate (UTC formatted date) to the server
     updateProfileMutation.mutate({

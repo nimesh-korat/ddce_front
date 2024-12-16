@@ -128,9 +128,6 @@ function AcademicDetails({ data }) {
       });
     },
   });
-  console.log(
-    branchOptions.find((option) => option.value === data?.Branch_Name)
-  );
 
   const onSubmit = (formData) => {
     updateProfileMutation.mutate({ ...formData, Id: user?.Id });

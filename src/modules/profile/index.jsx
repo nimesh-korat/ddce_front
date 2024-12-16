@@ -88,8 +88,8 @@ function Profile() {
           </div>
           <ProfileTab data={profileDetail} />
           <div className="tab-content" id="pills-tabContent">
-            <PersonalDetail data={profileDetail} />
-            <AcademicDetails data={profileDetail} />
+            <PersonalDetail data={profileDetail} setData={setProfileDetail} />
+            <AcademicDetails data={profileDetail} setData={setProfileDetail} />
             <PasswordChange id={profileDetail.Id} />
           </div>
         </div>
