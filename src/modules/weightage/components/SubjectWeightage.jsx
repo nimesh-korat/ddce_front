@@ -1,6 +1,53 @@
+import { useQuery } from "@tanstack/react-query";
 import Chart from "../../../utils/Charts";
+import Preloader from "../../../utils/Preloader";
+import { getSyllabusWithPaper } from "../../../apis/apis";
 
-function SubjectWeightage({ data, radialBarOptions }) {
+function SubjectWeightage() {
+  const radialBarOptions = {
+    chart: {
+      height: 250,
+      type: "pie",
+    },
+    dataLabels: {
+      enabled: false,
+      style: {
+        fontSize: "14px",
+        fontWeight: "600",
+        colors: ["#fff"],
+      },
+      formatter: (val) => `${val}%`,
+    },
+    legend: {
+      show: true,
+      position: "bottom",
+      fontSize: "14px",
+      fontWeight: "500",
+      labels: {
+        colors: "#333",
+      },
+    },
+    tooltip: {
+      y: {
+        formatter: (val) => `${val}% Weightage`, // Show weightage in tooltip
+      },
+    },
+    stroke: {
+      width: 1, // Add stroke to make it sharper
+      colors: ["#fff"], // White stroke around the pie slices
+    },
+  };
+
+  // Fetch the syllabus data using react-query
+  const { data, isLoading } = useQuery({
+    queryKey: ["syllabusWithPaper"],
+    queryFn: getSyllabusWithPaper,
+  });
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
   return (
     <div className="row">
       {/* Loop through each paper and create a chart */}

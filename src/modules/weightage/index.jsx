@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getSyllabusWithPaper } from "../../apis/apis";
-import Preloader from "../../utils/Preloader";
 import SubjectWeightage from "./components/SubjectWeightage";
 
 function Weightage() {
@@ -16,50 +13,6 @@ function Weightage() {
 
   const closeSidebar = () => {
     setIsSidebarActive(false);
-  };
-
-  // Fetch the syllabus data using react-query
-  const { data, isLoading } = useQuery({
-    queryKey: ["syllabusWithPaper"],
-    queryFn: getSyllabusWithPaper,
-  });
-
-  if (isLoading) {
-    return <Preloader />;
-  }
-
-  const radialBarOptions = {
-    chart: {
-      height: 250,
-      type: "pie",
-    },
-    dataLabels: {
-      enabled: false,
-      style: {
-        fontSize: "14px",
-        fontWeight: "600",
-        colors: ["#fff"],
-      },
-      formatter: (val) => `${val}%`,
-    },
-    legend: {
-      show: true,
-      position: "bottom",
-      fontSize: "14px",
-      fontWeight: "500",
-      labels: {
-        colors: "#333",
-      },
-    },
-    tooltip: {
-      y: {
-        formatter: (val) => `${val} Weightage`, // Show weightage in tooltip
-      },
-    },
-    stroke: {
-      width: 1, // Add stroke to make it sharper
-      colors: ["#fff"], // White stroke around the pie slices
-    },
   };
 
   return (
@@ -91,7 +44,7 @@ function Weightage() {
             </ul>
           </div>
           <div className="container-fluid dashboard-content">
-            <SubjectWeightage data={data} radialBarOptions={radialBarOptions} />
+            <SubjectWeightage />
           </div>
         </div>
       </div>
