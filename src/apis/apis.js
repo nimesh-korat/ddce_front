@@ -121,12 +121,23 @@ export async function fetchProfileDetails() {
 }
 
 //?==================== UPDATE PROFILE DETAILS API ====================
-export async function updateProfileDetails(data) {
+export async function updatePersonalDetails(data) {
     try {
-        const response = await axios.post(`${api}/updateProfile`, data);
+        const response = await axios.post(`${api}/updatePersonalDetails`, data);
         return response.data;
     } catch (error) {
-        console.log("updateProfileDetails() Err: ", error);
+        console.log("updatePersonalDetails() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== UPDATE PROFILE DETAILS API ====================
+export async function updateAcademicDetails(data) {
+    try {
+        const response = await axios.post(`${api}/updateAcademicDetails`, data);
+        return response.data;
+    } catch (error) {
+        console.log("updateAcademicDetails() Err: ", error);
         throw error;
     }
 }

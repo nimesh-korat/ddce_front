@@ -29,6 +29,7 @@ function PasswordChange(id) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
@@ -42,6 +43,7 @@ function PasswordChange(id) {
       toast.success("Password changed successfully!", {
         autoClose: 1500,
       });
+      reset();
     },
     onError: (error) => {
       toast.error(error.response.data.message, { autoClose: 3000 });

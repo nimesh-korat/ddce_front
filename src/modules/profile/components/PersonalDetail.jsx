@@ -1,42 +1,116 @@
 import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { updateProfileDetails } from "../../../apis/apis";
+import { fromZonedTime, toZonedTime } from "date-fns-tz";
 import { toast } from "react-toastify";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import UserContext from "../../../utils/UserContex";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { updatePersonalDetails } from "../../../apis/apis";
 
-function PersonalDetails({ data, setData }) {
+// Validation schema using yup
+const validationSchema = yup.object().shape({
+  Name: yup.string().required("Name is required"),
+  Email_Id: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  Phone_Number: yup
+    .string()
+    .matches(/^\d{10}$/, "Phone number must be 10 digits")
+    .required("Phone number is required"),
+  Whatsapp_Number: yup
+    .string()
+    .matches(/^\d{10}$/, "WhatsApp number must be 10 digits")
+    .required("WhatsApp number is required"),
+  DOB: yup.date().required("Date of Birth is required"),
+  Gender: yup.string().required("Gender is required"),
+  Address: yup.string().required("Address is required"),
+});
+
+function PersonalDetails({ data }) {
   const { user, setUser } = useContext(UserContext);
+
   const formatDate = (isoDate) => {
-    if (!isoDate) return ""; // Handle null/undefined dates
-    return format(new Date(isoDate), "yyyy-MM-dd");
-  };
-  const formattedDOB = formatDate(data?.DOB);
+    if (!isoDate || isNaN(Date.parse(isoDate))) {
+      return ""; // Handle invalid or missing date
+    }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    // Convert UTC date to local time zone
+    const localDate = fromZonedTime(
+      isoDate,
+      Intl.DateTimeFormat().resolvedOptions().timeZone
+    );
+
+    // Return formatted date in "yyyy-MM-dd" format
+    return format(localDate, "yyyy-MM-dd");
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset, // Use this to reset form values
+  } = useForm({
+    defaultValues: {
+      Name: data?.Name || "",
+      Email_Id: data?.Email_Id || "",
+      Phone_Number: data?.Phone_Number || "",
+      Whatsapp_Number: data?.Whatsapp_Number || "",
+      DOB: "",
+      Gender: data?.Gender || "",
+      Address: data?.Address || "",
+    },
+    resolver: yupResolver(validationSchema),
+  });
+
+  useEffect(() => {
+    if (data) {
+      reset({
+        Name: data?.Name || "",
+        Email_Id: data?.Email_Id || "",
+        Phone_Number: data?.Phone_Number || "",
+        Whatsapp_Number: data?.Whatsapp_Number || "",
+        DOB: formatDate(data?.DOB) || "",
+        Gender: data?.Gender || "",
+        Address: data?.Address || "",
+      });
+    }
+  }, [data, reset]);
   const updateProfileMutation = useMutation({
-    mutationFn: (data) => updateProfileDetails(data),
+    mutationFn: (data) => updatePersonalDetails(data),
     onSuccess: () => {
-      toast.success("Profile Details Updated!");
+      toast.success("Profile Details Updated!", {
+        autoClose: 1500,
+      });
       const updatedUser = { ...user, ...data };
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
     },
-    onError: (error) => {
-      toast.error("Error updating profile details!");
+    onError: () => {
+      toast.error("Error updating profile details!", {
+        autoClose: 1500,
+      });
     },
   });
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    updateProfileMutation.mutate(data);
+  const onSubmit = (formData) => {
+    const { DOB } = formData;
+
+    // Convert the date back to UTC format before submitting
+    const utcDate = toZonedTime(
+      DOB,
+      Intl.DateTimeFormat().resolvedOptions().timeZone
+    );
+    const isoDate = format(utcDate, "yyyy-MM-dd'T'HH:mm:ss.SSSX"); // ISO string with UTC time
+
+    // Send the isoDate (UTC formatted date) to the server
+    updateProfileMutation.mutate({
+      ...formData,
+      DOB: isoDate, // Use UTC date in form data
+      Id: user?.Id,
+    });
   };
 
   return (
@@ -52,7 +126,7 @@ function PersonalDetails({ data, setData }) {
           <h4 className="mb-4">My Details</h4>
         </div>
         <div className="card-body">
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row gy-4">
               <div className="col-sm-6 col-xs-6">
                 <label htmlFor="name" className="form-label mb-8 h6">
@@ -62,11 +136,12 @@ function PersonalDetails({ data, setData }) {
                   type="text"
                   className="form-control py-11"
                   id="name"
-                  name="Name"
-                  value={data?.Name}
-                  onChange={handleInputChange}
+                  {...register("Name")}
                   placeholder="Enter Name"
                 />
+                {errors.Name && (
+                  <span className="text-danger">{errors.Name.message}</span>
+                )}
               </div>
               <div className="col-sm-6 col-xs-6">
                 <label htmlFor="email" className="form-label mb-8 h6">
@@ -76,11 +151,12 @@ function PersonalDetails({ data, setData }) {
                   type="text"
                   className="form-control py-11"
                   id="email"
-                  name="Email_Id"
-                  onChange={handleInputChange}
-                  value={data?.Email_Id}
+                  {...register("Email_Id")}
                   placeholder="Enter Email"
                 />
+                {errors.Email_Id && (
+                  <span className="text-danger">{errors.Email_Id.message}</span>
+                )}
               </div>
               <div className="col-sm-6 col-xs-6">
                 <label htmlFor="phone" className="form-label mb-8 h6">
@@ -90,11 +166,14 @@ function PersonalDetails({ data, setData }) {
                   type="number"
                   className="form-control py-11"
                   id="phone"
-                  name="Phone_Number"
-                  onChange={handleInputChange}
-                  value={data?.Phone_Number}
+                  {...register("Phone_Number")}
                   placeholder="Enter Phone Number"
                 />
+                {errors.Phone_Number && (
+                  <span className="text-danger">
+                    {errors.Phone_Number.message}
+                  </span>
+                )}
               </div>
               <div className="col-sm-6 col-xs-6">
                 <label htmlFor="whatsapp" className="form-label mb-8 h6">
@@ -104,11 +183,14 @@ function PersonalDetails({ data, setData }) {
                   type="number"
                   className="form-control py-11"
                   id="whatsapp"
-                  value={data?.Whatsapp_Number}
-                  name="Whatsapp_Number"
-                  onChange={handleInputChange}
+                  {...register("Whatsapp_Number")}
                   placeholder="Enter WhatsApp Number"
                 />
+                {errors.Whatsapp_Number && (
+                  <span className="text-danger">
+                    {errors.Whatsapp_Number.message}
+                  </span>
+                )}
               </div>
               <div className="col-sm-6 col-xs-6">
                 <label htmlFor="datepicker" className="form-label mb-8 h6">
@@ -116,13 +198,13 @@ function PersonalDetails({ data, setData }) {
                 </label>
                 <input
                   id="datepicker"
-                  data-provide="datepicker"
                   type="date"
-                  value={formattedDOB}
-                  name="DOB"
-                  onChange={handleInputChange}
                   className="form-control py-11"
+                  {...register("DOB")}
                 />
+                {errors.DOB && (
+                  <span className="text-danger">{errors.DOB.message}</span>
+                )}
               </div>
               <div className="col-sm-6 col-xs-6">
                 <label htmlFor="gender" className="form-label mb-8 h6">
@@ -131,10 +213,7 @@ function PersonalDetails({ data, setData }) {
                 <select
                   id="gender"
                   className="form-select py-11"
-                  value={data?.Gender || ""}
-                  name="Gender"
-                  onChange={handleInputChange}
-                  aria-label="Default select example"
+                  {...register("Gender")}
                 >
                   <option value="" disabled>
                     Select Gender
@@ -143,6 +222,9 @@ function PersonalDetails({ data, setData }) {
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
                 </select>
+                {errors.Gender && (
+                  <span className="text-danger">{errors.Gender.message}</span>
+                )}
               </div>
               <div className="col-12">
                 <label htmlFor="address" className="form-label mb-8 h6">
@@ -152,20 +234,15 @@ function PersonalDetails({ data, setData }) {
                   className="form-control py-11"
                   id="address"
                   rows="4"
-                  value={data?.Address}
-                  name="Address"
-                  onChange={handleInputChange}
+                  {...register("Address")}
                   placeholder="Enter Address"
                 />
+                {errors.Address && (
+                  <span className="text-danger">{errors.Address.message}</span>
+                )}
               </div>
               <div className="col-12">
                 <div className="flex-align justify-content-end gap-8">
-                  {/* <button
-                    type="reset"
-                    className="btn btn-outline-main bg-main-100 border-main-100 text-main-600 rounded-pill py-9"
-                  >
-                    Cancel
-                  </button> */}
                   <button
                     type="submit"
                     className="btn btn-main rounded-pill py-9"
