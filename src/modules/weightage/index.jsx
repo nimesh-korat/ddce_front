@@ -3,6 +3,7 @@ import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import { Link } from "react-router-dom";
 import SubjectWeightage from "./components/SubjectWeightage";
+import TopicWeightage from "./components/TopicWeightage";
 
 function Weightage() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
@@ -45,6 +46,7 @@ function Weightage() {
           </div>
           <div className="container-fluid dashboard-content">
             <SubjectWeightage />
+            <TopicWeightage />
           </div>
         </div>
       </div>
