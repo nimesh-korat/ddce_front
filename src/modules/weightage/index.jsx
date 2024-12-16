@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import { Link } from "react-router-dom";
-import Chart from "../../utils/Charts";
 import { useQuery } from "@tanstack/react-query";
 import { getSyllabusWithPaper } from "../../apis/apis";
 import Preloader from "../../utils/Preloader";
+import SubjectWeightage from "./components/SubjectWeightage";
 
 function Weightage() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
@@ -20,7 +20,7 @@ function Weightage() {
 
   // Fetch the syllabus data using react-query
   const { data, isLoading } = useQuery({
-    queryKey: "syllabusWithPaper",
+    queryKey: ["syllabusWithPaper"],
     queryFn: getSyllabusWithPaper,
   });
 
@@ -28,7 +28,6 @@ function Weightage() {
     return <Preloader />;
   }
 
-  // Radial bar chart options with a more attractive color palette and hover effects
   const radialBarOptions = {
     chart: {
       height: 250,
@@ -92,39 +91,7 @@ function Weightage() {
             </ul>
           </div>
           <div className="container-fluid dashboard-content">
-            <div className="row">
-              {/* Loop through each paper and create a chart */}
-              {data?.success &&
-                data.data.map((paper, index) => (
-                  <div className="col-sm-12 col-md-6 mb-3" key={paper.PaperId}>
-                    <div className="card shadow">
-                      <div
-                        className="card-header"
-                        style={{ fontWeight: "bold" }}
-                      >
-                        {`${index + 1}.  ${paper.PaperName} - (${paper.Paper})`}
-                      </div>
-                      <div className="card-body">
-                        <Chart
-                          options={{
-                            ...radialBarOptions,
-                            labels: paper.Subjects.map(
-                              (subject) => subject.Subject
-                            ), // Set labels as subject names
-                          }}
-                          series={[
-                            ...paper.Subjects.map(
-                              (subject) => subject.SubjectWeightage
-                            ),
-                          ]}
-                          type="pie"
-                          height={250}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
+            <SubjectWeightage data={data} radialBarOptions={radialBarOptions} />
           </div>
         </div>
       </div>

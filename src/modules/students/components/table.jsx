@@ -72,10 +72,10 @@ function StudentTable() {
         <div className="card-body p-0 overflow-x-auto p-16">
           <table
             id="studentTable"
-            className="table table-striped table-bordered"
+            className="table table-striped  table-hover "
           >
             <thead>
-              <tr>
+              <tr className="border-bottom">
                 <th className="h6 text-gray-300">#</th>
                 <th className="h6 text-gray-300">Students</th>
                 <th className="h6 text-gray-300">College Name</th>
@@ -89,7 +89,7 @@ function StudentTable() {
                   const formattedTimeAgo = timeAgo(new Date(student.timeAgo));
 
                   return (
-                    <tr key={index}>
+                    <tr className="border-bottom" key={index}>
                       <td className="h6 mb-0 fw-medium text-gray-300">
                         {index + 1}
                       </td>

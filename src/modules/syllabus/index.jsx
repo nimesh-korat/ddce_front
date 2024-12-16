@@ -33,10 +33,6 @@ function Syllabus() {
     queryFn: getSyllabus,
   });
 
-  if (data) {
-    console.log(data.data);
-  }
-
   if (isLoading) {
     return <Preloader />;
   }
