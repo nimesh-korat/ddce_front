@@ -34,7 +34,7 @@ function ProfileTab({ data }) {
                 <div className="setting-profile__infos flex-align flex-wrap gap-16">
                   <div className="flex-align gap-6">
                     <span className="text-gray-600 d-flex text-lg">
-                      <i className="ph ph-swatches" />
+                      <i className="ph ph-student" />
                     </span>
                     <span className="text-gray-600 d-flex text-15">
                       {data?.College_Name}
@@ -104,7 +104,7 @@ function ProfileTab({ data }) {
                 aria-controls="pills-password"
                 aria-selected="false"
               >
-                Change Password
+                Password Settings
               </button>
             </li>
           </ul>

@@ -3,6 +3,9 @@ import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import { Link } from "react-router-dom";
 import Chart from "../../utils/Charts";
+import { useQuery } from "@tanstack/react-query";
+import { getSyllabusWithPaper } from "../../apis/apis";
+import Preloader from "../../utils/Preloader";
 
 function Weightage() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
@@ -14,18 +17,52 @@ function Weightage() {
   const closeSidebar = () => {
     setIsSidebarActive(false);
   };
+
+  // Fetch the syllabus data using react-query
+  const { data, isLoading } = useQuery({
+    queryKey: "syllabusWithPaper",
+    queryFn: getSyllabusWithPaper,
+  });
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  // Radial bar chart options with a more attractive color palette and hover effects
   const radialBarOptions = {
     chart: {
-      height: 172,
+      height: 250,
+      type: "pie",
     },
-    colors: ["#3D7FF9", "#27CFA7", "#020205"],
     dataLabels: {
       enabled: false,
+      style: {
+        fontSize: "14px",
+        fontWeight: "600",
+        colors: ["#fff"],
+      },
+      formatter: (val) => `${val}%`,
     },
-    labels: ["Completed", "In Progress", "Not Started"],
+    legend: {
+      show: true,
+      position: "bottom",
+      fontSize: "14px",
+      fontWeight: "500",
+      labels: {
+        colors: "#333",
+      },
+    },
+    tooltip: {
+      y: {
+        formatter: (val) => `${val} Weightage`, // Show weightage in tooltip
+      },
+    },
+    stroke: {
+      width: 1, // Add stroke to make it sharper
+      colors: ["#fff"], // White stroke around the pie slices
+    },
   };
 
-  const radialBarSeries = [15, 15, 15];
   return (
     <>
       <Sidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
@@ -56,18 +93,37 @@ function Weightage() {
           </div>
           <div className="container-fluid dashboard-content">
             <div className="row">
-              <div className="col-md-4">
-                <div className="card">
-                  <div className="card-body">
-                    <Chart
-                      options={radialBarOptions}
-                      series={radialBarSeries}
-                      type="pie"
-                      height={172}
-                    />
+              {/* Loop through each paper and create a chart */}
+              {data?.success &&
+                data.data.map((paper, index) => (
+                  <div className="col-sm-12 col-md-6 mb-3" key={paper.PaperId}>
+                    <div className="card shadow">
+                      <div
+                        className="card-header"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {`${index + 1}.  ${paper.PaperName} - (${paper.Paper})`}
+                      </div>
+                      <div className="card-body">
+                        <Chart
+                          options={{
+                            ...radialBarOptions,
+                            labels: paper.Subjects.map(
+                              (subject) => subject.Subject
+                            ), // Set labels as subject names
+                          }}
+                          series={[
+                            ...paper.Subjects.map(
+                              (subject) => subject.SubjectWeightage
+                            ),
+                          ]}
+                          type="pie"
+                          height={250}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                ))}
             </div>
           </div>
         </div>

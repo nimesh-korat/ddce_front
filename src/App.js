@@ -23,10 +23,10 @@ import GiveExam from "./modules/give_exam";
 import ExamResult from "./modules/exam_result";
 import Profile from "./modules/profile";
 import Weightage from "./modules/weightage";
+import Syllabus from "./modules/syllabus";
 
 
 function App() {
-
   return (
     <>
       <ToastContainer autoClose={3000} />
@@ -42,6 +42,7 @@ function App() {
           <Route path="/exam-result" element={<ProtectedRoute><ExamResult /></ProtectedRoute>} />
           <Route path="/test" element={<ProtectedRoute><GiveExam /></ProtectedRoute>} />
           <Route path="/testTopicListing" element={<TestTopicListing />} />
+          <Route path="/syllabus" element={<ProtectedRoute><Syllabus /></ProtectedRoute>} />
           <Route path="/weightage" element={<ProtectedRoute><Weightage /></ProtectedRoute>} />
           {/* <Route path="/mentors" element={<Mentor />} />
           <Route path="/resources" element={<Resources />} />

@@ -219,6 +219,28 @@ export async function getSubTopics(data) {
     }
 }
 
+//?==================== GET SYLLABUS API ====================
+export async function getSyllabus() {
+    try {
+        const response = await axios.get(`${api}/getSyllabus`);
+        return response.data;
+    } catch (error) {
+        console.log("getSyllabus() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== GET SYLLABUS WITH PAPER API ====================
+export async function getSyllabusWithPaper() {
+    try {
+        const response = await axios.get(`${api}/getSyllabusWithPaper`);
+        return response.data;
+    } catch (error) {
+        console.log("getSyllabusWithPaper() Err: ", error);
+        throw error;
+    }
+}
+
 //?==================== GET QUESTIONS FOR ADDING IN QUIZ API ====================
 export async function getQuestionsForTest(data) {
     try {

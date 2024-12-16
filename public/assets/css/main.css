@@ -4434,7 +4434,7 @@ button:focus {
 }
 
 .list-inside {
-  list-style: inside;
+  list-style: disc;
 }
 
 .min-w-max-content {

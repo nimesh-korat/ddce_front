@@ -72,142 +72,174 @@ function PasswordChange(id) {
     >
       <div className="card mt-24">
         <div className="card-header border-bottom">
-          <h4 className="mb-4">Password Settings</h4>
+          <h4 className="mb-4">Change Password</h4>
         </div>
         <div className="card-body">
           <div className="row">
-            <form onSubmit={handleSubmit(handleOnSubmit)}>
-              <div className="col-md-6">
+            <div className="col-12">
+              <form onSubmit={handleSubmit(handleOnSubmit)}>
                 <div className="row gy-4">
-                  <div className="col-12">
-                    <label htmlFor="oldPassword" className="form-label mb-8 h6">
-                      Current Password
-                    </label>
-                    <div className="position-relative">
-                      <input
-                        type={showCurrentPassword ? "text" : "password"}
-                        className="form-control py-11"
-                        id="oldPassword"
-                        placeholder="Enter Current Password"
-                        {...register("oldPassword")}
-                      />
-                      <span
-                        className={`toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y ${
-                          showCurrentPassword ? "ph ph-eye" : "ph ph-eye-slash"
-                        }`}
-                        onClick={() =>
-                          setShowCurrentPassword(!showCurrentPassword)
-                        }
-                      />
-                    </div>
-                    {/* Error message directly under input */}
-                    {errors.oldPassword && (
-                      <span
-                        className="text-danger mt-2"
-                        style={{ fontSize: "12px" }}
+                  <div className="col-md-7">
+                    <div className="col-12">
+                      <label
+                        htmlFor="oldPassword"
+                        className="form-label mb-8 h6"
                       >
-                        {errors.oldPassword?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="col-12">
-                    <label htmlFor="newPassword" className="form-label mb-8 h6">
-                      New Password
-                    </label>
-                    <div className="position-relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        className="form-control py-11"
-                        id="newPassword"
-                        placeholder="Enter New Password"
-                        {...register("newPassword")}
-                      />
-                      <span
-                        className={`toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y ${
-                          showPassword ? "ph ph-eye" : "ph ph-eye-slash"
-                        }`}
-                        onClick={() => setShowPassword(!showPassword)}
-                      />
+                        Current Password
+                      </label>
+                      <div className="position-relative">
+                        <input
+                          type={showCurrentPassword ? "text" : "password"}
+                          className="form-control py-11"
+                          id="oldPassword"
+                          placeholder="Enter Current Password"
+                          {...register("oldPassword")}
+                        />
+                        <span
+                          className={`toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y ${
+                            showCurrentPassword
+                              ? "ph ph-eye"
+                              : "ph ph-eye-slash"
+                          }`}
+                          onClick={() =>
+                            setShowCurrentPassword(!showCurrentPassword)
+                          }
+                        />
+                      </div>
+                      {/* Error message directly under input */}
+                      {errors.oldPassword && (
+                        <span
+                          className="text-danger mt-2"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {errors.oldPassword?.message}
+                        </span>
+                      )}
                     </div>
-                    {/* Error message directly under input */}
-                    {errors.newPassword && (
-                      <span
-                        className="text-danger mt-2"
-                        style={{ fontSize: "12px" }}
+                    <div className="col-12">
+                      <label
+                        htmlFor="newPassword"
+                        className="form-label mb-8 h6"
                       >
-                        {errors.newPassword?.message}
-                      </span>
-                    )}
+                        New Password
+                      </label>
+                      <div className="position-relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          className="form-control py-11"
+                          id="newPassword"
+                          placeholder="Enter New Password"
+                          {...register("newPassword")}
+                        />
+                        <span
+                          className={`toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y ${
+                            showPassword ? "ph ph-eye" : "ph ph-eye-slash"
+                          }`}
+                          onClick={() => setShowPassword(!showPassword)}
+                        />
+                      </div>
+                      {/* Error message directly under input */}
+                      {errors.newPassword && (
+                        <span
+                          className="text-danger mt-2"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {errors.newPassword?.message}
+                        </span>
+                      )}
+                    </div>
+                    <div className="col-12">
+                      <label
+                        htmlFor="confirmPassword"
+                        className="form-label mb-8 h6"
+                      >
+                        Confirm Password
+                      </label>
+                      <div className="position-relative">
+                        <input
+                          type={showConfirmPassword ? "text" : "password"}
+                          className="form-control py-11"
+                          id="confirmPassword"
+                          placeholder="Enter Confirm Password"
+                          {...register("confirmPassword")}
+                        />
+                        <span
+                          className={`toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y ${
+                            showConfirmPassword
+                              ? "ph ph-eye"
+                              : "ph ph-eye-slash"
+                          }`}
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                        />
+                      </div>
+                      {/* Error message directly under input */}
+                      {errors.confirmPassword && (
+                        <span
+                          className="text-danger mt-2"
+                          style={{ fontSize: "12px" }}
+                        >
+                          {errors.confirmPassword?.message}
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <div className="col-12">
+
+                  <div className="col-md-5">
                     <label
-                      htmlFor="confirmPassword"
-                      className="form-label mb-8 h6"
+                      className="form-label mb-3 h5"
+                      style={{ fontWeight: "600" }}
                     >
-                      Confirm Password
+                      Password Security Requirements:
                     </label>
-                    <div className="position-relative">
-                      <input
-                        type={showConfirmPassword ? "text" : "password"}
-                        className="form-control py-11"
-                        id="confirmPassword"
-                        placeholder="Enter Confirm Password"
-                        {...register("confirmPassword")}
-                      />
-                      <span
-                        className={`toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y ${
-                          showConfirmPassword ? "ph ph-eye" : "ph ph-eye-slash"
-                        }`}
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                      />
-                    </div>
-                    {/* Error message directly under input */}
-                    {errors.confirmPassword && (
-                      <span
-                        className="text-danger mt-2"
-                        style={{ fontSize: "12px" }}
+                    <ul
+                      className="list-inside"
+                      style={{ padding: "0px 15px", fontSize: "16px" }}
+                    >
+                      <li
+                        className="text-gray-600 mb-4"
+                        style={{ textAlign: "justify" }}
                       >
-                        {errors.confirmPassword?.message}
-                      </span>
-                    )}
-                  </div>
-                  {/* <div className="col-12">
-                    <label className="form-label mb-8 h6">
-                      Password Requirements:
-                    </label>
-                    <ul className="list-inside">
-                      <li className="text-gray-600 mb-4">
-                        At least one lowercase character
+                        Use at least one lowercase letter to enhance password
+                        strength.
                       </li>
-                      <li className="text-gray-600 mb-4">
-                        Minimum 8 characters long - the more, the better
+                      <li
+                        className="text-gray-600 mb-4"
+                        style={{ textAlign: "justify" }}
+                      >
+                        Your password should be a minimum of 8 characters in
+                        length. Longer passwords are more secure.
                       </li>
-                      <li className="text-gray-300 mb-4">
-                        At least one number, symbol, or whitespace character
+                      <li
+                        className="text-gray-600 mb-4"
+                        style={{ textAlign: "justify" }}
+                      >
+                        Include at least one uppercase letter, one number, and
+                        one special character (e.g., !, @, #, $) for a strong
+                        password.
                       </li>
                     </ul>
-                  </div> */}
+                  </div>
                 </div>
-              </div>
-              <div className="col-12">
-                <div className="flex-align justify-content-end gap-8">
-                  {/* <button
+                <div className="col-12">
+                  <div className="flex-align justify-content-end gap-8">
+                    {/* <button
                   type="reset"
                   className="btn btn-outline-main bg-main-100 border-main-100 text-main-600 rounded-pill py-9"
                 >
                   Cancel
                 </button> */}
-                  <button
-                    type="submit"
-                    className="btn btn-main rounded-pill py-9"
-                  >
-                    Save Changes
-                  </button>
+                    <button
+                      type="submit"
+                      className="btn btn-main rounded-pill py-9"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
