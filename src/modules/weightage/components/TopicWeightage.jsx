@@ -59,7 +59,7 @@ function TopicWeightage() {
       bar: {
         borderRadius: 4, // Optionally round the corners of the bars
         horizontal: false, // Set to true if you want a horizontal bar chart
-        columnWidth: "20%", // Controls the width of the bars relative to the available space
+        // columnWidth: "80%", // Controls the width of the bars relative to the available space
         distributed: true, // Ensures the bars are evenly distributed
       },
     },
