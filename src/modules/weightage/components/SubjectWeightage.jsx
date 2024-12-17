@@ -27,6 +27,7 @@ function SubjectWeightage() {
       },
     },
     tooltip: {
+      enabled: false,
       y: {
         formatter: (val) => `${val}% Weightage`,
       },
@@ -61,7 +62,10 @@ function SubjectWeightage() {
                 <Chart
                   options={{
                     ...radialBarOptions,
-                    labels: paper.Subjects.map((subject) => subject.Subject), // Set labels as subject names
+                    labels: paper.Subjects.map(
+                      (subject) =>
+                        `${subject.Subject} -<strong> ${subject.SubjectWeightage}% </strong>`
+                    ),
                   }}
                   series={[
                     ...paper.Subjects.map(
