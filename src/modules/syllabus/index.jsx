@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer";
@@ -11,7 +11,6 @@ function Syllabus() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [activeSubTopic, setActiveSubTopic] = useState(null); // Active course dropdown index
   const [selectedSubject, setSelectedSubject] = useState(null); // Selected subject
-
   //eslint-disable-next-line
   const [selectedTopic, setSelectedTopic] = useState(null); // Selected topic
 
@@ -33,14 +32,6 @@ function Syllabus() {
     queryFn: getSyllabus,
   });
 
-  if (isLoading) {
-    return <Preloader />;
-  }
-
-  if (isError) {
-    console.log(error);
-  }
-
   // Handle selecting a subject
   const handleSubjectChange = (e) => {
     setSelectedSubject(e.target.value);
@@ -50,9 +41,22 @@ function Syllabus() {
 
   // Filter subjects based on selected subject
   const filteredSubjects = selectedSubject
-    ? data.data.filter((subject) => subject.Subject === selectedSubject)
-    : data.data;
+    ? data?.data.filter((subject) => subject.Subject === selectedSubject)
+    : data?.data;
 
+  useEffect(() => {
+    if (filteredSubjects?.length > 0) {
+      setSelectedSubject(filteredSubjects[0].Subject);
+    }
+  }, [filteredSubjects]);
+
+  if (isLoading) {
+    return <Preloader />;
+  }
+
+  if (isError) {
+    console.log(error);
+  }
   return (
     <>
       <Sidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
@@ -88,7 +92,6 @@ function Syllabus() {
                 value={selectedSubject || ""}
                 onChange={handleSubjectChange}
               >
-                <option value="">Select a Subject</option>
                 {data.data.map((subject, index) => (
                   <option key={index} value={subject.Subject}>
                     {subject.Subject}

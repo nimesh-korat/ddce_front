@@ -102,7 +102,6 @@ function TopicWeightage() {
                 value={selectedSubject || ""}
                 onChange={handleSubjectChange}
               >
-                <option value="">Select a Subject</option>
                 {data.data.map((subject, index) => (
                   <option key={index} value={subject.Subject}>
                     {subject.Subject}
