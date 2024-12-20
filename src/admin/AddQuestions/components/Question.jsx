@@ -110,26 +110,27 @@ function Question({
               </div>
             </div>
             <div className="row g-3 mt-3">
-              <div className="col-lg-6">
-                <div className="form-check mt-3">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="isParagraph"
-                    name="isParagraph"
-                    checked={data.isParagraph}
-                    onChange={(e) =>
-                      setData({
-                        ...data,
-                        isParagraph: e.target.checked,
-                      })
-                    }
-                  />
-                  <label className="form-check-label" htmlFor="isParagraph">
-                    Is the question is paragraph based?
-                  </label>
-                </div>
-                {data.isParagraph && (
+              {data.tbl_subtopic === "83" && (
+                <div className="col-lg-6">
+                  {/* <div className="form-check mt-3">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="isParagraph"
+                      name="isParagraph"
+                      checked={data.isParagraph}
+                      onChange={(e) =>
+                        setData({
+                          ...data,
+                          isParagraph: e.target.checked,
+                        })
+                      }
+                    />
+                    <label className="form-check-label" htmlFor="isParagraph">
+                      Is the question is paragraph based?
+                    </label>
+                  </div> */}
+
                   <select
                     className="form-select"
                     onChange={(e) =>
@@ -147,8 +148,8 @@ function Question({
                       </option>
                     ))}
                   </select>
-                )}
-              </div>
+                </div>
+              )}
               <div className="col-lg-6">
                 <div className="form-check mt-3">
                   <input

@@ -168,8 +168,7 @@ function AddQuestion() {
       formData.append(key, data[key]);
     });
 
-    // addQuestionMutation.mutate(formData);
-    console.log([...formData]);
+    addQuestionMutation.mutate(formData);
   };
 
   const addParagraphBasedQuestion = () => {
