@@ -85,7 +85,7 @@ function PersonalDetails({ data, setData }) {
     mutationFn: (data) => updatePersonalDetails(data),
     onSuccess: () => {
       toast.success("Profile Details Updated!", {
-        autoClose: 1500,
+        autoClose: 1000,
       });
       const updatedUser = { ...user, ...data };
       setUser(updatedUser);
@@ -93,7 +93,7 @@ function PersonalDetails({ data, setData }) {
     },
     onError: () => {
       toast.error("Error updating profile details!", {
-        autoClose: 1500,
+        autoClose: 1000,
       });
     },
   });

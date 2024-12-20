@@ -30,7 +30,7 @@ import QuestionVerification from "./admin/QuestionVerification";
 function App() {
   return (
     <>
-      <ToastContainer autoClose={3000} />
+      <ToastContainer autoClose={1000} />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ProtectedRoute><HomeThree /></ProtectedRoute>} />

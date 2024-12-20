@@ -119,7 +119,7 @@ function AcademicDetails({ data }) {
     mutationFn: (formData) => updateAcademicDetails(formData),
     onSuccess: () => {
       toast.success("Academic Details Updated!", {
-        autoClose: 1500,
+        autoClose: 1000,
       });
       const updatedUser = { ...user, ...data };
       setUser(updatedUser);
@@ -127,7 +127,7 @@ function AcademicDetails({ data }) {
     },
     onError: () => {
       toast.error("Error updating academic details!", {
-        autoClose: 1500,
+        autoClose: 1000,
       });
     },
   });

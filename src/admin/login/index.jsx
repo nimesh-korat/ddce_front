@@ -45,7 +45,7 @@ function AdminLogin() {
     },
     onSuccess: (data) => {
       toast.success(data.message, {
-        autoClose: 1500,
+        autoClose: 1000,
         onClose: () => {
           setUser(data.data);
           localStorage.setItem("admin", JSON.stringify(data.data));

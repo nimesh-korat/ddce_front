@@ -43,7 +43,7 @@ function ProfileTab({ data }) {
     },
     onError: (error) => {
       toast.error("Something went wrong", {
-        autoClose: 1500,
+        autoClose: 1000,
       });
     },
   });

@@ -41,7 +41,7 @@ function PasswordChange(id) {
     mutationFn: (data) => changePassword(data),
     onSuccess: () => {
       toast.success("Password changed successfully!", {
-        autoClose: 1500,
+        autoClose: 1000,
       });
       reset();
     },

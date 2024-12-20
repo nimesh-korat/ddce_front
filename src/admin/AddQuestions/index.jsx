@@ -113,7 +113,7 @@ function AddQuestion() {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["paragraphs", subTopicId]);
       toast.success(data.message || "Paragraph added successfully", {
-        autoClose: 1500,
+        autoClose: 1000,
       });
       setParagraphData({
         ...paragraphData,
@@ -216,7 +216,7 @@ function AddQuestion() {
                   <select
                     className="form-select"
                     onChange={(e) => {
-                      setTopicId(e.target.value); 
+                      setTopicId(e.target.value);
                       setSubTopicId(null);
                     }}
                     disabled={isLoadingTopics}

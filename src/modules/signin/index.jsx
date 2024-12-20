@@ -43,7 +43,7 @@ function SignIn() {
     },
     onSuccess: (data) => {
       toast.success(data.message, {
-        autoClose: 1500,
+        autoClose: 1000,
         onClose: () => {
           setUser(data.user);
           localStorage.setItem("user", JSON.stringify(data.user));

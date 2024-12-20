@@ -114,7 +114,7 @@ function CreateTest() {
     mutationFn: (data) => adminAddTest(data),
     onSuccess: (data) => {
       toast.success("Test created successfully!", {
-        autoClose: 1500,
+        autoClose: 1000,
         onClose: () => navigate("/admin/showTests"),
       });
       reset();

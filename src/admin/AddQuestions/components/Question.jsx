@@ -39,10 +39,10 @@ function Question({
   const dropdownOptions = () => {
     if (data.isImageOption) {
       return [
-        { value: "1", label: "Option A" },
-        { value: "2", label: "Option B" },
-        { value: "3", label: "Option C" },
-        { value: "4", label: "Option D" },
+        { value: "Option A", label: "Option A" },
+        { value: "Option B", label: "Option B" },
+        { value: "Option C", label: "Option C" },
+        { value: "Option D", label: "Option D" },
       ];
     } else {
       return [

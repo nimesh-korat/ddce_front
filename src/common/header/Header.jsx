@@ -14,7 +14,7 @@ function Header({ toggleSidebar }) {
     mutationFn: (data) => logout(data),
     onSuccess: () => {
       toast.success("Logged out successfully", {
-        autoClose: 1500,
+        autoClose: 1000,
         onClose: () => {
           localStorage.removeItem("token");
           localStorage.removeItem("session");
@@ -231,7 +231,11 @@ function Header({ toggleSidebar }) {
                   <ul className="max-h-270 overflow-y-auto scroll-sm pe-4">
                     <li className="mb-4">
                       <Link
-                        to="/profile"
+                        to={
+                          user.Role === 1
+                            ? `${window.location.pathname}#`
+                            : "/profile"
+                        }
                         className="py-12 text-15 px-20 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15"
                       >
                         <span className="text-2xl text-primary-600 d-flex">
