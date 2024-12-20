@@ -21,11 +21,15 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 const schema = yup.object().shape({
   test_name: yup
     .string()
+    .trim()
     .required("Test title is required")
+    .min(3, "Title must be at least 3 characters")
     .max(100, "Title must not exceed 50 characters"),
   test_desc: yup
     .string()
+    .trim()
     .required("Description is required")
+    .min(5, "Description must be at least 5 characters")
     .max(500, "Description must not exceed 150 characters"),
   test_duration: yup
     .number()
@@ -45,10 +49,40 @@ const schema = yup.object().shape({
   test_end_date: yup
     .date()
     .typeError("End date is required")
-    .min(yup.ref("test_start_date"), "End date must be after start date"),
+    .min(yup.ref("test_start_date"), "End date must be after start date")
+    .test(
+      "min-time-difference",
+      "End date must be at least 1 hour after the start date",
+      function (value) {
+        const { test_start_date } = this.parent;
+        if (test_start_date && value) {
+          const differenceInHours =
+            (value - new Date(test_start_date)) / 1000 / 60 / 60;
+          return differenceInHours >= 1; // Ensure the difference is at least 1 hour
+        }
+        return true;
+      }
+    )
+    .test(
+      "duration-check",
+      "End date must be greater than or equal to the duration from start date",
+      function (value) {
+        const { test_start_date, test_duration } = this.parent;
+        if (test_start_date && value && test_duration) {
+          const startDate = new Date(test_start_date);
+          const endDate = new Date(value);
+          const differenceInMinutes = (endDate - startDate) / 1000 / 60; // Convert milliseconds to minutes
+          return differenceInMinutes >= test_duration; // Ensure end date is greater than or equal to duration
+        }
+        return true; // Pass if dates are not set yet
+      }
+    ),
   test_difficulty: yup.string().required("Difficulty is required"),
   test_neg_marks: yup
     .number()
+    .integer("Negative marks must be an integer")
+    .min(0, "Negative marks must be at least 0")
+    .max(2, "Negative marks must not exceed 2")
     .typeError("Negative marks must be a number")
     .required("Negative marks are required"),
 });

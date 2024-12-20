@@ -13,10 +13,13 @@ const validationSchema = yup.object().shape({
   Enrollment_No: yup
     .string()
     .matches(/^\d{1,15}$/, "Enrollment number must be up to 15 digits")
-    .required("Enrollment number is required"),
-  College_Name: yup.string().required("College name is required"),
-  Branch_Name: yup.string().required("Branch name is required"),
-  Semester: yup.number().required("Semester is required"),
+    .min(12, "Enrollment number must be at least 12 characters")
+    .max(15, "Enrollment number cannot exceed 15 characters"),
+  College_Name: yup
+    .string()
+    .max(100, "College name cannot exceed 100 characters"),
+  Branch_Name: yup.string().max(70, "Branch name cannot exceed 70 characters"),
+  Semester: yup.number().typeError("Semester must be a number"),
 });
 
 // Options for branch and semester

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // Import useLocation
 import { useMutation } from "@tanstack/react-query";
 import Preloader from "../../utils/Preloader";
 import Sidebar from "../../common/sidebar";
@@ -31,10 +31,20 @@ function Exam() {
     },
   });
 
-  React.useEffect(() => {
+  const location = useLocation(); // Get location from react-router
+
+  useEffect(() => {
     getQuizMutation.mutate();
-    // eslint-disable-next-line
-  }, []);
+
+    // Get the initial hash from the location object (e.g., #upcoming, #current, #completed)
+    const initialHash = location.hash.replace("#", "");
+
+    // Set activeTab based on the initial hash
+    if (["upcoming", "current", "completed"].includes(initialHash)) {
+      setActiveTab(initialHash);
+    }
+    //eslint-disable-next-line
+  }, [location.hash]); // Dependency on location.hash
 
   if (getQuizMutation.isLoading) {
     return <Preloader />;

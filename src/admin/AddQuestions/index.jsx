@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   adminAddParagraph,
   adminAddQuestions,
@@ -54,6 +54,7 @@ function AddQuestion() {
     isAskedPreviously: false,
     isFromBook: false,
   });
+  const queryClient = useQueryClient();
 
   const toggleSidebar = () => {
     setIsSidebarActive((prevState) => !prevState);
@@ -110,6 +111,7 @@ function AddQuestion() {
       toast.error(error.response?.data?.message || "Failed to add question");
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries(["paragraphs", subTopicId]);
       toast.success(data.message || "Paragraph added successfully", {
         autoClose: 1500,
       });
@@ -166,7 +168,8 @@ function AddQuestion() {
       formData.append(key, data[key]);
     });
 
-    addQuestionMutation.mutate(formData);
+    // addQuestionMutation.mutate(formData);
+    console.log([...formData]);
   };
 
   const addParagraphBasedQuestion = () => {
@@ -213,7 +216,10 @@ function AddQuestion() {
                 <div className="col-md-4">
                   <select
                     className="form-select"
-                    onChange={(e) => setTopicId(e.target.value)}
+                    onChange={(e) => {
+                      setTopicId(e.target.value); 
+                      setSubTopicId(null);
+                    }}
                     disabled={isLoadingTopics}
                     value={topicId || ""}
                   >
@@ -259,11 +265,6 @@ function AddQuestion() {
 
             {subTopicId && (
               <div className="row pt-10">
-                {/* <Question
-                  data={data}
-                  setData={setData}
-                  handleSave={addQuestion}
-                /> */}
                 <div className="container mt-5">
                   {/* Navigation Bar for Tabs */}
                   <ul className="nav nav-tabs" id="questionTabs" role="tablist">
@@ -280,19 +281,21 @@ function AddQuestion() {
                         Add Question
                       </a>
                     </li>
-                    <li className="nav-item" role="presentation">
-                      <a
-                        className="nav-link"
-                        id="paragraph-question-tab"
-                        data-bs-toggle="tab"
-                        href="#paragraph-question"
-                        role="tab"
-                        aria-controls="paragraph-question"
-                        aria-selected="false"
-                      >
-                        Add Paragraph
-                      </a>
-                    </li>
+                    {subTopicId === "83" && topicId === "20" && (
+                      <li className="nav-item" role="presentation">
+                        <a
+                          className="nav-link"
+                          id="paragraph-question-tab"
+                          data-bs-toggle="tab"
+                          href="#paragraph-question"
+                          role="tab"
+                          aria-controls="paragraph-question"
+                          aria-selected="false"
+                        >
+                          Add Paragraph
+                        </a>
+                      </li>
+                    )}
                   </ul>
                   {/* Tab Content */}
                   <div className="tab-content mt-3" id="questionTabsContent">
@@ -313,18 +316,20 @@ function AddQuestion() {
                       />
                     </div>
                     {/* Paragraph-Based Question Tab */}
-                    <div
-                      className="tab-pane fade"
-                      id="paragraph-question"
-                      role="tabpanel"
-                      aria-labelledby="paragraph-question-tab"
-                    >
-                      <ParagraphBasedQuestion
-                        data={paragraphData}
-                        setData={setParagraphData}
-                        handleSave={addParagraphBasedQuestion}
-                      />
-                    </div>
+                    {subTopicId === "83" && topicId === "20" && (
+                      <div
+                        className="tab-pane fade"
+                        id="paragraph-question"
+                        role="tabpanel"
+                        aria-labelledby="paragraph-question-tab"
+                      >
+                        <ParagraphBasedQuestion
+                          data={paragraphData}
+                          setData={setParagraphData}
+                          handleSave={addParagraphBasedQuestion}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

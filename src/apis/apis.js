@@ -131,6 +131,17 @@ export async function updatePersonalDetails(data) {
     }
 }
 
+//?==================== UPDATE PROFILE PICTURE API ====================
+export async function updateProfilePic(data) {
+    try {
+        const response = await axios.post(`${api}/updateProfilePic`, data);
+        return response.data;
+    } catch (error) {
+        console.log("updateProfilePic() Err: ", error);
+        throw error;
+    }
+}
+
 //?==================== UPDATE PROFILE DETAILS API ====================
 export async function updateAcademicDetails(data) {
     try {
@@ -248,6 +259,28 @@ export async function getQuestionsForTest(data) {
         return response.data;
     } catch (error) {
         console.log("getQuestionsForTest() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== GET QUESTIONS FOR VERIFICATION API ====================
+export async function getQuestionsForVerification(data) {
+    try {
+        const response = await axios.post(`${api}/admin/getQuestionsForVerification`, data);
+        return response.data;
+    } catch (error) {
+        console.log("getQuestionsForVerification() Err: ", error);
+        throw error;
+    }
+}
+
+//?==================== VERIFY QUESTION API ====================
+export async function verifyQuestion(data) {
+    try {
+        const response = await axios.post(`${api}/admin/verifyQuestion`, data);
+        return response.data;
+    } catch (error) {
+        console.log("verifyQuestion() Err: ", error);
         throw error;
     }
 }

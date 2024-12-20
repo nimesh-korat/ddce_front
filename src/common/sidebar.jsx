@@ -45,9 +45,9 @@ function Sidebar({ isActive, closeSidebar }) {
     }
   }, [location.pathname]);
 
-  // const toggleMenu = (menuId) => {
-  //   setOpenMenu((prevMenu) => (prevMenu === menuId ? null : menuId));
-  // };
+  const toggleMenu = (menuId) => {
+    setOpenMenu((prevMenu) => (prevMenu === menuId ? null : menuId));
+  };
 
   return (
     <>
@@ -74,57 +74,6 @@ function Sidebar({ isActive, closeSidebar }) {
         <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
           <div className="p-20 pt-10">
             <ul className="sidebar-menu">
-              {/* <li
-                className={`sidebar-menu__item has-dropdown  ${
-                  activeItem === "Home" ||
-                  activeItem === "Home2" ||
-                  activeItem === "Home3"
-                    ? "activePage"
-                    : ""
-                }`}
-                onClick={() => toggleMenu("menu1")}
-              >
-                <p className="sidebar-menu__link">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-squares-four" />
-                  </span>
-                  <span className="text">Dashboard</span>
-                  <span className="link-badge">3</span>
-                </p>
-                <ul
-                  className="sidebar-submenu"
-                  id="dashboard"
-                  style={{ display: openMenu === "menu1" ? "block " : "none" }}
-                >
-                  <li
-                    className={`sidebar-submenu__item ${
-                      activeItem === "Home" ? "activePage" : ""
-                    }`}
-                  >
-                    <p to="/" className="sidebar-submenu__link">
-                      Dashboard One
-                    </p>
-                  </li>
-                  <li
-                    className={`sidebar-submenu__item ${
-                      activeItem === "Home2" ? "activePage" : ""
-                    }`}
-                  >
-                    <p to="/home2" className="sidebar-submenu__link">
-                      Dashboard Two
-                    </p>
-                  </li>
-                  <li
-                    className={`sidebar-submenu__item ${
-                      activeItem === "Home3" ? "activePage" : ""
-                    }`}
-                  >
-                    <p to="/home3" className="sidebar-submenu__link">
-                      Dashboard Three
-                    </p>
-                  </li>
-                </ul>
-              </li> */}
               <li
                 className={`sidebar-menu__item  ${
                   activeItem === "Home" ? "activePage" : ""
@@ -197,23 +146,65 @@ function Sidebar({ isActive, closeSidebar }) {
                 </ul>
                 {/* Submenu End */}
               </li>
-
               <li
-                className={`sidebar-menu__item  ${
+                className={`sidebar-menu__item has-dropdown  ${
                   activeItem === "Exam" ? "activePage" : ""
                 }`}
+                onClick={() => toggleMenu("examMenu")}
               >
-                <Link
-                  to="/exams"
-                  className="sidebar-menu__link d-flex align-items-center"
-                >
+                <p className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-clipboard-text" />
                   </span>
                   <span className="text">Exam / Quiz</span>
-                </Link>
+                </p>
+                <ul
+                  className="sidebar-submenu"
+                  id="examMenu"
+                  style={{
+                    display:
+                      openMenu === "examMenu" || activeItem === "Exam"
+                        ? "block "
+                        : "none",
+                  }}
+                >
+                  <li
+                    className={`sidebar-submenu__item ${
+                      window.location.hash === "#upcoming" ? "activePage" : ""
+                    }`}
+                  >
+                    <Link
+                      to="/exams#upcoming"
+                      className="sidebar-submenu__link"
+                    >
+                      Upcoming Exam / Quiz
+                    </Link>
+                  </li>
+                  <li
+                    className={`sidebar-submenu__item ${
+                      window.location.hash === "#current" ? "activePage" : ""
+                    }`}
+                  >
+                    <Link to="/exams#current" className="sidebar-submenu__link">
+                      Current Exam / Quiz
+                    </Link>
+                  </li>
+                  <li
+                    className={`sidebar-submenu__item ${
+                      window.location.hash === "#completed" ? "activePage" : ""
+                    }`}
+                  >
+                    <Link
+                      to="/exams#completed"
+                      className="sidebar-submenu__link"
+                    >
+                      Completed Exam / Quiz
+                    </Link>
+                  </li>
+                </ul>
               </li>
 
+              
               <li className="sidebar-menu__item">
                 <p
                   to="/mentors"

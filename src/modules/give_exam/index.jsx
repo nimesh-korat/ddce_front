@@ -69,19 +69,6 @@ function GiveExam() {
     setSelectedOption({ key: optionKey, text: optionText });
   };
 
-  const submitTestQuery = useMutation({
-    mutationFn: (data) => studentSubmitTest(data),
-    onSuccess: (data) => {
-      toast.success("Test submitted successfully!", {
-        onClose: () => navigate("/exams"),
-      });
-    },
-    onError: (error) => {
-      toast.error("Something went wrong!");
-      console.log("Error:", error);
-    },
-  });
-
   const handleNextQuestion = () => {
     // Record the current answer or skip immediately
     setQuestionStatus((prevStatus) => {
@@ -96,6 +83,7 @@ function GiveExam() {
     // If the current question is the last question, show the submit button after "Next" is clicked
     if (currentQuestionIndex === questions.length - 1) {
       setShowSubmitButton(true); // Show the submit button
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
       // Proceed to next question
       if (currentQuestionIndex < questions.length - 1) {
@@ -115,11 +103,30 @@ function GiveExam() {
       return updatedStatus;
     });
 
-    if (currentQuestionIndex < questions.length - 1) {
-      setSelectedOption(null);
+    if (currentQuestionIndex === questions.length - 1) {
+      setShowSubmitButton(true); // Show the submit button
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    } else {
+      // Proceed to next question
+      if (currentQuestionIndex < questions.length - 1) {
+        setSelectedOption(null);
+        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+      }
     }
   };
+
+  const submitTestQuery = useMutation({
+    mutationFn: (data) => studentSubmitTest(data),
+    onSuccess: (data) => {
+      toast.success("Test submitted successfully!", {
+        onClose: () => navigate("/exams"),
+      });
+    },
+    onError: (error) => {
+      toast.error("Something went wrong!");
+      console.log("Error:", error);
+    },
+  });
 
   const handleSubmit = () => {
     // Update the current question before submitting

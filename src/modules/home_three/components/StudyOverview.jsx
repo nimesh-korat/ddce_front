@@ -159,18 +159,16 @@ function StudyOverview() {
           {/* remove position relative and lock-overlay div when unlocks */}
           <div className="position-relative">
             <div className="lock-overlay active">
-                <i className="ph-fill ph-lock" />
-              </div>
-          <div class="content">
-            <div className="tooltip-style y-value-lefte">
-              
-
-              <Chart
-                options={studyOverviewOptions}
-                series={studyOverviewData}
-                type="line"
-              />
+              <i className="ph-fill ph-lock" />
             </div>
+            <div className="content">
+              <div className="tooltip-style y-value-lefte">
+                <Chart
+                  options={studyOverviewOptions}
+                  series={studyOverviewData}
+                  type="line"
+                />
+              </div>
             </div>
           </div>
           {/* <img src="assets/images/thumbs/study_over.png" alt="" /> */}

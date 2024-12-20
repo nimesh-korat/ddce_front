@@ -70,7 +70,7 @@ function MostActivity() {
             <div className="lock-overlay active">
               <i className="ph-fill ph-lock" />
             </div>
-            <div class="content">
+            <div className="content">
               <div className="flex-center mb-20">
                 <Chart
                   options={radialBarOptions}

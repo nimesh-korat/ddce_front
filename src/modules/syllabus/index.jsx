@@ -121,16 +121,16 @@ function Syllabus() {
                                   <span className="d-block h5 mb-0 text-line-1">
                                     {topic.Topic}
                                   </span>{" "}
-                                  <span class="d-block text-15 text-gray-300">
+                                  <span className="d-block text-15 text-gray-300">
                                     {`Weightage: ${topic.TopicWeightage}%`}
                                   </span>
                                 </span>
-                                <span className="course-item__arrow ms-auto text-20 text-gray-500">
+                                <span className="ms-auto text-20 text-gray-500">
                                   <i
                                     className={`ph ${
                                       activeSubTopic === topicIndex
-                                        ? "ph-arrow-down"
-                                        : "ph-arrow-right"
+                                        ? "ph-caret-up"
+                                        : "ph-caret-down"
                                     }`}
                                   />
                                 </span>

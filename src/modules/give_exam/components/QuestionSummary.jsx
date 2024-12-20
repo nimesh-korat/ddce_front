@@ -2,38 +2,96 @@ import React from "react";
 
 function QuestionSummary({ questions, questionStatus, currentQuestionIndex }) {
   return (
-    <div className="col-md-4">
-      <div className="card">
-        {/* Full height card */}
+    <div className="col-md-4 order-md-2 order-1 ">
+      <div className="card shadow-sm border-0" style={{ minHeight: "100%" }}>
+        {/* Card Header */}
         <div className="card-header border-bottom border-gray-100">
           <h5 className="mb-0">Total Questions</h5>
         </div>
-        <div className="card-body d-flex justify-content-center">
-          <div className="d-flex flex-wrap justify-content-start">
-            {questions.map((_, index) => {
-              const status = questionStatus[index]?.attempt_status;
-              const bgColor =
-                index === currentQuestionIndex
-                  ? "bg-info-300"
-                  : status === "0"
-                  ? "bg-success-300"
-                  : status === "skipped"
-                  ? "bg-warning-300"
-                  : "bg-gray-50";
-              return (
-                <div
-                  key={index}
-                  className={`border text-center rounded-8 m-2 ${bgColor}`}
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    lineHeight: "50px",
-                  }}
-                >
-                  {index + 1}
-                </div>
-              );
-            })}
+
+        {/* Card Body */}
+        <div className="card-body d-flex flex-column p-3">
+          {/* Questions Grid */}
+          <div className="d-flex justify-content-center mb-4">
+            <div
+              className="d-flex flex-wrap justify-content-start align-items-start justify-content-space-around"
+              style={{ maxWidth: "92%" }}
+            >
+              {questions.map((_, index) => {
+                const status = questionStatus[index]?.attempt_status;
+                const bgColor =
+                  index === currentQuestionIndex
+                    ? "bg-info"
+                    : status === "0"
+                    ? "bg-success"
+                    : status === "skipped"
+                    ? "bg-warning"
+                    : "bg-light";
+
+                const textColor =
+                  index === currentQuestionIndex || status !== "0"
+                    ? "text-dark"
+                    : "text-white";
+
+                return (
+                  <div
+                    key={index}
+                    className={`border text-center rounded-circle m-1 ${textColor} ${bgColor} shadow-sm`}
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      lineHeight: "50px",
+                      fontSize: "16px",
+                      cursor: "pointer",
+                      transition: "transform 0.2s ease-in-out",
+                    }}
+                    title={`Question ${index + 1}`}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.transform = "scale(1.1)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.transform = "scale(1)")
+                    }
+                  >
+                    {index + 1}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Legend Section */}
+          <div className="mt-auto border-top border-gray-100 p-3">
+            <div className="d-flex align-items-center mb-3">
+              <div
+                className="rounded-circle bg-info me-2 shadow-sm"
+                style={{
+                  width: "20px",
+                  height: "20px",
+                }}
+              ></div>
+              <span className="text-muted">Current Question</span>
+            </div>
+            <div className="d-flex align-items-center mb-3">
+              <div
+                className="rounded-circle bg-warning me-2 shadow-sm"
+                style={{
+                  width: "20px",
+                  height: "20px",
+                }}
+              ></div>
+              <span className="text-muted">Skipped Question</span>
+            </div>
+            <div className="d-flex align-items-center">
+              <div
+                className="rounded-circle bg-success me-2 shadow-sm"
+                style={{
+                  width: "20px",
+                  height: "20px",
+                }}
+              ></div>
+              <span className="text-muted">Attempted Question</span>
+            </div>
           </div>
         </div>
       </div>

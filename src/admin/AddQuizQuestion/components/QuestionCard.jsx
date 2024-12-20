@@ -20,8 +20,10 @@ const AdminAddQuizQuestionCard = forwardRef(
   ) => (
     <div className="card question-card shadow" ref={ref}>
       <div className="card-body">
-        <h5 className="card-title d-flex">
-          {index}. {question}{" "} 
+        <h5 className="card-title d-flex ">
+          <span style={{ fontSize: "16px" }}>
+            {index}. {question}{" "}
+          </span>
           <span className="text-warning-600 text-12">
             {isAsked ? "(asked)" : ""}
           </span>
@@ -62,7 +64,7 @@ const AdminAddQuizQuestionCard = forwardRef(
               The correct answer is <strong>{answer}</strong>.
             </div>
           </div>
-          <div className="row mt-2">
+          <div className="row mt-5">
             <div className="col-12 text-end">
               <button
                 className={`btn btn-sm ${

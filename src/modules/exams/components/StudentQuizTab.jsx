@@ -3,6 +3,7 @@ import Pagination from "@mui/material/Pagination";
 import StudentQuizCard from "./StudentQuizCard";
 
 function StudentQuizTab({ activeTab, setActiveTab, quizes }) {
+  
   const currentDate = new Date(); // Get the current date
 
   const determineTestStatus = (quiz) => {
@@ -10,7 +11,7 @@ function StudentQuizTab({ activeTab, setActiveTab, quizes }) {
     const endDate = new Date(quiz.test_end_date);
 
     if (currentDate >= startDate && currentDate <= endDate) {
-      return "ongoing"; // Ongoing if current date is between start and end
+      return "current"; // Ongoing if current date is between start and end
     } else if (currentDate > endDate) {
       return "completed"; // Completed if current date is past end date
     } else {
@@ -24,6 +25,8 @@ function StudentQuizTab({ activeTab, setActiveTab, quizes }) {
 
   // Filter quizzes based on the active tab and status
   const filterQuizesByStatus = (status) => {
+    console.log(status);
+    
     return quizes.filter((quiz) => determineTestStatus(quiz) === status);
   };
 
@@ -49,42 +52,13 @@ function StudentQuizTab({ activeTab, setActiveTab, quizes }) {
     <div className="card">
       <div className="card-body">
         <div className="mb-24 flex-between gap-16 flex-wrap-reverse">
-          <ul
-            className="nav nav-pills common-tab gap-20"
-            id="pills-tab"
-            role="tablist"
-          >
-            <li className="nav-item" role="presentation">
-              <button
-                className={`nav-link ${activeTab === "upcoming" ? "active" : ""}`}
-                onClick={() => setActiveTab("upcoming")}
-                type="button"
-                role="tab"
-              >
-                Upcoming
-              </button>
-            </li>
-            <li className="nav-item" role="presentation">
-              <button
-                className={`nav-link ${activeTab === "ongoing" ? "active" : ""}`}
-                onClick={() => setActiveTab("ongoing")}
-                type="button"
-                role="tab"
-              >
-                Ongoing
-              </button>
-            </li>
-            <li className="nav-item" role="presentation">
-              <button
-                className={`nav-link ${activeTab === "completed" ? "active" : ""}`}
-                onClick={() => setActiveTab("completed")}
-                type="button"
-                role="tab"
-              >
-                Completed
-              </button>
-            </li>
-          </ul>
+          {activeTab === "upcoming" ? (
+            <h4 className="mb-0">Upcoming Quizzes</h4>
+          ) : activeTab === "current" ? (
+            <h4 className="mb-0">Current Quizzes</h4>
+          ) : (
+            <h4 className="mb-0">Completed Quizzes</h4>
+          )}
         </div>
         <div className="tab-content">
           <div className="row g-20">

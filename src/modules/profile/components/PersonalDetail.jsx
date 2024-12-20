@@ -11,22 +11,24 @@ import { updatePersonalDetails } from "../../../apis/apis";
 
 // Validation schema using yup
 const validationSchema = yup.object().shape({
-  Name: yup.string().required("Name is required"),
+  Name: yup.string().max(60, "Name cannot exceed 60 characters"), // Max length for Name
   Email_Id: yup
     .string()
     .email("Invalid email address")
-    .required("Email is required"),
+    .min(15, "Email must be at least 15 characters")
+    .max(60, "Email cannot exceed 60 characters"), // Max length for Email
   Phone_Number: yup
     .string()
-    .matches(/^\d{10}$/, "Phone number must be 10 digits")
-    .required("Phone number is required"),
+    .matches(/^\d{10}$/, "Phone number must be 10 digits"),
   Whatsapp_Number: yup
     .string()
-    .matches(/^\d{10}$/, "WhatsApp number must be 10 digits")
-    .required("WhatsApp number is required"),
-  DOB: yup.date().required("Date of Birth is required"),
-  Gender: yup.string().required("Gender is required"),
-  Address: yup.string().required("Address is required"),
+    .matches(/^\d{10}$/, "WhatsApp number must be 10 digits"),
+  DOB: yup.date(),
+  Gender: yup.string(),
+  Address: yup
+    .string()
+    .min(10, "Address must be at least 10 characters")
+    .max(250, "Address cannot exceed 250 characters"),
 });
 
 function PersonalDetails({ data, setData }) {
@@ -206,6 +208,13 @@ function PersonalDetails({ data, setData }) {
                   id="datepicker"
                   type="date"
                   className="form-control py-11"
+                  min={
+                    new Date(
+                      new Date().setFullYear(new Date().getFullYear() - 25)
+                    )
+                      .toISOString()
+                      .split("T")[0]
+                  } // Set max date dynamically to 25 years ago
                   {...register("DOB")}
                 />
                 {errors.DOB && (

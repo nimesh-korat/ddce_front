@@ -105,7 +105,7 @@ function ExamResult() {
               filterType={filterType} // Pass the filterType prop
             />
             <ResultOverview
-              testName={test.test_name}
+              testName={test?.test_name}
               pieChartData={pieChartData}
               totalMarks={total_marks}
               obtainedMarks={obtained_marks}

@@ -24,6 +24,7 @@ import ExamResult from "./modules/exam_result";
 import Profile from "./modules/profile";
 import Weightage from "./modules/weightage";
 import Syllabus from "./modules/syllabus";
+import QuestionVerification from "./admin/QuestionVerification";
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
           <Route path="/admin/createTest" element={<AdminRoutes><CreateTest /></AdminRoutes>} />
           <Route path="/admin/showTests" element={<AdminRoutes><ShowTests /></AdminRoutes>} />
           <Route path="/admin/addQuizQuestions" element={<AdminRoutes><AddQuizQuestions /></AdminRoutes>} />
+          <Route path="/admin/questionVerification" element={<AdminRoutes><QuestionVerification /></AdminRoutes>} />
           <Route path="/admin/test/:slug" element={<AdminRoutes><ShowTests /></AdminRoutes>} />
 
           <Route path="*" element={<Error404 />} />

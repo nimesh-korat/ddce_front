@@ -15,7 +15,7 @@ function StudentQuizCard({ test }) {
   // Determine the test status based on current date and start/end dates
   let testStatus = "upcoming"; // Default to "upcoming"
   if (currentDate >= startDate && currentDate <= endDate) {
-    testStatus = "ongoing"; // Ongoing if current date is between start and end
+    testStatus = "current"; // Ongoing if current date is between start and end
   } else if (currentDate > endDate) {
     testStatus = "completed"; // Completed if current date is past end date
   }
@@ -105,7 +105,7 @@ function StudentQuizCard({ test }) {
               </div>
             </div>
             <div className="flex-between gap-4 flex-wrap mt-24">
-              {testStatus === "ongoing" && test.has_taken !== 1 ? (
+              {testStatus === "current" && test.has_taken !== 1 ? (
                 <Link
                   to={`/test`}
                   state={{ exam: test }}

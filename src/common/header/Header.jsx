@@ -197,7 +197,11 @@ function Header({ toggleSidebar }) {
             >
               <span className="position-relative">
                 <img
-                  src="../assets/images/thumbs/user-img.png"
+                  src={
+                    user?.User_DP
+                      ? `${process.env.REACT_APP_API_URL}/uploads/images/profile_imgs/${user?.User_DP}`
+                      : "../assets/images/thumbs/user-img.png"
+                  }
                   alt=""
                   className="h-32 w-32 rounded-circle"
                 />
@@ -209,14 +213,18 @@ function Header({ toggleSidebar }) {
                 <div className="card-body">
                   <div className="flex-align gap-8 mb-20 pb-20 border-bottom border-gray-100">
                     <img
-                      src="../assets/images/thumbs/user-img.png"
+                      src={
+                        user?.User_DP
+                          ? `${process.env.REACT_APP_API_URL}/uploads/images/profile_imgs/${user?.User_DP}`
+                          : "../assets/images/thumbs/user-img.png"
+                      }
                       alt=""
                       className="w-54 h-54 rounded-circle"
                     />
                     <div>
                       <h4 className="mb-0">{user && user.Name}</h4>
                       <p className="fw-medium text-13 text-gray-200">
-                        {user && user.Email_Id}
+                        {user && (user.Email_Id || user.Email)}
                       </p>
                     </div>
                   </div>

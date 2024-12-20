@@ -8661,8 +8661,8 @@ button:focus {
 }
 
 .position-relative .content {
-    filter: blur(4px); /* Apply blur to content when hovering */
-  }
+  filter: blur(4px); /* Apply blur to content when hovering */
+}
 
 .lock-overlay i {
   font-size: 50px; /* Lock icon size */
@@ -9095,6 +9095,151 @@ button:focus {
 .sidebar-menu__item.has-dropdown .sidebar-menu__link {
   position: relative;
 }
+.scrollable-column {
+  max-height: 400px; /* Adjust as needed */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-right: 10px; /* Optional: adds padding to prevent content from touching the scrollbar */
+}
+
+/* Customize the scrollbar track */
+.scrollable-column::-webkit-scrollbar {
+  width: 8px; /* Set the width of the scrollbar */
+}
+
+/* Customize the scrollbar thumb (the draggable part) */
+.scrollable-column::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the thumb */
+  border-radius: 10px; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+/* Customize the scrollbar thumb on hover */
+.scrollable-column::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker shade when hovered */
+}
+
+/* Customize the scrollbar track (the area the thumb slides on) */
+.scrollable-column::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Light background for the track */
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Optional: Customize the scrollbar corner (where two scrollbars meet) */
+.scrollable-column::-webkit-scrollbar-corner {
+  background-color: transparent; /* Set corner color to transparent if not needed */
+}
+/* Styling for the filter button */
+.btn-outline-custom {
+  display: inline-flex;
+  align-items: center; /* Vertically center content */
+  justify-content: center; /* Horizontally center content */
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: 500;
+  gap: 5px;
+  text-transform: uppercase;
+  border: 2px solid #d1dae3; /* Primary color */
+  color: #505b66;
+  border-radius: 15px; /* Rounded corners */
+  transition: all 0.3s ease-in-out; /* Smooth transition for hover */
+  height: 40px; /* Set a fixed height to ensure consistent alignment */
+}
+
+/* Hover effect */
+.btn-outline-custom:hover {
+  background-color: #007bff;
+  color: white;
+  transform: translateY(-5px); /* Lift effect */
+  box-shadow: 0px 4px 20px rgba(0, 123, 255, 0.3); /* Shadow for focus effect */
+}
+/* Hover effect */
+.btn-outline-custom.active {
+  background-color: #007bff;
+  color: white;
+  transform: translateY(-5px); /* Lift effect */
+  box-shadow: 0px 4px 20px rgba(0, 123, 255, 0.3); /* Shadow for focus effect */
+}
+/* Icon styling */
+.btn-outline-custom i {
+  font-size: 20px;
+  transition: transform 0.3s ease; /* Smooth transition for icon */
+}
+
+/* Add a subtle animation to the icon */
+.btn-outline-custom:hover i {
+  transform: rotate(360deg); /* Rotate icon on hover */
+}
+
+/* Focus style for accessibility */
+.btn-outline-custom:focus {
+  outline: none;
+  box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.5); /* Soft blue glow */
+}
+
+/* Add spacing between icon and text */
+.btn-outline-custom .me-2 {
+  margin-right: 8px;
+}
+
+/* Transition for filter content */
+.filter-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+/* When showFilter is true, expand the filter content */
+.filter-content.show {
+  max-height: 1000px; /* Arbitrary large value to allow expansion */
+  opacity: 1;
+}
+
+/* Style for the filter section */
+.filter-content select {
+  transition: all 0.3s ease;
+}
+
+/* Container for centering */
+.toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Toggle button styles */
+.toggle-button {
+  width: 40px; /* Reduced width */
+  height: 20px; /* Reduced height */
+  background-color: #ccc;
+  border-radius: 10px; /* Adjusted for smaller size */
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Circle inside the toggle button */
+.toggle-circle {
+  width: 16px; /* Reduced width */
+  height: 16px; /* Reduced height */
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 1.95px; /* Adjusted for smaller height */
+  left: 2px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* When toggled, change background and move the circle */
+.toggle-button.toggled {
+  background-color: #4caf50;
+}
+
+.toggle-button.toggled .toggle-circle {
+  transform: translateX(20px); /* Adjusted for smaller button width */
+}
+
 
 .sidebar-menu__item.has-dropdown .sidebar-menu__link::before {
   position: absolute;

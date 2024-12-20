@@ -12,8 +12,8 @@ function QuizQuestion({
   currentQuestionIndex,
 }) {
   return (
-    <div className="col-md-8">
-      <div className="card">
+    <div className="col-md-8 order-md-1 order-2">
+      <div className="card shadow-sm border-0">
         <div className="card-header border-bottom border-gray-100">
           <h5 className="mb-0">Quiz Questions</h5>
         </div>
@@ -28,7 +28,7 @@ function QuizQuestion({
                   {currentQuestion.question_text}
                 </label>
               </div>
-              <div className="row g-20">
+              <div className="row g-20 " style={{ userSelect: "none" }}>
                 {["option_a", "option_b", "option_c", "option_d"].map(
                   (optionKey, index) => {
                     const optionText = currentQuestion[`${optionKey}_text`];

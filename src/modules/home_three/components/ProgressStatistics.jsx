@@ -47,7 +47,7 @@ function ProgressStatistics() {
               <i className="ph-fill ph-lock" />
             </div>
 
-            <div class="content">
+            <div className="content">
               {/* Your actual content */}
               <div>
                 <span className="text-gray-200 text-lg mb-12 mt-10 d-block text-center">
