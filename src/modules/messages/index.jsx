@@ -755,7 +755,13 @@ function Messages() {
                   >
                     <i className="ph ph-plus" />
                   </label>
-                  <input type="file" name="fileName" id="fileUp" hidden />
+                  <input
+                    type="file"
+                    name="fileName"
+                    id="fileUp"
+                    accept="image/*"
+                    hidden
+                  />
                   <input
                     type="text"
                     className="form-control h-48 border-transparent px-20 focus-border-main-600 bg-main-50 rounded-pill placeholder-15"

@@ -151,6 +151,7 @@ function ParagraphBasedQuestion({ data, setData, handleSave }) {
                     className="form-control"
                     name="paragraph_img"
                     id="inputGroupFile04"
+                    accept="image/*"
                     aria-label="Upload"
                     aria-describedby="inputGroupFileAddon04"
                     onChange={(e) =>

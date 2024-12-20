@@ -124,7 +124,7 @@ function Resources() {
                     <i className="ph ph-upload-simple d-flex text-xl" />
                     Upload File
                   </label>
-                  <input type="file" id="upload" hidden />
+                  <input type="file" accept="image/*" id="upload" hidden />
                 </div>
               </div>
             </div>

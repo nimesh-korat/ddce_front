@@ -239,7 +239,7 @@ function Header({ toggleSidebar }) {
                         className="py-12 text-15 px-20 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15"
                       >
                         <span className="text-2xl text-primary-600 d-flex">
-                          <i className="ph ph-gear" />
+                          <i className="ph ph-user" />
                         </span>
                         <span className="text">Profile</span>
                       </Link>

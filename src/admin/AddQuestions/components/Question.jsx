@@ -175,6 +175,7 @@ function Question({
                       type="file"
                       className="form-control"
                       id="inputGroupFile04"
+                      accept="image/*"
                       aria-describedby="inputGroupFileAddon04"
                       aria-label="Upload"
                       onChange={(e) => handleFileChange(e, "question_image")}
@@ -191,6 +192,7 @@ function Question({
                     <input
                       type="file"
                       className="form-control"
+                      accept="image/*"
                       onChange={(e) => handleFileChange(e, "option_a_image")}
                     />
                   </div>
@@ -199,6 +201,7 @@ function Question({
                     <input
                       type="file"
                       className="form-control"
+                      accept="image/*"
                       onChange={(e) => handleFileChange(e, "option_b_image")}
                     />
                   </div>
@@ -207,6 +210,7 @@ function Question({
                     <input
                       type="file"
                       className="form-control"
+                      accept="image/*"
                       onChange={(e) => handleFileChange(e, "option_c_image")}
                     />
                   </div>
@@ -215,6 +219,7 @@ function Question({
                     <input
                       type="file"
                       className="form-control"
+                      accept="image/*"
                       onChange={(e) => handleFileChange(e, "option_d_image")}
                     />
                   </div>

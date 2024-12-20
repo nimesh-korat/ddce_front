@@ -14,8 +14,14 @@ import * as yup from "yup";
 import { adminAddTest } from "../../apis/apis";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import { create } from "filepond";
 
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+registerPlugin(
+  FilePondPluginImageExifOrientation,
+  FilePondPluginImagePreview,
+  FilePondPluginFileValidateType
+);
 
 // Validation Schema
 const schema = yup.object().shape({
@@ -87,6 +93,12 @@ const schema = yup.object().shape({
     .required("Negative marks are required"),
 });
 
+// Create a FilePond instance
+const input = document.querySelector('input[name="test_img_path"]');
+create(input, {
+  // Only accept images
+  acceptedFileTypes: ["image/*"],
+});
 function CreateTest() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null); // Store the image file
@@ -101,7 +113,6 @@ function CreateTest() {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
   const toggleSidebar = () => {
     setIsSidebarActive((prevState) => !prevState);
   };
