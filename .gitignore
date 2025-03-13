@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-ubuntu@ec2-13-127-95-213.ap-south-1.compute.amazonaws.com
 
 # testing
 /coverage
