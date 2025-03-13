@@ -23,6 +23,12 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/showTests":
         setActiveItem("Show Test");
         break;
+      case "/admin/addSession":
+        setActiveItem("Add Session");
+        break;
+      case "/admin/showSession":
+        setActiveItem("Show Session");
+        break;
 
       default:
         setActiveItem("");
@@ -50,13 +56,13 @@ function AdminSidebar({ isActive, closeSidebar }) {
           <i className="ph ph-x" />
         </button>
         {/* sidebar close btn */}
-        <p
+        <div
           to="/"
           className="sidebar__logo text-center p-10 position-sticky inset-block-start-0 bg-white w-100 z-1 pb-5"
         >
           {/* <img src="assets/images/logo/logo.png" alt="Logo" /> */}
           <h1 className="fw-bold mb-0 mt-0 p-0">Unity</h1>
-        </p>
+        </div>
         <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
           <div className="p-20 pt-10">
             <ul className="sidebar-menu">
@@ -67,7 +73,7 @@ function AdminSidebar({ isActive, closeSidebar }) {
               >
                 <Link to="/admin/addQuestion" className="sidebar-menu__link ">
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-squares-four" />
+                    <i className="ph ph-question-mark" />
                   </span>
                   <span className="text">Add Question</span>
                 </Link>
@@ -79,7 +85,7 @@ function AdminSidebar({ isActive, closeSidebar }) {
               >
                 <Link to="/admin/showQuestions" className="sidebar-menu__link ">
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-squares-four" />
+                    <i className="ph ph-list-bullets" />
                   </span>
                   <span className="text">Show Questions</span>
                 </Link>
@@ -91,7 +97,7 @@ function AdminSidebar({ isActive, closeSidebar }) {
               >
                 <Link to="/admin/createTest" className="sidebar-menu__link ">
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-squares-four" />
+                    <i className="ph ph-article-ny-times" />
                   </span>
                   <span className="text">Create Quiz</span>
                 </Link>
@@ -103,9 +109,33 @@ function AdminSidebar({ isActive, closeSidebar }) {
               >
                 <Link to="/admin/showTests" className="sidebar-menu__link ">
                   <span className="icon d-flex align-items-center">
-                    <i className="ph ph-squares-four" />
+                    <i className="ph ph-blueprint" />
                   </span>
                   <span className="text">Show Quiz</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Add Session" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/addSession" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-blueprint" />
+                  </span>
+                  <span className="text">Add Session</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Show Session" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/showSession" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-blueprint" />
+                  </span>
+                  <span className="text">Show Session</span>
                 </Link>
               </li>
               {/* <li

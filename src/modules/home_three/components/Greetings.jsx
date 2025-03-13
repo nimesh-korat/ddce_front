@@ -15,7 +15,7 @@ function Greetings() {
                   Hi, {user?.Name}
                   <img src="assets/images/icons/wave-hand.png" alt="" />
                 </h2>
-                <h2 className="fw-medium mb-16">
+                <h2 className="fw-medium mb-16 unity-animatted-text">
                   What do you want to learn today with your <b>Unity</b>{" "}
                   partner?
                 </h2>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Chart from "../../../utils/Charts";
 import { getSyllabus } from "../../../apis/apis";
 import { useQuery } from "@tanstack/react-query";
-import Preloader from "../../../utils/Preloader";
+import Preloader from "../../../utils/preloader/Preloader";
 function TopicWeightage() {
   const [selectedSubject, setSelectedSubject] = useState(null); // Selected subject
 
@@ -11,6 +11,7 @@ function TopicWeightage() {
     queryKey: ["syllabus"],
     queryFn: getSyllabus,
   });
+
   useEffect(() => {
     if (data && data.data.length > 0) {
       // Find the "Mathematics" subject in the data
@@ -26,9 +27,6 @@ function TopicWeightage() {
       }
     }
   }, [data]); // Run only when `data` is updated
-  if (isLoading) {
-    return <Preloader />;
-  }
 
   if (isError) {
     console.log(error);
@@ -48,6 +46,18 @@ function TopicWeightage() {
   // If there's a selected subject, we want to display topics and their weightages
   const topics = selectedSubjectData ? selectedSubjectData.Topics : [];
 
+  // Calculate the column width based on the number of categories
+  const calculateColumnWidth = () => {
+    const numCategories = topics.length;
+    if (numCategories === 1) {
+      return "20%"; // Smaller width when there is only one bar
+    } else if (numCategories <= 3) {
+      return "40%"; // Wider columns when there are fewer categories
+    } else {
+      return "60%"; // Default width for more categories
+    }
+  };
+
   const chartOptions = {
     chart: {
       id: "topic-weightage-chart",
@@ -57,25 +67,24 @@ function TopicWeightage() {
     },
     plotOptions: {
       bar: {
-        borderRadius: 4, // Optionally round the corners of the bars
-        horizontal: false, // Set to true if you want a horizontal bar chart
-        // columnWidth: "80%", // Controls the width of the bars relative to the available space
-        distributed: true, // Ensures the bars are evenly distributed
+        borderRadius: 4,
+        columnWidth: calculateColumnWidth(), // Dynamically set column widthrelative to the available space
+        distributed: true,
       },
     },
     xaxis: {
-      categories: topics.map((topic) => topic.Topic), // Topics as X-axis labels
+      categories: topics.map((topic) => topic.Topic),
     },
     yaxis: {
       min: 0,
-      max: Math.max(...topics.map((topic) => topic.TopicWeightage)) + 2, // Ensure Y-axis is dynamic
+      max: Math.max(...topics.map((topic) => topic.TopicWeightage)) + 2, 
     },
     title: {
       align: "center",
       style: {
         fontSize: "16px",
         fontWeight: "bold",
-        color: "#333",
+        color: "#ff44ffff",
       },
     },
     dataLabels: {
@@ -90,45 +99,49 @@ function TopicWeightage() {
 
   return (
     <>
-      <div className="row mt-12">
-        <div className="card shadow mt-4 p-20">
-          <div className="col-md-12 d-flex justify-between">
-            <div className="col-md-6">
-              <h4>Topic Weightage</h4>
+      {isLoading ? (
+        <Preloader />
+      ) : (
+        <div className="row mt-12 mx-0">
+          <div className="card shadow mt-4 p-20">
+            <div className="col-md-12 d-flex justify-between">
+              <div className="col-md-6">
+                <h4>Topic Weightage</h4>
+              </div>
+              <div className="col-md-6">
+                <select
+                  className="form-select"
+                  value={selectedSubject || ""}
+                  onChange={handleSubjectChange}
+                >
+                  {data.data.map((subject, index) => (
+                    <option key={index} value={subject.Subject}>
+                      {subject.Subject}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="col-md-6">
-              <select
-                className="form-select"
-                value={selectedSubject || ""}
-                onChange={handleSubjectChange}
-              >
-                {data.data.map((subject, index) => (
-                  <option key={index} value={subject.Subject}>
-                    {subject.Subject}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
 
-          {selectedSubject && (
-            <div className="col-md-12 mt-4 ">
-              <Chart
-                type="bar"
-                options={chartOptions}
-                series={[
-                  {
-                    name: "Weightage",
-                    data: topics.map((topic) => topic.TopicWeightage), // Weightages of the topics
-                  },
-                ]}
-                width={600}
-                height={400}
-              />
-            </div>
-          )}
+            {selectedSubject && (
+              <div className="col-md-12 mt-4 ">
+                <Chart
+                  type="bar"
+                  options={chartOptions}
+                  series={[
+                    {
+                      name: "Weightage",
+                      data: topics.map((topic) => topic.TopicWeightage), // Weightages of the topics
+                    },
+                  ]}
+                  width={600}
+                  height={400}
+                />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

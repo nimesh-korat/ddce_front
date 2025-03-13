@@ -1,16 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { format } from "date-fns"; // Ensure using the correct version of date-fns
 import { Link } from "react-router-dom";
 
 function StudentQuizCard({ test }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const startDate = new Date(test && test.test_start_date);
-  const endDate = new Date(test && test.test_end_date);
+  const startDate = new Date(test && test.start_date);
+  const endDate = new Date(test && test.end_date);
   const currentDate = new Date(); // Get the current date
-
-  const toggleDescription = () => {
-    setIsExpanded(!isExpanded);
-  };
 
   // Determine the test status based on current date and start/end dates
   let testStatus = "upcoming"; // Default to "upcoming"
@@ -29,10 +24,7 @@ function StudentQuizCard({ test }) {
       <div className="card border border-gray-100">
         <div className="card-body p-8">
           <Link className="bg-main-100 rounded-8 overflow-hidden text-center mb-8 h-164 flex-center p-8">
-            <img
-              src={`${process.env.REACT_APP_API_URL}/uploads/images/test_images/${test.test_img_path}`}
-              alt="test"
-            />
+            <img src={`${test.test_img_path}`} alt="test" />
           </Link>
           <div className="p-8">
             <span
@@ -64,23 +56,22 @@ function StudentQuizCard({ test }) {
               </p>
             </h5>
             <p
-              className={`hover-text text-15 ${
-                isExpanded ? "" : "two-line-text"
-              }`}
-              style={{ minHeight: isExpanded ? "auto" : "3rem" }}
+              className={`hover-text text-15 two-line-text`}
+              style={{ minHeight: "3rem" }}
             >
               {test.test_desc}
             </p>
-            <button
+            <Link
+              to={`/quizdetail`}
+              state={{ test }}
               className="btn btn-link p-0 text-main-600 text-13"
-              onClick={toggleDescription}
             >
-              {isExpanded ? "Show Less" : "Show More"}
-            </button>
+              Show More
+            </Link>
             <div className="flex-align gap-8 mt-12 pt-12">
               <div className="flex-align gap-4">
                 <span className="text-13 text-gray-600">
-                  <strong>Available Time: </strong>{" "}
+                  <strong>Attend Between: </strong>{" "}
                   <strong>{formattedStartDate}</strong> to{" "}
                   <strong>{formattedEndDate}</strong>
                 </span>
@@ -97,10 +88,10 @@ function StudentQuizCard({ test }) {
               </div>
               <div className="flex-align gap-4">
                 <span className="text-sm text-main-600 d-flex">
-                  <i className="ph ph-clock" />
+                  <i className="ph ph-note-pencil" />
                 </span>
                 <span className="text-13 text-gray-600">
-                  {test.test_duration} Minutes
+                  Total Marks: {test.total_marks}
                 </span>
               </div>
             </div>

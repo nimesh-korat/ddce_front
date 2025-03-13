@@ -8,7 +8,7 @@ import {
   getSubTopics,
   getTopics,
 } from "../../apis/apis";
-import Preloader from "../../utils/Preloader";
+import Preloader from "../../utils/preloader/Preloader";
 import AdminVerifyQuestionCard from "./components/QuestionCard";
 
 function QuestionVerification() {

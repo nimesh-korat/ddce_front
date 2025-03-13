@@ -20,8 +20,8 @@ function Sidebar({ isActive, closeSidebar }) {
       case "/home3":
         setActiveItem("Home3");
         break;
-      case "/student_course":
-        setActiveItem("student_course");
+      case "/schedule":
+        setActiveItem("schedule");
         break;
       case "/mentor_course":
         setActiveItem("mentor_course");
@@ -37,6 +37,18 @@ function Sidebar({ isActive, closeSidebar }) {
         break;
       case "/weightage":
         setActiveItem("weightage");
+        break;
+      case "/analytics":
+        setActiveItem("analytics");
+        break;
+      case "/masteryMatrix":
+        setActiveItem("masteryMatrix");
+        break;
+      case "/pricing":
+        setActiveItem("pricing");
+        break;
+      case "/doubts":
+        setActiveItem("doubts");
         break;
 
       default:
@@ -87,29 +99,52 @@ function Sidebar({ isActive, closeSidebar }) {
                 </Link>
               </li>
               <li
-                className={`sidebar-menu__item position-relative ${
-                  activeItem === "mentor_course" ||
-                  activeItem === "student_course"
+                className={`sidebar-menu__item  ${
+                  activeItem === "Syllabus" ? "activePage" : ""
+                }`}
+              >
+                <Link
+                  to="/syllabus"
+                  className="sidebar-menu__link d-flex align-items-center"
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-books" />
+                  </span>
+                  <span className="text">Syllabus</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item  ${
+                  activeItem === "weightage" ? "activePage" : ""
+                }`}
+              >
+                <Link
+                  to="/weightage"
+                  className="sidebar-menu__link d-flex align-items-center position-relative"
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-chart-pie-slice" />
+                  </span>
+                  <span className="text">Topic & Weightage</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "mentor_course" || activeItem === "schedule"
                     ? "activePage"
                     : ""
                 }`}
                 // onClick={() => toggleMenu("menu2")}
               >
-                <p className="sidebar-menu__link d-flex align-items-center position-relative">
+                <Link
+                  to="/schedule"
+                  className="sidebar-menu__link d-flex align-items-center"
+                >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-calendar-dots" />
                   </span>
                   <span className="text">Schedule</span>
-
-                  {/* Lock icon positioned at the far right */}
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
+                </Link>
 
                 {/* Submenu start */}
                 <ul
@@ -170,18 +205,6 @@ function Sidebar({ isActive, closeSidebar }) {
                 >
                   <li
                     className={`sidebar-submenu__item ${
-                      window.location.hash === "#upcoming" ? "activePage" : ""
-                    }`}
-                  >
-                    <Link
-                      to="/exams#upcoming"
-                      className="sidebar-submenu__link"
-                    >
-                      Upcoming Exam / Quiz
-                    </Link>
-                  </li>
-                  <li
-                    className={`sidebar-submenu__item ${
                       window.location.hash === "#current" ? "activePage" : ""
                     }`}
                   >
@@ -201,10 +224,54 @@ function Sidebar({ isActive, closeSidebar }) {
                       Completed Exam / Quiz
                     </Link>
                   </li>
+                  <li
+                    className={`sidebar-submenu__item ${
+                      window.location.hash === "#upcoming" ? "activePage" : ""
+                    }`}
+                  >
+                    <Link
+                      to="/exams#upcoming"
+                      className="sidebar-submenu__link"
+                    >
+                      Upcoming Exam / Quiz
+                    </Link>
+                  </li>
                 </ul>
               </li>
-
-              
+              <li
+                className={`sidebar-menu__item  ${
+                  activeItem === "masteryMatrix" ? "activePage" : ""
+                }`}
+              >
+                <Link
+                  to="/masteryMatrix"
+                  className="sidebar-menu__link d-flex align-items-center position-relative"
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-trophy" />
+                  </span>
+                  <span className="text">Accuracy Matrix</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item  ${
+                  activeItem === "analytics" ? "activePage" : ""
+                }`}
+              >
+                <p className="sidebar-menu__link d-flex align-items-center position-relative">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-chart-bar" />
+                  </span>
+                  <span className="text">Analytics</span>
+                  <i
+                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
+                    style={{
+                      fontSize: "18px",
+                      color: "#B0B0B0",
+                    }}
+                  />
+                </p>
+              </li>
               <li className="sidebar-menu__item">
                 <p
                   to="/mentors"
@@ -241,43 +308,22 @@ function Sidebar({ isActive, closeSidebar }) {
                   />
                 </p>
               </li>
-              <li className="sidebar-menu__item ">
-                <p
-                  to="/messages"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
+              <li
+                className={`sidebar-menu__item  ${
+                  activeItem === "doubts" ? "activePage" : ""
+                }`}
+              >
+                <Link
+                  to="/doubts"
+                  className="sidebar-menu__link d-flex align-items-center"
                 >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-seal-question" />
                   </span>
                   <span className="text">Doubts</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
+                </Link>
               </li>
-              <li className="sidebar-menu__item ">
-                <p
-                  to="/analytics"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-chart-bar" />
-                  </span>
-                  <span className="text">Analytics</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
-              </li>
-              <li className="sidebar-menu__item">
+              {/* <li className="sidebar-menu__item">
                 <p
                   to="/events"
                   className="sidebar-menu__link  d-flex align-items-center position-relative"
@@ -294,37 +340,7 @@ function Sidebar({ isActive, closeSidebar }) {
                     }}
                   />
                 </p>
-              </li>
-              <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "Syllabus" ? "activePage" : ""
-                }`}
-              >
-                <Link
-                  to="/syllabus"
-                  className="sidebar-menu__link d-flex align-items-center"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-books" />
-                  </span>
-                  <span className="text">Syllabus</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "weightage" ? "activePage" : ""
-                }`}
-              >
-                <Link
-                  to="/weightage"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-chart-pie-slice" />
-                  </span>
-                  <span className="text">Topic & Weightage</span>
-                </Link>
-              </li>
+              </li> */}
               <li
                 className={`sidebar-menu__item  ${
                   activeItem === "Student" ? "activePage" : ""
@@ -357,23 +373,27 @@ function Sidebar({ isActive, closeSidebar }) {
                 </p>
               </li>
 
-              <li className="sidebar-menu__item ">
-                <p
+              <li
+                className={`sidebar-menu__item  ${
+                  activeItem === "pricing" ? "activePage" : ""
+                }`}
+              >
+                <Link
                   to="/pricing"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
+                  className="sidebar-menu__link d-flex align-items-center"
                 >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-tag" />
                   </span>
                   <span className="text">Pricing</span>
                   <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
+                    className="position-absolute top-50 end-0 translate-middle-y"
                     style={{
                       fontSize: "18px",
                       color: "#B0B0B0",
                     }}
                   />
-                </p>
+                </Link>
               </li>
               <li className="sidebar-menu__item ">
                 <span className="text-gray-300 text-sm px-20 pt-20 fw-semibold border-top border-gray-100 d-block text-uppercase">

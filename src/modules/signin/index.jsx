@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import Preloader from "../../utils/Preloader";
+import Preloader from "../../utils/preloader/Preloader";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { login } from "../../apis/apis";
@@ -39,9 +39,11 @@ function SignIn() {
   const loginQuery = useMutation({
     mutationFn: login,
     onError: (error) => {
+      toast.dismiss(); // Close the loading toast
       toast.error(error.response.data.message);
     },
     onSuccess: (data) => {
+      toast.dismiss(); // Close the loading toast
       toast.success(data.message, {
         autoClose: 1000,
         onClose: () => {
@@ -76,7 +78,8 @@ function SignIn() {
             </Link>
             <h2 className="mb-8">Welcome 👋</h2>
             <p className="text-gray-600 text-15 mb-32">
-              Please sign in to your account and start the session
+              Unlock your potential! Sign in now and kickstart your journey to
+              exam success. 🚀📚
             </p>
             <form onSubmit={handleSubmit}>
               <div className="mb-24">
@@ -131,18 +134,18 @@ function SignIn() {
                   </span>
                 </div>
               </div>
-              <div className="mb-32 flex-between flex-wrap gap-8 justify-content-end">
+              {/* <div className="mb-32 flex-between flex-wrap gap-8 justify-content-end">
                 <Link
                   to="/forget_password"
                   className="text-main-600 hover-text-decoration-underline text-15 fw-medium"
                 >
                   Forgot Password?
                 </Link>
-              </div>
+              </div> */}
               <button type="submit" className="btn btn-main rounded-pill w-100">
                 Sign In
               </button>
-              <p className="mt-32 text-gray-600 text-center">
+              {/* <p className="mt-32 text-gray-600 text-center">
                 New on our platform? &nbsp;
                 <Link
                   to={"/signup"}
@@ -150,7 +153,7 @@ function SignIn() {
                 >
                   Create an account
                 </Link>
-              </p>
+              </p> */}
               {/* <div className="divider my-32 position-relative text-center">
                 <span className="divider__text text-gray-600 text-13 fw-medium px-26 bg-white">
                   or

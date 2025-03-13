@@ -56,11 +56,19 @@ function Question({
 
   const handleFileChange = (e, field) => {
     const file = e.target.files[0];
+
+    if (file && file.size > 2 * 1024 * 1024) {
+      alert("File size must be less than 2 MB");
+      e.target.value = ""; // Clear the input
+      return;
+    }
+
     setData((prevData) => ({
       ...prevData,
       [field]: file,
     }));
   };
+
   // Form validation
   const validateForm = () => {
     const isValid =
@@ -79,6 +87,8 @@ function Question({
           data.option_d_text.trim() !== "");
     return isValid;
   };
+  console.log(data);
+
   return (
     <div className="col-lg-8 order-2 order-lg-1 mt-10 mt-lg-0">
       <div className="card">
@@ -345,9 +355,17 @@ function Question({
                       type="number"
                       className="form-control py-8"
                       placeholder="Enter marks"
+                      min={0}
+                      max={10} // Set the maximum value
                       value={data.question_marks}
                       onChange={(e) =>
-                        setData({ ...data, question_marks: e.target.value })
+                        setData({
+                          ...data,
+                          question_marks: Math.min(
+                            10,
+                            Math.max(0, e.target.value)
+                          ), // Clamp the value between 0 and 10
+                        })
                       }
                       required
                     />

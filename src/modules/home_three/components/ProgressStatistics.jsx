@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function ProgressStatistics() {
   return (
@@ -42,7 +43,17 @@ function ProgressStatistics() {
           </div>
 
           {/* remove position relative and lock-overlay div when unlocks */}
-          <div className="card-body position-relative">
+          <div
+            className="card-body position-relative"
+            onClick={() => {
+              Swal.fire({
+                title: "Statistics Unavailable",
+                text: "Statistics will appear when we receive enough exam data.",
+                icon: "info",
+                confirmButtonText: "OK",
+              });
+            }}
+          >
             <div className="lock-overlay active">
               <i className="ph-fill ph-lock" />
             </div>

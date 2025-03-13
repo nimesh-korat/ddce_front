@@ -27,6 +27,10 @@ const branchOptions = [
   { value: "aeronautical_engineering", label: "Aeronautical Engineering" },
   { value: "architecture", label: "Architecture" },
   {
+    value: "architectural_assistantship",
+    label: "Architectural Assistantship",
+  },
+  {
     value: "ai_ml",
     label: "Artificial Intelligence (AI) & Machine Learning",
   },
@@ -35,16 +39,24 @@ const branchOptions = [
   { value: "bio_medical_engineering", label: "Bio-Medical Engineering" },
   { value: "cadcam", label: "CADCAM" },
   { value: "ceramic_technology", label: "Ceramic Technology" },
+  { value: "chemical_engineering", label: "Chemical Technology" },
   { value: "civil_engineering", label: "Civil Engineering" },
   { value: "cloud_computing", label: "Cloud Computing & Big Data" },
   { value: "computer_engineering", label: "Computer Engineering" },
+  {
+    value: "computer_aided_costume_design_dress_making",
+    label: "Computer Aided Costume Design & Dress Making",
+  },
   { value: "computer_science", label: "Computer Science & Engineering" },
   { value: "electrical_engineering", label: "Electrical Engineering" },
   {
     value: "electronics_communication",
     label: "Electronics & Communication Engineering",
   },
-  { value: "environmental_engineering", label: "Environmental Engineering" },
+  {
+    value: "envirenvirenvirenvironmental_engineering",
+    label: "Environmental Engineering",
+  },
   { value: "fabrication_technology", label: "Fabrication Technology" },
   { value: "gaming_animation", label: "Gaming & Animation" },
   { value: "ict", label: "Information & Communication Technology" },
@@ -61,7 +73,7 @@ const branchOptions = [
   { value: "petro_chemical", label: "Petro Chemical Engineering" },
   {
     value: "plastic_engineering",
-    label: "Plastic Engineering (Sandwitch Pattern)",
+    label: "Plastic Engineering",
   },
   { value: "power_electronics", label: "Power Electronics" },
   { value: "printing_technology", label: "Printing Technology" },
@@ -70,7 +82,7 @@ const branchOptions = [
   { value: "textile_design", label: "Textile Design" },
   {
     value: "textile_manufacturing",
-    label: "Textile Manufacturing Technology",
+    label: "Textile MaTextile Manufacturing Technology",
   },
   { value: "textile_processing", label: "Textile Processing Technology" },
   { value: "textile_technology", label: "Textile Technology" },

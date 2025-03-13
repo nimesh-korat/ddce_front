@@ -5,6 +5,7 @@ import { useState } from "react";
 
 function QuizCard({ test }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const startDate = new Date(test && test.test_start_date);
   const endDate = new Date(test && test.test_end_date);
   const currentDate = new Date(); // Get the current date
@@ -12,6 +13,7 @@ function QuizCard({ test }) {
   const toggleDescription = () => {
     setIsExpanded(!isExpanded);
   };
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
 
   // Determine the test status based on current date and start/end dates
   let testStatus = "upcoming"; // Default to "upcoming"
@@ -29,11 +31,29 @@ function QuizCard({ test }) {
     <div className="col-xxl-3 col-lg-4 col-sm-6">
       <div className="card border border-gray-100">
         <div className="card-body p-8">
-          <Link className="bg-main-100 rounded-8 overflow-hidden text-center mb-8 h-164 flex-center p-8">
-            <img
-              src={`${process.env.REACT_APP_API_URL}/uploads/images/test_images/${test.test_img_path}`}
-              alt="test"
+          <div className="text-end p-3 position-relative">
+            <i
+              className="ph-fill ph-dots-three-outline-vertical cursor-pointer"
+              onClick={toggleDropdown}
+              style={{ fontSize: "20px" }}
             />
+            {showDropdown && (
+              <div
+                className="position-absolute bg-white shadow rounded-2 p-2"
+                style={{ right: 0, top: "100%" }}
+              >
+                <Link
+                  className="btn btn-sm btn-outline-main w-100"
+                  to={"/admin/assignBatch"}
+                  state={{ test }}
+                >
+                  Assign Batch
+                </Link>
+              </div>
+            )}
+          </div>
+          <Link className="bg-main-100 rounded-8 overflow-hidden text-center mb-8 h-164 flex-center p-8">
+            <img src={`${test.test_img_path}`} alt="test" />
           </Link>
           <div className="p-8">
             <span
@@ -108,13 +128,28 @@ function QuizCard({ test }) {
             <div className="flex-between gap-4 flex-wrap mt-24">
               {testStatus === "ongoing" ? null : testStatus ===
                 "completed" ? null : (
-                <Link
-                  to="/admin/addQuizQuestions"
-                  state={{ test }} // Pass state directly
-                  className="btn btn-outline-main rounded-pill py-9 w-100 mt-24"
-                >
-                  Add Questions
-                </Link>
+                <>
+                  <div className="row">
+                    <div className="col-6">
+                      <Link
+                        to="/admin/addQuizQuestions"
+                        state={{ test }} // Pass state directly
+                        className="btn btn-outline-main rounded-pill py-9 w-100 mt-24"
+                      >
+                        Add Questions
+                      </Link>
+                    </div>
+                    <div className="col-6">
+                      <Link
+                        to="/admin/viewQuizQuestions"
+                        state={{ test }}
+                        className="btn btn-outline-main rounded-pill py-9 w-100 mt-24"
+                      >
+                        View Questions
+                      </Link>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           </div>

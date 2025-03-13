@@ -21,7 +21,7 @@ const ResultOverview = ({
           // Extract the label (e.g., "Correct", "Incorrect", or "Skipped")
           const label = selectedLabel.split(" ")[2];
           setFilterType(label.toLowerCase()); // Update the filter based on selection
-          console.log("Selected Label:", selectedLabel); // Debug log of selected label
+          // console.log("Selected Label:", selectedLabel); // Debug log of selected label
         },
       },
     },

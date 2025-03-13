@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import { format } from "date-fns";
-import { useMutation } from "@tanstack/react-query";
-import { updateProfilePic } from "../../../apis/apis";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getProfileImage, updateProfilePic } from "../../../apis/apis";
 import { toast } from "react-toastify";
 import UserContext from "../../../utils/UserContex";
 
@@ -9,15 +9,33 @@ function ProfileTab({ data }) {
   const fileInputRef = useRef(null); // Create a reference for the file input
   const [User_DP, setUser_DP] = useState(null); // State to store the selected file
   const { user, setUser } = useContext(UserContext);
+  const queryClient = useQueryClient();
 
   const formatDate = (isoDate) => {
     if (!isoDate) return ""; // Handle null/undefined dates
     return format(new Date(isoDate), "dd MMM yyyy");
   };
 
+  // Fetch Profile Picture
+  //eslint-disable-next-line
+  const { data: profilePic, isLoading: isProfilePicLoading } = useQuery({
+    queryKey: ["profilePic", user?.Id],
+    queryFn: getProfileImage,
+    enabled: !!user?.Id,
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    refetchOnMount: false,
+  });
+
   // Handle file selection
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+
+    if (file && file.size > 2 * 1024 * 1024) {
+      alert("File size must be less than 2 MB");
+      event.target.value = ""; // Clear the input
+      return;
+    }
+
     if (file) {
       setUser_DP(file);
     } else {
@@ -37,6 +55,10 @@ function ProfileTab({ data }) {
       const updatedUser = { ...user, User_DP: data.data };
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      // Invalidate the profilePic query to refetch the profile picture
+      queryClient.invalidateQueries(["profilePic", user?.Id]);
+
       toast.success("Profile Picture Updated!", {
         autoClose: 500,
       });
@@ -87,15 +109,19 @@ function ProfileTab({ data }) {
                   style={{ position: "relative", display: "inline-block" }}
                 >
                   <img
-                    src={`${
+                    src={
                       User_DP
-                        ? URL.createObjectURL(User_DP) // If User_DP exists, use the selected file
-                        : user?.User_DP // If there's a response, use the updated profile picture URL
-                        ? `${process.env.REACT_APP_API_URL}/uploads/images/profile_imgs/${user?.User_DP}`
-                        : `${process.env.REACT_APP_API_URL}/uploads/images/profile_imgs/${data?.User_DP}` // Default to the initial profile picture
-                    }`}
+                        ? URL.createObjectURL(User_DP)
+                        : // : isProfilePicLoading
+                          // ? "../assets/images/loading.gif" // Show loading spinner
+                          `${profilePic?.data}`
+                    }
                     alt="Profile"
                     className="w-120 h-120 rounded-circle border border-white"
+                    onError={(e) => {
+                      e.target.onerror = null; // Prevent infinite loop if fallback fails
+                      e.target.src = "../assets/images/thumbs/user-img.png";
+                    }}
                   />
                   <div
                     className="upload-icon flex-center text-white"

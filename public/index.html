@@ -11,21 +11,7 @@
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <title> Unity Exams</title>
 
-  <style>
-    #preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
+   <style>
     .question-card {
       margin: 20px auto;
       border-radius: 8px;
@@ -50,8 +36,39 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
+    .option-card img {
+      max-height: 80px;
+      /* Limit image height */
+      width: auto;
+      /* Keep image aspect ratio */
+      border-radius: 5px;
+      object-fit: cover;
+      /* Ensure image covers the area without stretching */
+      margin-left: 10px;
+      transition: transform 0.3s ease;
+      /* Smooth zoom effect */
+    }
+
+    .option-card img:hover {
+      transform: scale(1.1);
+      /* Zoom image on hover */
+    }
+
+    /* Adjustments for responsiveness */
+    @media (max-width: 768px) {
+      .col-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+      }
+
+      .option-card img {
+        max-height: 60px;
+        /* Smaller image size on smaller screens */
+      }
+    }
+
     .question-bullet-icon {
-      width: 25px;
+      min-width: 25px;
       /* Fixed width */
       height: 25px;
       /* Fixed height */
@@ -86,14 +103,14 @@
     }
 
     .correct-answer-section .icon {
-      width: 30px;
+      min-width: 25px;
       /* Fixed width */
-      height: 30px;
+      min-height: 25px;
       /* Fixed height */
       margin-right: 10px;
       background-color: #28a745;
       color: #fff;
-      font-size: 18px;
+      font-size: 14px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -178,23 +195,25 @@
   <!-- Bootstrap -->
   <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
   <!-- file upload -->
-  <link rel="stylesheet" href="../assets/css/file-upload.css">
+  <!-- <link rel="stylesheet" href="../assets/css/file-upload.css"> -->
   <!-- file upload -->
-  <link rel="stylesheet" href="../assets/css/plyr.css">
+  <!-- <link rel="stylesheet" href="../assets/css/plyr.css"> -->
   <!-- DataTables -->
   <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
   <!-- full calendar -->
-  <link rel="stylesheet" href="../assets/css/full-calendar.css">
+  <!-- <link rel="stylesheet" href="../assets/css/full-calendar.css"> -->
   <!-- jquery Ui -->
   <link rel="stylesheet" href="../assets/css/jquery-ui.css">
   <!-- editor quill Ui -->
-  <link rel="stylesheet" href="../assets/css/editor-quill.css">
+  <!-- <link rel="stylesheet" href="../assets/css/editor-quill.css"> -->
   <!-- apex charts Css -->
   <!-- <link rel="stylesheet" href="../assets/css/apexcharts.css"> -->
   <!-- calendar Css -->
-  <link rel="stylesheet" href="../assets/css/calendar.css">
+  <!-- <link rel="stylesheet" href="../assets/css/calendar.css"> -->
   <!-- jvector map Css -->
-  <link rel="stylesheet" href="../assets/css/jquery-jvectormap-2.0.5.css">
+  <!-- <link rel="stylesheet" href="../assets/css/jquery-jvectormap-2.0.5.css"> -->
+  <!-- Add jQuery and DataTables JS/CSS -->
+  <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"> -->
   <!-- Main css -->
   <link rel="stylesheet" href="../assets/css/main.css">
 
@@ -213,7 +232,7 @@
   <!-- file upload -->
   <!-- <script src="../assets/js/file-upload.js"></script> -->
   <!-- file upload -->
-  <script src="../assets/js/plyr.js"></script>
+  <!-- <script src="../assets/js/plyr.js"></script> -->
   <!-- dataTables -->
   <!-- <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script> -->
   <!-- full calendar -->
@@ -221,7 +240,7 @@
   <!-- jQuery UI -->
   <!-- <script src="../assets/js/jquery-ui.js"></script> -->
   <!-- jQuery UI -->
-  <script src="../assets/js/editor-quill.js"></script>
+  <!-- <script src="../assets/js/editor-quill.js"></script> -->
   <!-- apex charts -->
   <!-- <script src="../assets/js/apexcharts.min.js"></script> -->
   <!-- Calendar Js -->
@@ -229,8 +248,6 @@
 
   <!-- main js -->
   <script src="../assets/js/main.js"></script>
-  <!-- Add jQuery and DataTables JS/CSS -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
   <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript" charset="utf8"
     src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -247,62 +264,6 @@
         ]
       });
     });
-  </script>
-  <script>
-
-    // ========================== Export Js Start ==============================
-    // document.getElementById('exportOptions').addEventListener('change', function () {
-    //   const format = this.value;
-    //   const table = document.getElementById('studentTable');
-    //   let data = [];
-    //   const headers = [];
-
-    //   // Get the table headers
-    //   table.querySelectorAll('thead th').forEach(th => {
-    //     headers.push(th.innerText.trim());
-    //   });
-
-    //   // Get the table rows
-    //   table.querySelectorAll('tbody tr').forEach(tr => {
-    //     const row = {};
-    //     tr.querySelectorAll('td').forEach((td, index) => {
-    //       row[headers[index]] = td.innerText.trim();
-    //     });
-    //     data.push(row);
-    //   });
-
-    //   if (format === 'csv') {
-    //     downloadCSV(data);
-    //   } else if (format === 'json') {
-    //     downloadJSON(data);
-    //   }
-    // });
-
-    function downloadCSV(data) {
-      const csv = data.map(row => Object.values(row).join(',')).join('\n');
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'students.csv';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-
-    function downloadJSON(data) {
-      const json = JSON.stringify(data, null, 2);
-      const blob = new Blob([json], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'students.json';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-    // ========================== Export Js End ==============================
-
   </script>
 
 </body>

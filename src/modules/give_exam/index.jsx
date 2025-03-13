@@ -128,12 +128,35 @@ function GiveExam() {
     },
   });
 
+  const validateAllQuestionsAttempted = () => {
+    const isAllAttempted = questionStatus.every(
+      (status) =>
+        status.attempt_status === "0" || status.attempt_status === "skipped"
+    );
+
+    if (!isAllAttempted) {
+      Swal.fire({
+        title: "Incomplete Test",
+        text: "Please attempt or skip all questions before submitting.",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
+    // Validate if all questions are attempted
+    if (!validateAllQuestionsAttempted()) {
+      return; // Stop submission if validation fails
+    }
+
     // Update the current question before submitting
     setQuestionStatus((prevStatus) => {
       const updatedStatus = [...prevStatus];
       updatedStatus[currentQuestionIndex] = {
-        std_answer: selectedOption ? selectedOption.text : "", // Immediately record the answer or skip
+        std_answer: selectedOption ? selectedOption.text : "",
         attempt_status: selectedOption ? "0" : "skipped",
       };
       return updatedStatus;
@@ -143,21 +166,30 @@ function GiveExam() {
       test_id: exam?.test_id,
       answers: questions.map((q, index) => ({
         question_id: q.question_id,
-        std_answer: questionStatus[index]?.std_answer || "", // Ensure to capture the selected or skipped answer
-        attempt_status: questionStatus[index]?.attempt_status || "1", // Ensure status is correctly captured
+        std_answer: questionStatus[index]?.std_answer || "",
+        attempt_status: questionStatus[index]?.attempt_status || "1",
       })),
     };
+
+    console.log("Submission Data:", submissionData);
 
     // Trigger the mutation to submit the test
     submitTestQuery.mutate(submissionData);
   };
 
   const showPopUp = () => {
+    // Validate if all questions are attempted
+    if (!validateAllQuestionsAttempted()) {
+      return; // Stop if validation fails
+    }
+
     Swal.fire({
       title: "Are you sure?",
       text: "Once you submit, you won't be able to change your answers!",
       icon: "warning",
+      showCancelButton: true,
       confirmButtonText: "Yes, Submit it!",
+      cancelButtonText: "No, cancel!",
     }).then((result) => {
       if (result.isConfirmed) {
         handleSubmit();
@@ -207,6 +239,19 @@ function GiveExam() {
 
   const currentQuestion = questions[currentQuestionIndex];
 
+  const handleQuestionNavigation = (index) => {
+    setCurrentQuestionIndex(index);
+    setSelectedOption(
+      questionStatus[index]?.std_answer
+        ? { key: "", text: questionStatus[index].std_answer }
+        : null
+    );
+
+    // Reset showSubmitButton if the navigated question is not the last one
+    if (index !== questions.length - 1) {
+      setShowSubmitButton(false);
+    }
+  };
   return (
     <>
       <Sidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
@@ -215,6 +260,7 @@ function GiveExam() {
         <div className="dashboard-body">
           <div className="row gy-4">
             <QuizQuestion
+              questions={questions}
               currentQuestion={currentQuestion}
               selectedOption={selectedOption}
               handleOptionSelect={handleOptionSelect}
@@ -224,11 +270,13 @@ function GiveExam() {
               showPopUp={showPopUp}
               questionStatus={questionStatus}
               currentQuestionIndex={currentQuestionIndex}
+              setSelectedOption={setSelectedOption}
             />
             <QuizQuestionSummary
               questions={questions}
               questionStatus={questionStatus}
               currentQuestionIndex={currentQuestionIndex}
+              handleQuestionNavigation={handleQuestionNavigation}
             />
           </div>
         </div>

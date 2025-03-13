@@ -8,7 +8,7 @@ import {
   getTopics,
 } from "../../apis/apis";
 import AdminAddQuizQuestionCard from "./components/QuestionCard";
-import Preloader from "../../utils/Preloader";
+import Preloader from "../../utils/preloader/Preloader";
 import Footer from "../../common/footer";
 import AdminSidebar from "../../common/AdminSidebar";
 import Header from "../../common/header/Header";
@@ -393,10 +393,15 @@ function AddQuizQuestions() {
                               key={index}
                               index={getAdjustedIndex(index)} // Adjusted index
                               question={question.question_text}
+                              questionImg={question.question_image}
                               option1={question.option_a_text}
                               option2={question.option_b_text}
                               option3={question.option_c_text}
                               option4={question.option_d_text}
+                              optionImg1={question.option_a_image}
+                              optionImg2={question.option_b_image}
+                              optionImg3={question.option_c_image}
+                              optionImg4={question.option_d_image}
                               answer={question.answer_text}
                               isAsked={question.isAsked}
                               question_marks={question.question_marks}
@@ -441,10 +446,15 @@ function AddQuizQuestions() {
                           key={index}
                           index={index + 1}
                           question={question.question_text}
+                          questionImg={question.question_image}
                           option1={question.option_a_text}
                           option2={question.option_b_text}
                           option3={question.option_c_text}
                           option4={question.option_d_text}
+                          optionImg1={question.option_a_image}
+                          optionImg2={question.option_b_image}
+                          optionImg3={question.option_c_image}
+                          optionImg4={question.option_d_image}
                           answer={question.answer_text}
                           isAsked={question.is_asked}
                           question_marks={question.question_marks}

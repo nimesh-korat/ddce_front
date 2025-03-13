@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import Preloader from "../../utils/Preloader";
+import Preloader from "../../utils/preloader/Preloader";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { adminLogin } from "../../apis/apis";

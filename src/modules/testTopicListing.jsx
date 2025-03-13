@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query"; // Importing React Query
-import Preloader from "../utils/Preloader";
+import Preloader from "../utils/preloader/Preloader";
 import Sidebar from "../common/sidebar";
 import Header from "../common/header/Header";
 import Footer from "../common/footer";

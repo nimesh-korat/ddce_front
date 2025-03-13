@@ -6,44 +6,47 @@ import "./QuizTab.css";
 function QuizTab({ activeTab, setActiveTab, quizes }) {
   const currentDate = new Date(); // Get the current date
 
+  // Determine test status based on start and end dates
   const determineTestStatus = (quiz) => {
     const startDate = new Date(quiz.test_start_date);
     const endDate = new Date(quiz.test_end_date);
 
     if (currentDate >= startDate && currentDate <= endDate) {
-      return "ongoing"; // Ongoing if current date is between start and end
+      return "ongoing";
     } else if (currentDate > endDate) {
-      return "completed"; // Completed if current date is past end date
+      return "completed";
     } else {
-      return "upcoming"; // Default to upcoming
+      return "upcoming";
     }
   };
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4; // Number of items to display per page
+  const itemsPerPage = 4; // Number of items per page
 
-  // Filter quizzes based on the active tab and status
+  // Filter quizzes based on active tab and status
   const filterQuizesByStatus = (status) => {
+    if (status === "batch_not_assigned") {
+      return quizes.filter((quiz) => quiz.isAssigned === 0);
+    }
     return quizes.filter((quiz) => determineTestStatus(quiz) === status);
   };
 
-  // Get quizzes for the current page
+  // Get paginated quizzes for the current page
   const getCurrentPageQuizes = (filteredQuizes) => {
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return filteredQuizes.slice(startIndex, endIndex);
+    return filteredQuizes.slice(startIndex, startIndex + itemsPerPage);
   };
 
   const filteredQuizes = filterQuizesByStatus(activeTab);
   const totalPages = Math.ceil(filteredQuizes.length / itemsPerPage);
 
-  // Reset pagination to page 1 when activeTab changes
+  // Reset pagination when active tab changes
   useEffect(() => {
-    setCurrentPage(1); // Reset to first page when tab changes
+    setCurrentPage(1);
   }, [activeTab]);
 
-  // Check if there are any quizzes for the active tab
+  // Check if there are any quizzes in the active tab
   const hasQuizes = filteredQuizes.length > 0;
 
   return (
@@ -55,6 +58,18 @@ function QuizTab({ activeTab, setActiveTab, quizes }) {
             id="pills-tab"
             role="tablist"
           >
+            <li className="nav-item" role="presentation">
+              <button
+                className={`nav-link ${
+                  activeTab === "batch_not_assigned" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("batch_not_assigned")}
+                type="button"
+                role="tab"
+              >
+                Batch Not Assigned
+              </button>
+            </li>
             <li className="nav-item" role="presentation">
               <button
                 className={`nav-link ${

@@ -6,7 +6,7 @@ function Footer() {
       <div className="dashboard-footer">
         <div className="flex-between flex-wrap gap-16">
           <p className="text-gray-300 text-13 fw-normal">
-            © Copyright 2024, All Right Reserverd
+            © Copyright 2025, All Right Reserverd
           </p>
           {/* <div className="flex-align flex-wrap gap-16">
             <a

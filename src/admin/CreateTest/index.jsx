@@ -7,6 +7,8 @@ import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,13 +16,12 @@ import * as yup from "yup";
 import { adminAddTest } from "../../apis/apis";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
-import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import { create } from "filepond";
 
 registerPlugin(
   FilePondPluginImageExifOrientation,
   FilePondPluginImagePreview,
-  FilePondPluginFileValidateType
+  FilePondPluginFileValidateType,
+  FilePondPluginFileValidateSize
 );
 
 // Validation Schema
@@ -29,18 +30,18 @@ const schema = yup.object().shape({
     .string()
     .trim()
     .required("Test title is required")
-    .min(3, "Title must be at least 3 characters")
-    .max(100, "Title must not exceed 50 characters"),
+    .min(3, "Too short title")
+    .max(100, "Title must not exceed 100 characters"),
   test_desc: yup
     .string()
     .trim()
     .required("Description is required")
-    .min(5, "Description must be at least 5 characters")
-    .max(500, "Description must not exceed 150 characters"),
+    .min(5, "Invalid description")
+    .max(500, "Description must not exceed 500 characters"),
   test_duration: yup
     .number()
     .integer("Duration must be an integer")
-    .min(1, "Duration must be at least 1 minute")
+    .min(30, "Duration must be at least 30 minute")
     .max(210, "Duration must not exceed 210 minutes")
     .typeError("Duration must be a number")
     .required("Duration is required")
@@ -86,19 +87,12 @@ const schema = yup.object().shape({
   test_difficulty: yup.string().required("Difficulty is required"),
   test_neg_marks: yup
     .number()
-    .integer("Negative marks must be an integer")
     .min(0, "Negative marks must be at least 0")
     .max(2, "Negative marks must not exceed 2")
     .typeError("Negative marks must be a number")
     .required("Negative marks are required"),
 });
 
-// Create a FilePond instance
-const input = document.querySelector('input[name="test_img_path"]');
-create(input, {
-  // Only accept images
-  acceptedFileTypes: ["image/*"],
-});
 function CreateTest() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null); // Store the image file
@@ -158,7 +152,6 @@ function CreateTest() {
       toast.error("Please upload a test thumbnail image.");
       return;
     }
-    console.log("Form Data:", formData); // Debug log to check what is being sent
 
     // Send the form data
     addQuizMutation.mutate(formData);
@@ -212,6 +205,10 @@ function CreateTest() {
                       credits={false}
                       maxFiles={1}
                       labelIdle="Add Thumbnail Image"
+                      maxFileSize="2MB"
+                      allowFileSizeValidation={true}
+                      labelMaxFileSizeExceeded="File is too large"
+                      labelMaxFileSize="Maximum file size is {filesize}"
                       acceptedFileTypes={["image/*"]}
                       onupdatefiles={(fileItems) => {
                         setSelectedImage(fileItems[0]?.file || null);

@@ -2,45 +2,67 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRecentRegNotification } from "../../../apis/apis";
 import { Link } from "react-router-dom";
+import { toZonedTime } from "date-fns-tz";
+import { formatDistanceToNow } from "date-fns";
 
 // Helper function to calculate time ago
+
+//!old code
+// function timeAgo(date) {
+//   const now = new Date();
+
+//   // Convert the input date to a Date object
+//   let dateUTC = new Date(date);
+
+//   // Adjust the date by adding 5 hours and 30 minutes (19800 seconds)
+//   dateUTC = new Date(dateUTC.getTime() + 5 * 60 * 60 * 1000 + 30 * 60 * 1000);
+
+//   const diffInSeconds = Math.floor((now - dateUTC) / 1000); // difference in seconds
+
+//   if (diffInSeconds < 60) {
+//     return `${diffInSeconds} second${diffInSeconds === 1 ? "" : "s"} ago`;
+//   }
+
+//   const diffInMinutes = Math.floor(diffInSeconds / 60);
+//   if (diffInMinutes < 60) {
+//     return `${diffInMinutes} minute${diffInMinutes === 1 ? "" : "s"} ago`;
+//   }
+
+//   const diffInHours = Math.floor(diffInMinutes / 60);
+//   if (diffInHours < 24) {
+//     return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
+//   }
+
+//   const diffInDays = Math.floor(diffInHours / 24);
+//   if (diffInDays < 30) {
+//     return `${diffInDays} day${diffInDays === 1 ? "" : "s"} ago`;
+//   }
+
+//   const diffInMonths = Math.floor(diffInDays / 30);
+//   if (diffInMonths < 12) {
+//     return `${diffInMonths} month${diffInMonths === 1 ? "" : "s"} ago`;
+//   }
+
+//   const diffInYears = Math.floor(diffInMonths / 12);
+//   return `${diffInYears} year${diffInYears === 1 ? "" : "s"} ago`;
+// }
+
 function timeAgo(date) {
-  const now = new Date();
+  // Get the user's current timezone
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  // Convert the input date to a Date object
-  let dateUTC = new Date(date);
+  // Parse the UTC date into a Date object
+  const dateUTC = new Date(date);
 
-  // Adjust the date by adding 5 hours and 30 minutes (19800 seconds)
-  dateUTC = new Date(dateUTC.getTime() + 5 * 60 * 60 * 1000 + 30 * 60 * 1000);
+  // Convert UTC date to user's local timezone
+  const dateInUserTimeZone = toZonedTime(dateUTC, userTimeZone);
 
-  const diffInSeconds = Math.floor((now - dateUTC) / 1000); // difference in seconds
+  // Calculate the time ago
+  const timeAgoText = formatDistanceToNow(dateInUserTimeZone, {
+    addSuffix: true,
+  });
 
-  if (diffInSeconds < 60) {
-    return `${diffInSeconds} second${diffInSeconds === 1 ? "" : "s"} ago`;
-  }
-
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-  if (diffInMinutes < 60) {
-    return `${diffInMinutes} minute${diffInMinutes === 1 ? "" : "s"} ago`;
-  }
-
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) {
-    return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
-  }
-
-  const diffInDays = Math.floor(diffInHours / 24);
-  if (diffInDays < 30) {
-    return `${diffInDays} day${diffInDays === 1 ? "" : "s"} ago`;
-  }
-
-  const diffInMonths = Math.floor(diffInDays / 30);
-  if (diffInMonths < 12) {
-    return `${diffInMonths} month${diffInMonths === 1 ? "" : "s"} ago`;
-  }
-
-  const diffInYears = Math.floor(diffInMonths / 12);
-  return `${diffInYears} year${diffInYears === 1 ? "" : "s"} ago`;
+  return timeAgoText;
 }
 
 function Notification() {
@@ -56,8 +78,8 @@ function Notification() {
 
   const notifications = data?.success ? data.data : [];
 
-  // Limit notifications to first 10
-  const notificationsToShow = notifications.slice(0, 10);
+  // Limit notifications to first 5
+  const notificationsToShow = notifications.slice(0, 5);
 
   return (
     <div className="dropdown">

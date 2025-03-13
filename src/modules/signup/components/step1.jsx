@@ -14,9 +14,9 @@ import { toast } from "react-toastify";
 const validationSchema = yup.object().shape({
   Name: yup
     .string()
-    .matches(/^[A-Za-z\s]+$/, "Name must contain only letters and spaces")
+    .matches(/^[A-Za-z\s]+$/, "Name must contain only letters")
     .min(3, "Name must be at least 3 characters")
-    .max(50, "Name cannot exceed 50 characters")
+    .max(35, "Name cannot exceed 35 characters")
     .required("Name is required"),
   Email_Id: yup
     .string()
@@ -76,7 +76,6 @@ function Step1({ onNext }) {
     },
     onSuccess: (data) => {
       toast.success(data.message);
-
       onNext(formData.Phone_Number);
     },
   });
@@ -266,6 +265,7 @@ function Step1({ onNext }) {
               type="tel"
               className="form-control py-11 ps-40"
               id="Phone_Number"
+              maxLength={10}
               placeholder="Enter Phone Number"
               {...register("Phone_Number")}
             />

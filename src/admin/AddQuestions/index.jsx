@@ -8,13 +8,14 @@ import {
   getSubTopics,
   getTopics,
 } from "../../apis/apis";
-import Preloader from "../../utils/Preloader";
+import Preloader from "../../utils/preloader/Preloader";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer";
 import Question from "./components/Question";
 import { toast } from "react-toastify";
 import AdminSidebar from "../../common/AdminSidebar";
 import ParagraphBasedQuestion from "./components/ParagraphBasedQuestion";
+import { Link } from "react-router-dom";
 
 function AddQuestion() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
@@ -193,6 +194,30 @@ function AddQuestion() {
       <div className="dashboard-main-wrapper">
         <Header toggleSidebar={toggleSidebar} />
         <div className="dashboard-body">
+          <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
+            <div className="breadcrumb mb-24">
+              <ul className="flex-align gap-4">
+                <li>
+                  <Link
+                    to={"/admin"}
+                    className="text-gray-200 fw-normal text-15 hover-text-main-600"
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <span className="text-gray-500 fw-normal d-flex">
+                    <i className="ph ph-caret-right" />
+                  </span>
+                </li>
+                <li>
+                  <span className="text-main-600 fw-normal text-15">
+                    Add Question
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
           <div className="container-fluid dashboard-content">
             <div className="row gy-2 ">
               <div className="col-md-4">

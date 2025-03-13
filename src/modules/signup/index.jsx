@@ -29,7 +29,8 @@ function Signup() {
           </a>
           <h2 className="mb-8">Sign Up</h2>
           <p className="text-gray-600 text-15 mb-32">
-            Please sign up to your account and start the session
+            Your success starts here! Sign up now and take the first step toward
+            acing your exams. 🚀📖
           </p>
           <div>
             <Stepper activeStep={activeStep} alternativeLabel>

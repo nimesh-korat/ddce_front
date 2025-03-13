@@ -1,15 +1,23 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { logout } from "../../apis/apis";
+import { getProfileImage, logout } from "../../apis/apis";
 import Notification from "./components/Notification";
 import UserContext from "../../utils/UserContex";
 
 function Header({ toggleSidebar }) {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
-
+  // Fetch Profile Picture
+  //eslint-disable-next-line
+  const { data: profilePic, isLoading: isProfilePicLoading } = useQuery({
+    queryKey: ["profilePic", user?.Id],
+    queryFn: getProfileImage,
+    enabled: !!user?.Id,
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    refetchOnMount: false,
+  });
   const logoutQuery = useMutation({
     mutationFn: (data) => logout(data),
     onSuccess: () => {
@@ -199,11 +207,15 @@ function Header({ toggleSidebar }) {
                 <img
                   src={
                     user?.User_DP
-                      ? `${process.env.REACT_APP_API_URL}/uploads/images/profile_imgs/${user?.User_DP}`
+                      ? `${profilePic?.data}`
                       : "../assets/images/thumbs/user-img.png"
                   }
-                  alt=""
+                  alt="User Profile"
                   className="h-32 w-32 rounded-circle"
+                  onError={(e) => {
+                    e.target.onerror = null; // Prevent infinite loop if fallback fails
+                    e.target.src = "../assets/images/thumbs/user-img.png";
+                  }}
                 />
                 <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0" />
               </span>
@@ -215,11 +227,15 @@ function Header({ toggleSidebar }) {
                     <img
                       src={
                         user?.User_DP
-                          ? `${process.env.REACT_APP_API_URL}/uploads/images/profile_imgs/${user?.User_DP}`
+                          ? `${profilePic?.data}`
                           : "../assets/images/thumbs/user-img.png"
                       }
                       alt=""
                       className="w-54 h-54 rounded-circle"
+                      onError={(e) => {
+                        e.target.onerror = null; // Prevent infinite loop if fallback fails
+                        e.target.src = "../assets/images/thumbs/user-img.png";
+                      }}
                     />
                     <div>
                       <h4 className="mb-0">{user && user.Name}</h4>
@@ -244,7 +260,7 @@ function Header({ toggleSidebar }) {
                         <span className="text">Profile</span>
                       </Link>
                     </li>
-                    <li className="mb-4">
+                    {/* <li className="mb-4">
                       <Link
                         to="/"
                         className="py-12 text-15 px-20 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15"
@@ -287,7 +303,7 @@ function Header({ toggleSidebar }) {
                         </span>
                         <span className="text">Ask Doubts</span>
                       </Link>
-                    </li>
+                    </li> */}
                     <li className="pt-8 border-top border-gray-100">
                       <Link
                         onClick={handleLogout}

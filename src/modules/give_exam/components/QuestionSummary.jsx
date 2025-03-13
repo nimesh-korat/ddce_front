@@ -1,6 +1,11 @@
 import React from "react";
 
-function QuestionSummary({ questions, questionStatus, currentQuestionIndex }) {
+function QuestionSummary({
+  questions,
+  questionStatus,
+  currentQuestionIndex,
+  handleQuestionNavigation,
+}) {
   return (
     <div className="col-md-4 order-md-2 order-1 ">
       <div className="card shadow-sm border-0" style={{ minHeight: "100%" }}>
@@ -23,7 +28,7 @@ function QuestionSummary({ questions, questionStatus, currentQuestionIndex }) {
                   index === currentQuestionIndex
                     ? "bg-info"
                     : status === "0"
-                    ? "bg-success"
+                    ? "bg-secondary"
                     : status === "skipped"
                     ? "bg-warning"
                     : "bg-light";
@@ -52,6 +57,7 @@ function QuestionSummary({ questions, questionStatus, currentQuestionIndex }) {
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.transform = "scale(1)")
                     }
+                    onClick={() => handleQuestionNavigation(index)}
                   >
                     {index + 1}
                   </div>
@@ -84,7 +90,7 @@ function QuestionSummary({ questions, questionStatus, currentQuestionIndex }) {
             </div>
             <div className="d-flex align-items-center">
               <div
-                className="rounded-circle bg-success me-2 shadow-sm"
+                className="rounded-circle bg-secondary me-2 shadow-sm"
                 style={{
                   width: "20px",
                   height: "20px",

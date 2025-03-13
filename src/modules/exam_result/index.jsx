@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { studentGetResult } from "../../apis/apis";
 import { useLocation } from "react-router-dom";
 import UserContext from "../../utils/UserContex";
-import Preloader from "../../utils/Preloader";
+import Preloader from "../../utils/preloader/Preloader";
 import QuizQuestionsAnswer from "./components/QuizQuestionAnswer";
 import ResultOverview from "./components/Result";
 

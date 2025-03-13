@@ -1,5 +1,6 @@
 import React from "react";
 import Chart from "../../../utils/Charts";
+import Swal from "sweetalert2";
 
 function StudyOverview() {
   const studyOverviewData = [
@@ -137,27 +138,40 @@ function StudyOverview() {
         <div className="card-body">
           <div className="mb-20 flex-between flex-wrap gap-8">
             <h4 className="mb-0">Study Overview</h4>
-            <div className="flex-align gap-16 flex-wrap">
-              <div className="flex-align flex-wrap gap-16">
-                <div className="flex-align flex-wrap gap-8">
+            <div className="flex-align gap-6 flex-wrap">
+              <div className="flex-align flex-wrap gap-8">
+                <div className="flex-align flex-wrap gap-4">
                   <span className="w-8 h-8 rounded-circle bg-main-600" />
-                  <span className="text-13 text-gray-600">Design</span>
+                  <span className="text-13 text-gray-600">Your Progress</span>
                 </div>
-                <div className="flex-align flex-wrap gap-8">
+                <div className="flex-align flex-wrap gap-4">
                   <span className="w-8 h-8 rounded-circle bg-main-two-600" />
-                  <span className="text-13 text-gray-600">Development</span>
+                  <span className="text-13 text-gray-600">Others Progress</span>
                 </div>
               </div>
               <select className="form-select form-control text-13 px-8 pe-24 py-8 rounded-8 w-auto">
-                <option value={1}>Yearly</option>
-                <option value={1}>Monthly</option>
-                <option value={1}>Weekly</option>
-                <option value={1}>Today</option>
+                <option value={1}>All Subject</option>
+                <option value={1}>Physics</option>
+                <option value={1}>Chemistry</option>
+                <option value={1}>Computer Practice</option>
+                <option value={1}>Environmental Sciences </option>
+                <option value={1}>Mathematics</option>
+                <option value={1}>Soft Skills</option>
               </select>
             </div>
           </div>
           {/* remove position relative and lock-overlay div when unlocks */}
-          <div className="position-relative">
+          <div
+            className="position-relative"
+            onClick={() => {
+              Swal.fire({
+                title: "Statistics Unavailable",
+                text: "Statistics will appear when we receive enough exam data.",
+                icon: "info",
+                confirmButtonText: "OK",
+              });
+            }}
+          >
             <div className="lock-overlay active">
               <i className="ph-fill ph-lock" />
             </div>
