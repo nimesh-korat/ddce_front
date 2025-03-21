@@ -3,7 +3,12 @@ import React from "react";
 function UnityLogo() {
   return (
     <>
-      <h2 className="mb-8 fw-bold ">Unity</h2>
+      <img
+        className="w-100 text-center"
+        src="./assets/images/logo/logo4.png"
+        alt=""
+        style={{ width: "100%", height: "80px" }}
+      />
     </>
   );
 }

@@ -10520,10 +10520,9 @@ button:focus {
 }
 
 .mastery-subject-name p {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 450;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  margin-bottom: 15px;
 }
 
 .mastery-stat-number {
@@ -10538,24 +10537,32 @@ button:focus {
 
 .mastery-percentage {
   font-size: 3rem; /* Default size for large screens */
-  margin-bottom: 0px;
 }
 
 @media (max-width: 1200px) {
   .mastery-percentage {
     font-size: 3rem; /* Adjust for medium screens */
   }
+  .mastery-subject-name p {
+    font-size: 1.6rem;
+  }
 }
 
 @media (max-width: 768px) {
   .mastery-percentage {
-    font-size: 3rem; /* Adjust for small screens */
+    font-size: 2.8rem; /* Adjust for small screens */
+  }
+  .mastery-subject-name p {
+    font-size: 1.4rem;
   }
 }
 
 @media (max-width: 576px) {
   .mastery-percentage {
-    font-size: 2.6rem; /* Adjust for extra-small screens */
+    font-size: 1.7rem; /* Adjust for extra-small screens */
+  }
+  .mastery-subject-name p {
+    font-size: 1.22rem;
   }
 }
 
@@ -10571,8 +10578,8 @@ button:focus {
 }
 
 .today-meeting {
-  background-color: #7baef0;
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+  background-color: #97e0dd;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
   scale: 1.02;
   transition: 0.3s;
   color: white;

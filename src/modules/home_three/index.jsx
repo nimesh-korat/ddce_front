@@ -8,6 +8,8 @@ import Greetings from "./components/Greetings";
 import ProgressStatistics from "./components/ProgressStatistics";
 import MostActivity from "./components/MostActivity";
 import Preloader from "../../utils/preloader/Preloader";
+import { useQuery } from "@tanstack/react-query";
+import { getDashboardCounts } from "../../apis/apis";
 
 function Home() {
   const [isReady, setIsReady] = useState(false);
@@ -21,6 +23,15 @@ function Home() {
     setIsSidebarActive(false);
   };
 
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["dashboardCounts"],
+    queryFn: getDashboardCounts,
+  });
+
+  if (isError) {
+    console.log(error);
+  }
+
   useEffect(() => {
     setIsReady(true); // Ensure the DOM is ready before rendering the chart
   }, []);
@@ -31,7 +42,7 @@ function Home() {
 
       <div className="dashboard-main-wrapper">
         <Header toggleSidebar={toggleSidebar} />
-        {!isReady ? (
+        {!isReady || isLoading ? (
           <Preloader />
         ) : (
           <div className="dashboard-body">
@@ -44,30 +55,30 @@ function Home() {
                 <div className="row gy-4">
                   <HomeWidgets
                     bgColor={"bg-main-600"}
-                    img="ph-fill ph-graduation-cap"
+                    img="ph-fill ph-seal-question"
                     title="Total Questions"
-                    count="10,000"
+                    count={data?.data?.total_questions || 0}
                   />
                   <HomeWidgets
                     bgColor={"bg-main-two-600 "}
                     img="ph-fill ph-graduation-cap"
-                    title="Earned Certificate"
-                    count="39"
-                    isLocked={true}
+                    title="Offline Students"
+                    count="200"
+                    isLocked={false}
                   />
                   <HomeWidgets
                     bgColor={"bg-purple-600"}
-                    img="ph-fill ph-certificate"
-                    title="Course in Progress"
-                    count="25"
-                    isLocked={true}
+                    img="ph-fill ph-users-four"
+                    title="Online Students"
+                    count={data?.data?.total_users || 0}
+                    isLocked={false}
                   />
                   <HomeWidgets
                     bgColor="bg-warning-600 "
-                    img="ph-fill ph-users-four"
-                    title="Community Support"
-                    count="18k"
-                    isLocked={true}
+                    img="ph-fill ph-certificate"
+                    title="Quiz Completed"
+                    count={data?.data?.total_completed_quizzes || 0}
+                    isLocked={false}
                   />
                 </div>
                 {/* Widgets End */}

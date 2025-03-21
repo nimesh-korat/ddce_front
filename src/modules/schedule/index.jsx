@@ -6,9 +6,16 @@ import Footer from "../../common/footer";
 import { useQuery } from "@tanstack/react-query";
 import { getActiveScheduleForStudent } from "../../apis/apis";
 import Preloader from "../../utils/preloader/Preloader";
+import { toZonedTime, format } from "date-fns-tz";
 
 function Schedule() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
+
+  function formatDateInUserTimezone(date) {
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const zonedDate = toZonedTime(date, userTimeZone);
+    return format(zonedDate, "dd/MM/yyyy hh:mm a"); // 12-hour format with AM/PM
+  }
 
   const toggleSidebar = () => {
     setIsSidebarActive((prevState) => !prevState);
@@ -76,7 +83,112 @@ function Schedule() {
               <div className="container mt-5">
                 <h2 className="text-center mb-15">Schedule</h2>
 
-                <div className="card mb-10 shadow-sm">
+                <div className="row g-20">
+                  {sortedData.length === 0 ? (
+                    <>No Schedule Found.</>
+                  ) : (
+                    sortedData.map((schedule) => {
+                      const startDate = new Date(schedule.start_date);
+                      const endDate = new Date(schedule.end_date);
+                      const currentDate = new Date();
+
+                      let testStatus = "upcoming"; // Default to "upcoming"
+                      if (currentDate >= startDate && currentDate <= endDate) {
+                        testStatus = "current"; // Ongoing if current date is between start and end
+                      } else if (currentDate > endDate) {
+                        testStatus = "completed"; // Completed if current date is past end date
+                      }
+
+                      // Check if the current date is within the schedule's range
+                      const isActive = startDate <= now && now <= endDate;
+                      return (
+                        <div
+                          className={`col-xxl-3 col-lg-4 col-sm-6`}
+                          key={schedule.sr_no}
+                        >
+                          <div
+                            className={`card border border-gray-100 ${
+                              isActive ? "today-meeting" : ""
+                            }`}
+                          >
+                            <div className="card-body p-8">
+                              <div className="p-8">
+                                <div className="flex-align gap-10">
+                                  <span className="text-13 py-2 px-10 rounded-pill bg-warning-100 text-success-600 mb-16 shadow-sm">
+                                    {schedule.for_who}
+                                  </span>
+                                  <span className="text-13 py-2 px-10 rounded-pill bg-success-50 text-success-600 mb-16 shadow-sm">
+                                    {schedule.type}
+                                  </span>
+                                </div>
+                                <h5 className="mb-8">
+                                  {schedule.session_link ? (
+                                    <a
+                                      href={schedule.session_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {schedule.description}
+                                    </a>
+                                  ) : (
+                                    schedule.description
+                                  )}
+                                </h5>
+                                <div className="row gap-8">
+                                  <div className="flex-align gap-4">
+                                    <span className="text-sm text-main-600 d-flex">
+                                      <i className="ph ph-clock" />
+                                    </span>
+                                    <span className="text-13 text-gray-600">
+                                      <b>Starts at: </b>{" "}
+                                      {formatDateInUserTimezone(
+                                        schedule.start_date
+                                      )}
+                                    </span>
+                                  </div>{" "}
+                                  <div className="flex-align gap-4">
+                                    <span className="text-sm text-main-600 d-flex">
+                                      <i className="ph ph-clock" />
+                                    </span>
+                                    <span className="text-13 text-gray-600">
+                                      <b>Ends at: </b>{" "}
+                                      {formatDateInUserTimezone(
+                                        schedule.end_date
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="flex-between gap-4 flex-wrap mt-20">
+                                  <Link
+                                    to={`${
+                                      schedule.type === "Test" &&
+                                      testStatus === "current"
+                                        ? "/exams#current"
+                                        : schedule.type === "Test" &&
+                                          testStatus === "completed"
+                                        ? "/exams#completed"
+                                        : schedule.type === "Test" &&
+                                          testStatus === "upcoming"
+                                        ? "/exams#upcoming"
+                                        : "#"
+                                    }`}
+                                    className="btn btn-outline-main rounded-pill py-9 flex-align gap-4"
+                                  >
+                                    View Details
+                                    <span className="d-flex text-xl">
+                                      <i className="ph ph-arrow-right" />
+                                    </span>
+                                  </Link>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+                {/* <div className="card mb-10 shadow-sm">
                   <div className="card-body d-flex flex-wrap justify-content-between text-center">
                     <p className="mb-1 fw-bold col-6 col-md-2 text-md-center">
                       SR No.
@@ -97,9 +209,9 @@ function Schedule() {
                       For
                     </p>
                   </div>
-                </div>
+                </div> */}
 
-                {sortedData.length === 0 ? (
+                {/* {sortedData.length === 0 ? (
                   <>No Schedule Found.</>
                 ) : (
                   sortedData.map((schedule) => {
@@ -149,7 +261,7 @@ function Schedule() {
                       </div>
                     );
                   })
-                )}
+                )} */}
               </div>
             </div>
           )}

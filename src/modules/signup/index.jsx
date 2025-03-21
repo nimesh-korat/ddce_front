@@ -22,11 +22,13 @@ function Signup() {
         <img src="assets/images/thumbs/auth-img2.png" alt="a" />
       </div>
       <div className="auth-right py-40 px-24 flex-center flex-column">
-        <div className="auth-right__inner mx-auto w-100">
-          <a href="index.html" className="auth-right__logo">
-            {/* <img src="assets/images/logo/logo.png" alt="a" /> */}
-            <UnityLogo />
-          </a>
+        <div className="auth-right__inner w-100">
+          <div className="d-flex align-items-center justify-content-center">
+            <Link to={"/#"} className="auth-right__logo mb-0">
+              {/* <img src="assets/images/logo/logo.png" alt="" /> */}
+              <UnityLogo />
+            </Link>
+          </div>
           <h2 className="mb-8">Sign Up</h2>
           <p className="text-gray-600 text-15 mb-32">
             Your success starts here! Sign up now and take the first step toward

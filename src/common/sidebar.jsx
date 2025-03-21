@@ -41,8 +41,8 @@ function Sidebar({ isActive, closeSidebar }) {
       case "/analytics":
         setActiveItem("analytics");
         break;
-      case "/masteryMatrix":
-        setActiveItem("masteryMatrix");
+      case "/accuracyMatrix":
+        setActiveItem("accuracyMatrix");
         break;
       case "/pricing":
         setActiveItem("pricing");
@@ -76,13 +76,18 @@ function Sidebar({ isActive, closeSidebar }) {
           <i className="ph ph-x" />
         </button>
         {/* sidebar close btn */}
-        <p
+        <Link
           to="/"
           className="sidebar__logo text-center p-10 position-sticky inset-block-start-0 bg-white w-100 z-1 pb-5"
         >
           {/* <img src="assets/images/logo/logo.png" alt="Logo" /> */}
-          <h1 className="fw-bold mb-0 mt-0 p-0">Unity</h1>
-        </p>
+          <img
+            className="w-100 text-center"
+            src="./assets/images/logo/logo4.png"
+            alt=""
+            style={{ width: "100px", height: "70px", objectFit: "contain" }}
+          />
+        </Link>
         <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
           <div className="p-20 pt-10">
             <ul className="sidebar-menu">
@@ -240,11 +245,11 @@ function Sidebar({ isActive, closeSidebar }) {
               </li>
               <li
                 className={`sidebar-menu__item  ${
-                  activeItem === "masteryMatrix" ? "activePage" : ""
+                  activeItem === "accuracyMatrix" ? "activePage" : ""
                 }`}
               >
                 <Link
-                  to="/masteryMatrix"
+                  to="/accuracyMatrix"
                   className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">

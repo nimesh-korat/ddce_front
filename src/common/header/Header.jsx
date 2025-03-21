@@ -51,7 +51,7 @@ function Header({ toggleSidebar }) {
   return (
     <>
       <div className="top-navbar flex-between gap-16">
-        <div className="flex-align gap-16">
+        <div className="flex-align gap-2">
           {/* Toggle Button Start */}
           <button
             type="button"
@@ -61,21 +61,14 @@ function Header({ toggleSidebar }) {
             <i className="ph ph-list" />
           </button>
           {/* Toggle Button End */}
-          {/* <form className="w-350 d-sm-block d-none">
-            <div className="position-relative">
-              <button
-                type="button"
-                className="input-icon text-xl d-flex text-gray-100 pointer-event-none"
-              >
-                <i className="ph ph-magnifying-glass" />
-              </button>
-              <input
-                type="text"
-                className="form-control ps-40 h-40 border-transparent focus-border-main-600 bg-main-50 rounded-pill placeholder-15"
-                placeholder="Search..."
-              />
-            </div>
-          </form> */}
+          <div className="d-lg-none d-block">
+            <img
+              className="img-fluid"
+              src="./assets/images/logo/logo4.png"
+              alt="logo"
+              style={{ width: "70px", height: "35px", objectFit: "cover" }}
+            />
+          </div>
         </div>
         <div className="flex-align gap-16">
           <div className="flex-align gap-8">

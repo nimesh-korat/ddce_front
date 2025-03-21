@@ -74,10 +74,29 @@ function TopicWeightage() {
     },
     xaxis: {
       categories: topics.map((topic) => topic.Topic),
+      labels: {
+        show: false,
+        style: {
+          colors: "#333",
+          fontSize: "12px",
+        },
+      },
+    },
+    // xaxis: {
+    //   labels: {
+    //     show: false,
+    //     style: {
+    //       colors: "#333",
+    //       fontSize: "12px",
+    //     },
+    //   },
+    // },
+    legend: {
+      show: false, // Hide the legend
     },
     yaxis: {
       min: 0,
-      max: Math.max(...topics.map((topic) => topic.TopicWeightage)) + 2, 
+      max: Math.max(...topics.map((topic) => topic.TopicWeightage)) + 2,
     },
     title: {
       align: "center",

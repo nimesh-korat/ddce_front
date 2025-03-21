@@ -12,7 +12,7 @@ function MasteryMatrix() {
 
   // Use React Query to fetch mastery matrix data
   const { data, error, isFetching } = useQuery({
-    queryKey: ["masteryMatrixData"],
+    queryKey: ["accuracyMatrixData"],
     queryFn: getSubjectWiseAnalysis,
     // total corrected questions (subject-wise) / (total corrected questions (subject-wise) + total incorrect questions (subject-wise)) * 100
     refetchOnWindowFocus: false,
@@ -53,7 +53,7 @@ function MasteryMatrix() {
               </li>
               <li>
                 <span className="text-main-600 fw-normal text-15">
-                  Mastery Matrix
+                  Accuracy Matrix
                 </span>
               </li>
             </ul>
@@ -67,7 +67,7 @@ function MasteryMatrix() {
                   <div className="col-12">
                     <div className="card p-4 rounded shadow">
                       <div className="row g-3">
-                        <div className="col-6 col-md-4 col-lg-2">
+                        <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-primary">
                               {data?.OverallAnalytics?.TotalQuestionsAsked}
@@ -75,7 +75,7 @@ function MasteryMatrix() {
                             <p className="mastery-stat-text">Asked</p>
                           </div>
                         </div>
-                        <div className="col-6 col-md-4 col-lg-2">
+                        <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-info">
                               {data?.OverallAnalytics?.TotalAttempted}
@@ -83,7 +83,7 @@ function MasteryMatrix() {
                             <p className="mastery-stat-text">Attempted</p>
                           </div>
                         </div>
-                        <div className="col-6 col-md-4 col-lg-2">
+                        <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-success">
                               {data?.OverallAnalytics?.TotalCorrect}
@@ -91,7 +91,7 @@ function MasteryMatrix() {
                             <p className="mastery-stat-text">Correct</p>
                           </div>
                         </div>
-                        <div className="col-6 col-md-4 col-lg-2">
+                        <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-danger">
                               {data?.OverallAnalytics?.TotalIncorrect}
@@ -99,7 +99,7 @@ function MasteryMatrix() {
                             <p className="mastery-stat-text">Incorrect</p>
                           </div>
                         </div>
-                        <div className="col-6 col-md-4 col-lg-2">
+                        <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-warning">
                               {data?.OverallAnalytics?.TotalSkipped}
@@ -107,7 +107,7 @@ function MasteryMatrix() {
                             <p className="mastery-stat-text">Skipped</p>
                           </div>
                         </div>
-                        <div className="col-6 col-md-4 col-lg-2">
+                        <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-success">
                               {data?.OverallAnalytics?.Accuracy}%
@@ -164,14 +164,14 @@ function MasteryMatrix() {
                               /> */}
 
                             {/* </div> */}
-                            <div className="mastery-subject-name mb-3 row">
-                              <div className="col-8">
+                            <div className="row mastery-subject-name">
+                              <div className="col-7">
                                 <p className="font-weight-bold">
                                   {subject.Subject}
                                 </p>
                               </div>
-                              <div className="col-4 text-end">
-                                <h1 className="mastery-percentage">
+                              <div className="col-5">
+                                <h1 className="mastery-percentage text-sm-end ">
                                   {subject.Accuracy}%
                                 </h1>
                               </div>

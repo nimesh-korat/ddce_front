@@ -5,7 +5,7 @@ import Header from "../../common/header/Header";
 import { toast } from "react-toastify";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
-  assignTestToBatch,
+  assignBatchToSession,
   getAllBatch,
   getAllPhase,
   getSessionWiseBatch,
@@ -32,12 +32,12 @@ function AssignSessionToBatch() {
   };
 
   const { data: phases, isLoading: isLoadingPhaseData } = useQuery({
-    queryKey: ["allBatch"],
+    queryKey: ["allPhase"],
     queryFn: getAllPhase,
   });
 
   const { data: batches, isLoading: isLoadingData } = useQuery({
-    queryKey: ["allPhase"],
+    queryKey: ["allBatch"],
     queryFn: getAllBatch,
   });
 
@@ -57,12 +57,10 @@ function AssignSessionToBatch() {
       if (sessionData) {
         getSessionWiseBatchData.mutate(sessionData.Id);
       }
-      toast.success("Feature status changed successfully", {
-        autoClose: 1000,
-      });
+      toast.success("Feature status changed successfully");
     },
     onError: (error) => {
-      toast.error(error.response.data.message, { autoClose: 1000 });
+      toast.error(error.response.data.message);
     },
   });
 
@@ -78,7 +76,7 @@ function AssignSessionToBatch() {
     setBatchData((prevData) =>
       prevData.map((batch) =>
         batch.assigned_session_id === id
-          ? { ...batch, is_featured: batch.is_featured === 1 ? 0 : 1 }
+          ? { ...batch, is_featured: batch.is_featured === "1" ? "0" : "1" }
           : batch
       )
     );
@@ -87,20 +85,21 @@ function AssignSessionToBatch() {
       id: id,
       isFeatured:
         batchData.find((batch) => batch.assigned_session_id === id)
-          .is_featured === 1
-          ? 0
-          : 1,
+          .is_featured === "1"
+          ? "0"
+          : "1",
     });
   };
 
   // Handle "Add Batch" Button Click
   const handleAddBatch = () => {
     setNewBatch({
-      tbl_test: sessionData.Id,
+      tbl_session: sessionData.Id,
       tbl_batch: "",
+      tbl_phase: "",
       start_date: "",
       end_date: "",
-      is_featured: "0",
+      is_featured: "1",
     });
   };
 
@@ -117,8 +116,8 @@ function AssignSessionToBatch() {
     }
   };
 
-  const assignTestToBatchMutation = useMutation({
-    mutationFn: (data) => assignTestToBatch(data),
+  const assignBatchToSessionMutation = useMutation({
+    mutationFn: (data) => assignBatchToSession(data),
     onSuccess: (data) => {
       if (sessionData) {
         getSessionWiseBatchData.mutate(sessionData.Id);
@@ -133,7 +132,7 @@ function AssignSessionToBatch() {
 
   // Save New Batch
   const handleSaveNewBatch = () => {
-    assignTestToBatchMutation.mutate(newBatch);
+    assignBatchToSessionMutation.mutate(newBatch);
   };
 
   // Edit Batch
@@ -145,13 +144,13 @@ function AssignSessionToBatch() {
   const handleSaveEditBatch = () => {
     console.log(editBatch);
 
-    setBatchData((prevData) =>
-      prevData.map((batch) =>
-        batch.assigned_session_id === editBatch.assigned_session_id
-          ? editBatch
-          : batch
-      )
-    );
+    // setBatchData((prevData) =>
+    //   prevData.map((batch) =>
+    //     batch.assigned_session_id === editBatch.assigned_session_id
+    //       ? editBatch
+    //       : batch
+    //   )
+    // );
     setEditBatch(null);
   };
 
@@ -220,8 +219,8 @@ function AssignSessionToBatch() {
                           <thead>
                             <tr className="bg-light">
                               <th>No.</th>
-                              <th>Batch</th>
                               <th>Phase</th>
+                              <th>Batch</th>
                               <th>Start Date</th>
                               <th>End Date</th>
                               <th>Is Featured</th>
@@ -233,6 +232,27 @@ function AssignSessionToBatch() {
                             {newBatch && (
                               <tr>
                                 <td>#</td>
+                                <td>
+                                  <select
+                                    className="form-select"
+                                    name="tbl_phase"
+                                    value={newBatch.tbl_phase}
+                                    onChange={handleInputChange}
+                                  >
+                                    <option value="" selected disabled>
+                                      Select Phase
+                                    </option>
+                                    {isLoadingData ? (
+                                      <option>Loading...</option>
+                                    ) : (
+                                      phases.map((phase) => (
+                                        <option key={phase.Id} value={phase.Id}>
+                                          {phase.title}
+                                        </option>
+                                      ))
+                                    )}
+                                  </select>
+                                </td>
                                 <td>
                                   <select
                                     className="form-select"
@@ -249,27 +269,6 @@ function AssignSessionToBatch() {
                                       batches.map((batch) => (
                                         <option key={batch.id} value={batch.id}>
                                           {batch.batch_title}
-                                        </option>
-                                      ))
-                                    )}
-                                  </select>
-                                </td>
-                                <td>
-                                  <select
-                                    className="form-select"
-                                    name="tbl_batch"
-                                    value={newBatch.tbl_batch}
-                                    onChange={handleInputChange}
-                                  >
-                                    <option value="" selected disabled>
-                                      Select Phase
-                                    </option>
-                                    {isLoadingData ? (
-                                      <option>Loading...</option>
-                                    ) : (
-                                      phases.map((phase) => (
-                                        <option key={phase.Id} value={phase.Id}>
-                                          {phase.title}
                                         </option>
                                       ))
                                     )}
@@ -336,6 +335,30 @@ function AssignSessionToBatch() {
                                     <td>
                                       <select
                                         className="form-select"
+                                        name="tbl_phase"
+                                        value={editBatch.tbl_phase}
+                                        onChange={handleInputChange}
+                                      >
+                                        <option value="" selected disabled>
+                                          Select Phase
+                                        </option>
+                                        {isLoadingData ? (
+                                          <option>Loading...</option>
+                                        ) : (
+                                          phases.map((phase) => (
+                                            <option
+                                              key={phase.Id}
+                                              value={phase.Id}
+                                            >
+                                              {phase.title}
+                                            </option>
+                                          ))
+                                        )}
+                                      </select>
+                                    </td>
+                                    <td>
+                                      <select
+                                        className="form-select"
                                         name="name"
                                         value={editBatch.name}
                                         onChange={(e) =>
@@ -345,9 +368,21 @@ function AssignSessionToBatch() {
                                           )
                                         }
                                       >
-                                        <option value="Batch 1">Batch 1</option>
-                                        <option value="Batch 2">Batch 2</option>
-                                        <option value="Batch 3">Batch 3</option>
+                                        <option value="" selected disabled>
+                                          Select Batch
+                                        </option>
+                                        {isLoadingData ? (
+                                          <option>Loading...</option>
+                                        ) : (
+                                          batches.map((batch) => (
+                                            <option
+                                              key={batch.id}
+                                              value={batch.id}
+                                            >
+                                              {batch.batch_title}
+                                            </option>
+                                          ))
+                                        )}
                                       </select>
                                     </td>
                                     <td>
@@ -396,6 +431,7 @@ function AssignSessionToBatch() {
                                   </>
                                 ) : (
                                   <>
+                                    <td>{batch.phase_name}</td>
                                     <td>{batch.batch_name}</td>
                                     <td>
                                       {new Date(
@@ -415,7 +451,7 @@ function AssignSessionToBatch() {
                                           role="switch"
                                           name="is_featured"
                                           id={`featuredSwitch${batch.assigned_session_id}`}
-                                          checked={batch.is_featured === 1}
+                                          checked={batch.is_featured === "1"}
                                           onChange={() =>
                                             handleToggleFeatured(
                                               batch.assigned_session_id
@@ -426,7 +462,7 @@ function AssignSessionToBatch() {
                                           className="form-check-label"
                                           htmlFor={`featuredSwitch${batch.assigned_session_id}`}
                                         >
-                                          {batch.is_featured === 1
+                                          {batch.is_featured === "1"
                                             ? "Yes"
                                             : "No"}
                                         </label>

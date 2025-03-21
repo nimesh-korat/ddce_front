@@ -1,69 +1,60 @@
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { fetchRecentRegNotification } from "../../../apis/apis";
-import { Link } from "react-router-dom";
-import Preloader from "../../../utils/preloader/Preloader";
 import { toZonedTime } from "date-fns-tz";
 import { formatDistanceToNow } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
+import { fetchRecentRegNotification } from "../../../apis/apis";
+import Preloader from "../../../utils/preloader/Preloader";
+import { Link } from "react-router-dom";
 
-// Helper function to calculate time ago
-//! OLD CODE
-// function timeAgo(date) {
-//   const now = new Date();
-
-//   // Convert the input date to a Date object
-//   let dateUTC = new Date(date);
-
-//   // Adjust the date by adding 5 hours and 30 minutes (19800 seconds)
-//   dateUTC = new Date(dateUTC.getTime() + 5 * 60 * 60 * 1000 + 30 * 60 * 1000);
-
-//   const diffInSeconds = Math.floor((now - dateUTC) / 1000); // difference in seconds
-
-//   if (diffInSeconds < 60) {
-//     return `${diffInSeconds} second${diffInSeconds === 1 ? "" : "s"} ago`;
-//   }
-
-//   const diffInMinutes = Math.floor(diffInSeconds / 60);
-//   if (diffInMinutes < 60) {
-//     return `${diffInMinutes} minute${diffInMinutes === 1 ? "" : "s"} ago`;
-//   }
-
-//   const diffInHours = Math.floor(diffInMinutes / 60);
-//   if (diffInHours < 24) {
-//     return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
-//   }
-
-//   const diffInDays = Math.floor(diffInHours / 24);
-//   if (diffInDays < 30) {
-//     return `${diffInDays} day${diffInDays === 1 ? "" : "s"} ago`;
-//   }
-
-//   const diffInMonths = Math.floor(diffInDays / 30);
-//   if (diffInMonths < 12) {
-//     return `${diffInMonths} month${diffInMonths === 1 ? "" : "s"} ago`;
-//   }
-
-//   const diffInYears = Math.floor(diffInMonths / 12);
-//   return `${diffInYears} year${diffInYears === 1 ? "" : "s"} ago`;
-// }
+// Static student data
+// const studentData = [
+//   {
+//     name: "Jignesh Patel",
+//     collegeName: "IIT Gandhinagar",
+//     timeAgo: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
+//   },
+//   {
+//     name: "Dhruv Joshi",
+//     collegeName: "LD College of Engineering",
+//     timeAgo: new Date(Date.now() - 2 * 60 * 60 * 1000), // 3 hours ago
+//   },
+//   {
+//     name: "Ravi Mehta",
+//     collegeName: "Nirma University",
+//     timeAgo: new Date(Date.now() - 3 * 60 * 60 * 1000), // 2 hours ago
+//   },
+//   {
+//     name: "Hetal Trivedi",
+//     collegeName: "Sardar Vallabhbhai National Institute of Technology",
+//     timeAgo: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
+//   },
+//   {
+//     name: "Priyanshi Shah",
+//     collegeName: "Gujarat Technological University",
+//     timeAgo: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+//   },
+// ];
 
 function timeAgo(date) {
-  // Get the user's current timezone
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-  // Parse the UTC date into a Date object
-  const dateUTC = new Date(date);
-
-  // Convert UTC date to user's local timezone
-  const dateInUserTimeZone = toZonedTime(dateUTC, userTimeZone);
-
-  // Calculate the time ago
-  const timeAgoText = formatDistanceToNow(dateInUserTimeZone, {
-    addSuffix: true,
-  });
-
-  return timeAgoText;
+  const dateInUserTimeZone = toZonedTime(date, userTimeZone);
+  return formatDistanceToNow(dateInUserTimeZone, { addSuffix: true });
 }
+
+const randomImage = [
+  "assets/images/thumbs/mentor-cover-img1.png",
+  "assets/images/thumbs/mentor-cover-img2.png",
+  "assets/images/thumbs/mentor-cover-img3.png",
+  "assets/images/thumbs/mentor-cover-img4.png",
+  "assets/images/thumbs/mentor-cover-img5.png",
+  "assets/images/thumbs/mentor-cover-img6.png",
+  "assets/images/thumbs/mentor-cover-img7.png",
+  "assets/images/thumbs/mentor-cover-img8.png",
+  "assets/images/thumbs/mentor-cover-img9.png",
+  "assets/images/thumbs/mentor-cover-img10.png",
+  "assets/images/thumbs/mentor-cover-img11.png",
+  "assets/images/thumbs/mentor-cover-img12.png",
+];
 
 function StudentTable() {
   const { data, isError, isLoading } = useQuery({
@@ -76,6 +67,8 @@ function StudentTable() {
     },
   });
 
+  console.log(data);
+
   if (isError) {
     return <p className="text-gray-400">Failed to fetch data.</p>;
   }
@@ -84,87 +77,111 @@ function StudentTable() {
 
   // Limit to first 20 records
   const limitedStudentData = studentData.slice(0, 20);
-
-  console.log(isLoading);
+  function getDeterministicImage(name) {
+    const hash = [...name].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return randomImage[hash % randomImage.length];
+  }
   return (
     <>
       {isLoading ? (
         <Preloader />
       ) : (
-        <div className="card overflow-hidden">
-          <div className="card-body p-0 overflow-x-auto p-16">
-            <table
-              id="studentTable"
-              className="table table-striped  table-hover "
-            >
-              <thead>
-                <tr className="border-bottom">
-                  <th className="h6 text-gray-300">#</th>
-                  <th className="h6 text-gray-300">Students</th>
-                  <th className="h6 text-gray-300">College Name</th>
-                  <th className="h6 text-gray-300">Joining Info</th>
-                </tr>
-              </thead>
-              <tbody>
+        <>
+          <div className="card mt-24">
+            <div className="card-body">
+              <h4 className="mb-20">
+                Recent {studentData.length} Students of {data.totalUsers}{" "}
+                Students
+              </h4>
+              <div className="row g-20">
                 {limitedStudentData.length > 0 ? (
                   limitedStudentData.map((student, index) => {
                     // Format the "timeAgo" field
                     const formattedTimeAgo = timeAgo(new Date(student.timeAgo));
+                    const coverImage = getDeterministicImage(student.name);
 
                     return (
-                      <tr className="border-bottom" key={index}>
-                        <td className="h6 mb-0 fw-medium text-gray-300">
-                          {index + 1}
-                        </td>
-                        <td>
-                          <div className="flex-align gap-8">
-                            <span className="h6 mb-0 fw-medium text-gray-300">
-                              {student.name}
-                            </span>
+                      <div className="col-xl-3 col-md-4 col-sm-6">
+                        <div className="mentor-card rounded-8 overflow-hidden">
+                          <div className="mentor-card__cover position-relative">
+                            <img
+                              src={coverImage}
+                              alt=""
+                              className="cover-img unselectable"
+                            />
+                            <button
+                              type="button"
+                              className="follow-btn py-2 px-8 flex-align gap-4 text-13 fw-medium text-white border border-white rounded-pill position-absolute inset-block-start-0 inset-inline-end-0 mt-8 me-8 transition-1"
+                            >
+                              <span className="text">
+                                {formattedTimeAgo || "N/A"}
+                              </span>
+                            </button>
                           </div>
-                        </td>
-                        <td>
-                          <span className="h6 mb-0 fw-medium text-gray-300">
-                            {student.collegeName || "N/A"}
-                          </span>
-                        </td>
-                        <td>
-                          <span className="h6 mb-0 fw-medium text-gray-300">
-                            {formattedTimeAgo || "N/A"}
-                          </span>
-                        </td>
-                      </tr>
+                          <div className="mentor-card__content text-center">
+                            <div className="w-56 h-56 rounded-circle overflow-hidden border border-white d-inline-block">
+                              <img
+                                src={
+                                  student.userDp ||
+                                  "../assets/images/icons/nodp.webp"
+                                }
+                                alt=""
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "contain",
+                                }}
+                                className="mentor-card__img cover-img unselectable"
+                              />
+                            </div>
+                            <h5 className="mb-0">
+                              <Link to={`#`}> {student.name}</Link>
+                            </h5>
+                            <span className="text-13 text-gray-500">
+                              {student.collegeName || "N/A"}
+                            </span>
+                            <p className="mt-20 text-gray-600 text-14 text-line-3">
+                              Hi, I am {student.name}, A student at{" "}
+                              {student.collegeName || "N/A"}. I am happy to join
+                              this platform.
+                            </p>
+                            {/* <div className="mentor-card__rating mt-20 border border-gray-100 px-8 py-6 rounded-8 flex-between flex-wrap">
+                              <div className="flex-align gap-4">
+                                <span className="text-15 fw-normal text-main-600 d-flex">
+                                  <i className="ph-fill ph-book-open" />
+                                </span>
+                                <span className="text-13 fw-normal text-gray-600">
+                                  45 Tasks
+                                </span>
+                              </div>
+                              <div className="flex-align gap-4">
+                                <span className="text-15 fw-normal text-warning-600 d-flex">
+                                  <i className="ph-fill ph-star" />
+                                </span>
+                                <span className="text-13 fw-normal text-gray-600">
+                                  4.8
+                                </span>
+                                <span className="text-13 fw-normal text-gray-600">
+                                  (750 Reviews)
+                                </span>
+                              </div>
+                            </div> */}
+                          </div>
+                        </div>
+                      </div>
                     );
                   })
                 ) : (
-                  <tr>
-                    <td colSpan="7" className="text-center text-gray-400">
-                      No student data available.
-                    </td>
-                  </tr>
+                  <div className="card mt-24">
+                    <div className="card-body">
+                      <h4>No data found</h4>
+                    </div>
+                  </div>
                 )}
-              </tbody>
-            </table>
+              </div>
+            </div>
           </div>
-          <div className="card-footer flex-between flex-wrap">
-            <span className="text-gray-900">
-              Showing recent 1 to {limitedStudentData.length + 1000} of{" "}
-              {studentData.length} students
-            </span>
-            <ul className="pagination flex-align flex-wrap">
-              {/* Pagination controls (add logic for actual pagination if needed) */}
-              <li className="page-item active">
-                <Link
-                  className="page-link h-44 w-44 flex-center text-15 rounded-8 fw-medium"
-                  to={"/#"}
-                >
-                  1
-                </Link>
-              </li>
-              {/* Add more pagination items here */}
-            </ul>
-          </div>
-        </div>
+        </>
       )}
     </>
   );

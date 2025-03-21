@@ -113,7 +113,7 @@ function App() {
             }
           />
           <Route
-            path="/masteryMatrix"
+            path="/accuracyMatrix"
             element={
               <ProtectedRoute>
                 <MasteryMatrix />
@@ -156,11 +156,11 @@ function App() {
             path="/signin"
             element={
               <PrivateRoute>
-                <SignIn />{" "}
+                <SignIn />
               </PrivateRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/signup"
             element={
               <PrivateRoute>
@@ -184,9 +184,12 @@ function App() {
                 <ResetPassword />
               </PrivateRoute>
             }
-          />
-          {/*<Route path="/two_step_verification" element={<TwoStepVerification />} />
-          <Route path="/live_class" element={<LiveClass />} /> */}
+          /> */}
+          {/* <Route
+            path="/two_step_verification"
+            element={<TwoStepVerification />}
+          /> */}
+          {/* <Route path="/live_class" element={<LiveClass />} /> */}
 
           {/* Admin Routes */}
           <Route

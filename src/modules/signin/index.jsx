@@ -72,10 +72,12 @@ function SignIn() {
         </div>
         <div className="auth-right py-40 px-24 flex-center flex-column">
           <div className="auth-right__inner mx-auto w-100">
-            <Link to={"/#"} className="auth-right__logo">
-              {/* <img src="assets/images/logo/logo.png" alt="" /> */}
-              <UnityLogo />
-            </Link>
+            <div className="d-flex align-items-center justify-content-center">
+              <Link to={"/#"} className="auth-right__logo mb-24">
+                {/* <img src="assets/images/logo/logo.png" alt="" /> */}
+                <UnityLogo />
+              </Link>
+            </div>
             <h2 className="mb-8">Welcome 👋</h2>
             <p className="text-gray-600 text-15 mb-32">
               Unlock your potential! Sign in now and kickstart your journey to

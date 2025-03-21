@@ -24,7 +24,11 @@ function StudentQuizCard({ test }) {
       <div className="card border border-gray-100">
         <div className="card-body p-8">
           <Link className="bg-main-100 rounded-8 overflow-hidden text-center mb-8 h-164 flex-center p-8">
-            <img src={`${test.test_img_path}`} alt="test" />
+            <img
+              src={`${test.test_img_path}`}
+              alt="test"
+              style={{ objectFit: "cover" }}
+            />
           </Link>
           <div className="p-8">
             <span

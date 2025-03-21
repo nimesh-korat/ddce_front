@@ -212,6 +212,17 @@ export async function resetPassword(data) {
   }
 }
 
+//?==================== GET DASHBOARD COUNTS API ====================
+export async function getDashboardCounts() {
+  try {
+    const response = await axiosInstance.get(`/getDashboardCounts`);
+    return response.data;
+  } catch (error) {
+    console.log("getDashboardCounts() Err: ", error);
+    throw error;
+  }
+}
+
 //?==================== GET SUBJECT API ====================
 export async function getSubjects() {
   try {
@@ -502,6 +513,20 @@ export async function getSession() {
     return response.data;
   } catch (error) {
     console.error("getSession() error", error);
+    throw error;
+  }
+}
+
+//?==================== ASSIGN TEST TO BATCH API ====================
+export async function assignBatchToSession(data) {
+  try {
+    const response = await axiosInstance.post(
+      `/admin/assignBatchToSession`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    console.error("assignBatchToSession() error", error);
     throw error;
   }
 }

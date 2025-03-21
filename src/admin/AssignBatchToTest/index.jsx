@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   assignTestToBatch,
   getAllBatch,
+  getAllPhase,
   getTestWiseBatch,
   updateIsFeatured,
 } from "../../apis/apis";
@@ -14,11 +15,17 @@ import { toast } from "react-toastify";
 function AssignBatchToTest() {
   const location = useLocation();
   const testData = location.state.test;
-  
+
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [batchData, setBatchData] = useState([]);
   const [editBatch, setEditBatch] = useState(null);
   const [newBatch, setNewBatch] = useState(null);
+
+  //eslint-disable-next-line
+  const { data: phases, isLoading: isLoadingPhaseData } = useQuery({
+    queryKey: ["allPhase"],
+    queryFn: getAllPhase,
+  });
 
   const { data: batches, isLoading: isLoadingData } = useQuery({
     queryKey: ["allBatch"],
@@ -82,6 +89,7 @@ function AssignBatchToTest() {
   const handleAddBatch = () => {
     setNewBatch({
       tbl_test: testData.test_id,
+      tbl_phase: "",
       tbl_batch: "",
       start_date: "",
       end_date: "",
@@ -201,6 +209,7 @@ function AssignBatchToTest() {
                       <thead>
                         <tr className="bg-light">
                           <th>No.</th>
+                          <th>Phase</th>
                           <th>Batch</th>
                           <th>Start Date</th>
                           <th>End Date</th>
@@ -213,6 +222,27 @@ function AssignBatchToTest() {
                         {newBatch && (
                           <tr>
                             <td>#</td>
+                            <td>
+                              <select
+                                className="form-select"
+                                name="tbl_phase"
+                                value={newBatch.tbl_phase}
+                                onChange={handleInputChange}
+                              >
+                                <option value="" selected disabled>
+                                  Select Phase
+                                </option>
+                                {isLoadingData ? (
+                                  <option>Loading...</option>
+                                ) : (
+                                  phases.map((phase) => (
+                                    <option key={phase.Id} value={phase.Id}>
+                                      {phase.title}
+                                    </option>
+                                  ))
+                                )}
+                              </select>
+                            </td>
                             <td>
                               <select
                                 className="form-select"
@@ -295,18 +325,48 @@ function AssignBatchToTest() {
                                 <td>
                                   <select
                                     className="form-select"
+                                    name="tbl_phase"
+                                    value={editBatch.tbl_phase}
+                                    onChange={handleInputChange}
+                                  >
+                                    <option value="" selected disabled>
+                                      Select Phase
+                                    </option>
+                                    {isLoadingData ? (
+                                      <option>Loading...</option>
+                                    ) : (
+                                      phases.map((phase) => (
+                                        <option key={phase.Id} value={phase.Id}>
+                                          {phase.title}
+                                        </option>
+                                      ))
+                                    )}
+                                  </select>
+                                </td>
+                                <td>
+                                  <select
+                                    className="form-select"
                                     name="name"
                                     value={editBatch.name}
                                     onChange={(e) =>
                                       handleInputChange(
                                         e,
-                                        batch.assigned_batch_id
+                                        batch.assigned_session_id
                                       )
                                     }
                                   >
-                                    <option value="Batch 1">Batch 1</option>
-                                    <option value="Batch 2">Batch 2</option>
-                                    <option value="Batch 3">Batch 3</option>
+                                    <option value="" selected disabled>
+                                      Select Batch
+                                    </option>
+                                    {isLoadingData ? (
+                                      <option>Loading...</option>
+                                    ) : (
+                                      batches.map((batch) => (
+                                        <option key={batch.id} value={batch.id}>
+                                          {batch.batch_title}
+                                        </option>
+                                      ))
+                                    )}
                                   </select>
                                 </td>
                                 <td>
@@ -355,6 +415,7 @@ function AssignBatchToTest() {
                               </>
                             ) : (
                               <>
+                                <td>{batch.phase_name}</td>
                                 <td>{batch.batch_name}</td>
                                 <td>
                                   {new Date(batch.start_date).toLocaleString()}

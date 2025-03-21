@@ -56,13 +56,18 @@ function AdminSidebar({ isActive, closeSidebar }) {
           <i className="ph ph-x" />
         </button>
         {/* sidebar close btn */}
-        <div
+        <Link
           to="/"
           className="sidebar__logo text-center p-10 position-sticky inset-block-start-0 bg-white w-100 z-1 pb-5"
         >
           {/* <img src="assets/images/logo/logo.png" alt="Logo" /> */}
-          <h1 className="fw-bold mb-0 mt-0 p-0">Unity</h1>
-        </div>
+          <img
+            className="w-100 text-center"
+            src="./assets/images/logo/logo4.png"
+            alt=""
+            style={{ width: "100px", height: "70px", objectFit: "contain" }}
+          />
+        </Link>
         <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
           <div className="p-20 pt-10">
             <ul className="sidebar-menu">
