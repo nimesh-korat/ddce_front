@@ -16,6 +16,28 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// Add a response interceptor
+axiosInstance.interceptors.response.use(
+  (response) => {
+    // If the response is successful, return it
+    return response;
+  },
+  (error) => {
+    // If the error status is 401 (Unauthorized), handle it
+    if (error.response && error.response.status === 401) {
+      // Handle the 401 error (e.g., redirect to login)
+      console.log("Unauthorized! Redirecting to login...");
+
+      // Optionally, you can clear the token from localStorage and redirect the user
+      localStorage.clear();
+      window.location.href = "/signin"; // Or use your preferred redirect method
+    }
+
+    // If the error is not a 401, reject it as usual
+    return Promise.reject(error);
+  }
+);
+
 //?==================== AUTH CHECK API ====================
 export async function checkSession() {
   try {

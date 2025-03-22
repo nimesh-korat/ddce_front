@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 const PlanItem = ({
   iconClass,
@@ -11,6 +10,7 @@ const PlanItem = ({
   buttonText,
   buttonLink,
   isRecommended,
+  isButtonActive,
 }) => {
   return (
     <div className="col-md-4 col-sm-6">
@@ -21,7 +21,7 @@ const PlanItem = ({
       >
         {isRecommended && (
           <span className="plan-badge py-4 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-15">
-            Recommended
+            Your Plan
           </span>
         )}
 
@@ -54,12 +54,15 @@ const PlanItem = ({
             </li>
           ))}
         </ul>
-        <Link
+        <button
           to={buttonLink}
-          className="btn btn-outline-main w-100 rounded-pill py-16 border-main-300 text-17 fw-medium mt-32"
+          className={`btn ${
+            isButtonActive ? "custom-btn" : "btn-outline-main"
+          } custom-btn w-100 rounded-pill py-16 border-main-300 text-17 fw-medium mt-32`}
+          disabled={!isButtonActive}
         >
           {buttonText}
-        </Link>
+        </button>
       </div>
     </div>
   );
