@@ -85,6 +85,8 @@ const schema = yup.object().shape({
       }
     ),
   test_difficulty: yup.string().required("Difficulty is required"),
+  isFake: yup.string().required("Fake test is required"),
+  for_who: yup.string().required("For who is required"),
   test_neg_marks: yup
     .number()
     .min(0, "Negative marks must be at least 0")
@@ -96,7 +98,7 @@ const schema = yup.object().shape({
 function CreateTest() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null); // Store the image file
-  const [startDate, setStartDate] = useState(""); // Store the selected start date
+  // const [startDate, setStartDate] = useState(""); // Store the selected start date
   const [descriptionLength, setDescriptionLength] = useState(0); // Track character count
   const navigate = useNavigate();
   const {
@@ -119,13 +121,12 @@ function CreateTest() {
     mutationFn: (data) => adminAddTest(data),
     onSuccess: (data) => {
       toast.success("Test created successfully!", {
-        autoClose: 1000,
         onClose: () => navigate("/admin/showTests"),
       });
       reset();
     },
     onError: (error) => {
-      toast.error("Something went wrong!");
+      toast.error(error.response.data.message);
       console.log("Error:", error);
     },
   });
@@ -133,31 +134,26 @@ function CreateTest() {
   const onSubmit = (data) => {
     const formData = new FormData();
 
-    // Append all form data fields, including the image file
     Object.keys(data).forEach((key) => {
-      if (key === "test_start_date") {
-        console.log("Start Date:", data[key]);
-      }
-      // Skip appending image file as it is handled separately
-      if (key !== "test_img_path") {
+      if (key === "test_start_date" || key === "test_end_date") {
+        const utcDate = new Date(data[key]).toISOString(); // Convert to UTC
+        formData.append(key, utcDate);
+      } else if (key !== "test_img_path") {
         formData.append(key, data[key]);
       }
     });
 
-    // Append the selected image to FormData
     if (selectedImage) {
       formData.append("test_img_path", selectedImage);
     } else {
-      // Handle case when image is not selected
       toast.error("Please upload a test thumbnail image.");
       return;
     }
 
-    // Send the form data
     addQuizMutation.mutate(formData);
   };
 
-  const todayDate = new Date().toISOString().slice(0, 16); // Get current date in "YYYY-MM-DDTHH:MM" format
+  // const todayDate = new Date().toISOString().slice(0, 16); // Get current date in "YYYY-MM-DDTHH:MM" format
 
   return (
     <>
@@ -269,7 +265,7 @@ function CreateTest() {
                           {errors.test_desc?.message}
                         </small>
                       </div>
-                      <div className="col-sm-6">
+                      {/* <div className="col-sm-6">
                         <label className="h5 mb-8 fw-semibold font-heading">
                           Start Date
                         </label>
@@ -296,6 +292,36 @@ function CreateTest() {
                         />
                         <small className="text-danger">
                           {errors.test_end_date?.message}
+                        </small>
+                      </div> */}
+                      <div className="col-sm-6">
+                        <label className="h5 mb-8 fw-semibold font-heading">
+                          Is Fake
+                        </label>
+                        <select
+                          className="form-select py-9"
+                          {...register("isFake")}
+                        >
+                          <option value="">Select</option>
+                          <option value="1">Yes</option>
+                          <option value="0">No</option>
+                        </select>
+                        <small className="text-danger">
+                          {errors.isFake?.message}
+                        </small>
+                      </div>
+                      <div className="col-sm-6">
+                        <label className="h5 mb-8 fw-semibold font-heading">
+                          For Who <small>(Online/Offline/Both)</small>
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control py-11"
+                          placeholder="Online/Offline/Both"
+                          {...register("for_who")}
+                        />
+                        <small className="text-danger">
+                          {errors.for_who?.message}
                         </small>
                       </div>
                       <div className="col-sm-6">

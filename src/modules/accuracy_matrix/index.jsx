@@ -120,121 +120,132 @@ function MasteryMatrix() {
                   </div>
                 </div>
                 <div className="row mt-12 g-3">
-                  {data?.SubjectWiseAnalytics.map((subject, index) => {
-                    if (subject.TotalAttempted === "0") {
-                      return null;
-                    }
+                  {data?.OverallAnalytics?.TotalQuestionsAsked === 0 ? (
+                    <div>
+                      <div className="col-12 d-flex justify-content-center">
+                        <img
+                          src={"../assets/images/error/no_data_found.webp"}
+                          style={{ width: "250px", height: "250px" }}
+                          alt="No Data"
+                        />
+                      </div>
+                      <h3 className="text-center">No Data Found For You</h3>
+                    </div>
+                  ) : (
+                    data?.SubjectWiseAnalytics.map((subject, index) => {
+                      if (subject.TotalAttempted === "0") {
+                        return null;
+                      }
+                      let backgroundImage;
+                      if (subject.Accuracy >= 90) {
+                        backgroundImage =
+                          "url(https://example.com/high-accuracy-background.jpg)";
+                      } else if (subject.Accuracy >= 70) {
+                        backgroundImage =
+                          "url(https://example.com/medium-accuracy-background.jpg)";
+                      } else if (subject.Accuracy >= 50) {
+                        backgroundImage =
+                          "url(https://example.com/low-accuracy-background.jpg)";
+                      } else {
+                        //eslint-disable-next-line
+                        backgroundImage =
+                          "url(https://example.com/very-low-accuracy-background.jpg)";
+                      }
 
-                    // Set background image based on subject
-                    let backgroundImage;
-                    if (subject.Accuracy >= 90) {
-                      backgroundImage =
-                        "url(https://example.com/high-accuracy-background.jpg)";
-                    } else if (subject.Accuracy >= 70) {
-                      backgroundImage =
-                        "url(https://example.com/medium-accuracy-background.jpg)";
-                    } else if (subject.Accuracy >= 50) {
-                      backgroundImage =
-                        "url(https://example.com/low-accuracy-background.jpg)";
-                    } else {
-                      //eslint-disable-next-line
-                      backgroundImage =
-                        "url(https://example.com/very-low-accuracy-background.jpg)";
-                    }
-
-                    return (
-                      <div className="col-md-6" key={index}>
-                        <div
-                          className="card shadow rounded"
-                          style={{
-                            backgroundImage:
-                              "url(https://t3.ftcdn.net/jpg/04/12/82/16/360_F_412821610_95RpjzPXCE2LiWGVShIUCGJSktkJQh6P.jpg)",
-                            backgroundSize: "cover",
-                            backgroundColor: "rgba(255, 255, 255, 0.45)",
-                            backgroundPosition: "center",
-                            backgroundBlendMode: "overlay",
-                          }}
-                        >
-                          <div className="card-body">
-                            {/* <div className="d-flex justify-content-between align-items-center mb-3"> */}
-                            {/* <img
+                      return (
+                        <div className="col-md-6" key={index}>
+                          <div
+                            className="card shadow rounded"
+                            style={{
+                              backgroundImage:
+                                "url(https://t3.ftcdn.net/jpg/04/12/82/16/360_F_412821610_95RpjzPXCE2LiWGVShIUCGJSktkJQh6P.jpg)",
+                              backgroundSize: "cover",
+                              backgroundColor: "rgba(255, 255, 255, 0.45)",
+                              backgroundPosition: "center",
+                              backgroundBlendMode: "overlay",
+                            }}
+                          >
+                            <div className="card-body">
+                              {/* <div className="d-flex justify-content-between align-items-center mb-3"> */}
+                              {/* <img
                                 src="../assets/images/icons/gold_trophy.png"
                                 alt="Placeholder"
                                 className="trophy-icon unselectable"
                               /> */}
 
-                            {/* </div> */}
-                            <div className="row mastery-subject-name">
-                              <div className="col-7">
-                                <p className="font-weight-bold">
-                                  {subject.Subject}
-                                </p>
+                              {/* </div> */}
+                              <div className="row mastery-subject-name">
+                                <div className="col-7">
+                                  <p className="font-weight-bold">
+                                    {subject.Subject}
+                                  </p>
+                                </div>
+                                <div className="col-5">
+                                  <h1 className="mastery-percentage text-sm-end ">
+                                    {subject.Accuracy}%
+                                  </h1>
+                                </div>
                               </div>
-                              <div className="col-5">
-                                <h1 className="mastery-percentage text-sm-end ">
-                                  {subject.Accuracy}%
-                                </h1>
-                              </div>
-                            </div>
-                            <div>
-                              <div className="row text-center justify-content-between g-3">
-                                <div className="col-6 col-md-4 col-lg-2">
-                                  <div className="mastery-stat-box">
-                                    <p className="mastery-stat-number text-primary">
-                                      {subject.TotalQuestionsAsked}
-                                    </p>
-                                    <p className="mastery-stat-text fw-bold">
-                                      Asked
-                                    </p>
+                              <div>
+                                <div className="row text-center justify-content-between g-3">
+                                  <div className="col-6 col-md-4 col-lg-2">
+                                    <div className="mastery-stat-box">
+                                      <p className="mastery-stat-number text-primary">
+                                        {subject.TotalQuestionsAsked}
+                                      </p>
+                                      <p className="mastery-stat-text fw-bold">
+                                        Asked
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="col-6 col-md-4 col-lg-2">
-                                  <div className="mastery-stat-box">
-                                    <p className="mastery-stat-number text-info">
-                                      {subject.TotalAttempted}
-                                    </p>
-                                    <p className="mastery-stat-text fw-bold">
-                                      Attempted
-                                    </p>
+                                  <div className="col-6 col-md-4 col-lg-2">
+                                    <div className="mastery-stat-box">
+                                      <p className="mastery-stat-number text-info">
+                                        {subject.TotalAttempted}
+                                      </p>
+                                      <p className="mastery-stat-text fw-bold">
+                                        Attempted
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="col-6 col-md-4 col-lg-2">
-                                  <div className="mastery-stat-box">
-                                    <p className="mastery-stat-number text-success">
-                                      {subject.TotalCorrect}
-                                    </p>
-                                    <p className="mastery-stat-text fw-bold">
-                                      Correct
-                                    </p>
+                                  <div className="col-6 col-md-4 col-lg-2">
+                                    <div className="mastery-stat-box">
+                                      <p className="mastery-stat-number text-success">
+                                        {subject.TotalCorrect}
+                                      </p>
+                                      <p className="mastery-stat-text fw-bold">
+                                        Correct
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="col-6 col-md-4 col-lg-2">
-                                  <div className="mastery-stat-box">
-                                    <p className="mastery-stat-number text-danger">
-                                      {subject.TotalIncorrect}
-                                    </p>
-                                    <p className="mastery-stat-text fw-bold">
-                                      Incorrect
-                                    </p>
+                                  <div className="col-6 col-md-4 col-lg-2">
+                                    <div className="mastery-stat-box">
+                                      <p className="mastery-stat-number text-danger">
+                                        {subject.TotalIncorrect}
+                                      </p>
+                                      <p className="mastery-stat-text fw-bold">
+                                        Incorrect
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="col-6 col-md-4 col-lg-2">
-                                  <div className="mastery-stat-box">
-                                    <p className="mastery-stat-number text-warning">
-                                      {subject.TotalSkipped}
-                                    </p>
-                                    <p className="mastery-stat-text fw-bold">
-                                      Skipped
-                                    </p>
+                                  <div className="col-6 col-md-4 col-lg-2">
+                                    <div className="mastery-stat-box">
+                                      <p className="mastery-stat-number text-warning">
+                                        {subject.TotalSkipped}
+                                      </p>
+                                      <p className="mastery-stat-text fw-bold">
+                                        Skipped
+                                      </p>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })
+                  )}
                 </div>
               </>
             )}

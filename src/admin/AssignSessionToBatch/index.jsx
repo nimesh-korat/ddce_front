@@ -132,7 +132,12 @@ function AssignSessionToBatch() {
 
   // Save New Batch
   const handleSaveNewBatch = () => {
-    assignBatchToSessionMutation.mutate(newBatch);
+    const batchWithUtcDates = {
+      ...newBatch,
+      start_date: new Date(newBatch.start_date).toISOString(),
+      end_date: new Date(newBatch.end_date).toISOString(),
+    };
+    assignBatchToSessionMutation.mutate(batchWithUtcDates);
   };
 
   // Edit Batch
@@ -141,17 +146,26 @@ function AssignSessionToBatch() {
   };
 
   // Save Edited Batch
+  // Save Edited Batch with UTC dates (if you also plan to save edited data)
   const handleSaveEditBatch = () => {
-    console.log(editBatch);
+    const updatedBatch = {
+      ...editBatch,
+      start_date: new Date(editBatch.start_date).toISOString(),
+      end_date: new Date(editBatch.end_date).toISOString(),
+    };
 
-    // setBatchData((prevData) =>
-    //   prevData.map((batch) =>
-    //     batch.assigned_session_id === editBatch.assigned_session_id
-    //       ? editBatch
-    //       : batch
-    //   )
-    // );
+    // If you also plan to update it in UI or API:
+    setBatchData((prevData) =>
+      prevData.map((batch) =>
+        batch.assigned_session_id === editBatch.assigned_session_id
+          ? updatedBatch
+          : batch
+      )
+    );
     setEditBatch(null);
+
+    // If you're sending this to an API:
+    // assignBatchToSessionMutation.mutate(updatedBatch);
   };
 
   // Cancel Edit

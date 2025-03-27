@@ -130,17 +130,13 @@ function AcademicDetails({ data }) {
   const updateProfileMutation = useMutation({
     mutationFn: (formData) => updateAcademicDetails(formData),
     onSuccess: () => {
-      toast.success("Academic Details Updated!", {
-        autoClose: 1000,
-      });
+      toast.success("Academic Details Updated!");
       const updatedUser = { ...user, ...data };
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
     },
-    onError: () => {
-      toast.error("Error updating academic details!", {
-        autoClose: 1000,
-      });
+    onError: (error) => {
+      toast.error(error.response.data.message);
     },
   });
 

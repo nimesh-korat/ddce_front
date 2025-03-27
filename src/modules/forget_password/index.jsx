@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  resendMobileOtp,
   resetPasswordOtpVerification,
   sendResetPasswordOtp,
 } from "../../apis/apis";
@@ -99,6 +100,25 @@ function ForgetPassword() {
     }
   };
 
+  const smsResendQuery = useMutation({
+    mutationFn: resendMobileOtp,
+    onError: (error) => {
+      toast.error(error.response.data.message);
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+      startTimer(); // Start timer on successful OTP resend
+    },
+  });
+
+  const handleSmsOtpResend = () => {
+    if (phone) {
+      smsResendQuery.mutate({
+        Phone_Number: phone,
+      }); // Pass phone number to the parent (Signup)
+    }
+  };
+
   return (
     <>
       {resetPasswordOtpQuery.isLoading && <Preloader />}
@@ -148,8 +168,9 @@ function ForgetPassword() {
                         className="position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y text-primary"
                         onClick={() => {
                           // Trigger resend OTP logic here
-                          setTimer(90);
+                          setTimer(180);
                           setIsResendEnabled(false);
+                          handleSmsOtpResend();
                         }}
                       >
                         Resend OTP

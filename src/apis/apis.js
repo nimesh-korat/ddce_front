@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const api = process.env.REACT_APP_API_URL;
 
@@ -26,11 +27,13 @@ axiosInstance.interceptors.response.use(
     // If the error status is 401 (Unauthorized), handle it
     if (error.response && error.response.status === 401) {
       // Handle the 401 error (e.g., redirect to login)
-      console.log("Unauthorized! Redirecting to login...");
+
+      toast.error("Session Expired! Please login again.", {
+        onClose: () => localStorage.clear()((window.location.href = "/signin")),
+      });
 
       // Optionally, you can clear the token from localStorage and redirect the user
-      localStorage.clear();
-      window.location.href = "/signin"; // Or use your preferred redirect method
+      // Or use your preferred redirect method
     }
 
     // If the error is not a 401, reject it as usual

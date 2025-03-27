@@ -3,18 +3,17 @@ import Pagination from "@mui/material/Pagination";
 import StudentQuizCard from "./StudentQuizCard";
 
 function StudentQuizTab({ activeTab, setActiveTab, quizes }) {
-  const currentDate = new Date(); // Get the current date
-
+  const currentDate = new Date(new Date().toISOString()); // UTC current time
   const determineTestStatus = (quiz) => {
     const startDate = new Date(quiz.start_date);
     const endDate = new Date(quiz.end_date);
 
     if (currentDate >= startDate && currentDate <= endDate) {
-      return "current"; // Ongoing if current date is between start and end
+      return "current";
     } else if (currentDate > endDate) {
-      return "completed"; // Completed if current date is past end date
+      return "completed";
     } else {
-      return "upcoming"; // Default to upcoming
+      return "upcoming";
     }
   };
 
@@ -24,7 +23,9 @@ function StudentQuizTab({ activeTab, setActiveTab, quizes }) {
 
   // Filter quizzes based on the active tab and status
   const filterQuizesByStatus = (status) => {
-    const filtered = quizes.filter((quiz) => determineTestStatus(quiz) === status);
+    const filtered = quizes.filter(
+      (quiz) => determineTestStatus(quiz) === status
+    );
 
     // Sort filtered quizzes
     if (status === "upcoming" || status === "current") {

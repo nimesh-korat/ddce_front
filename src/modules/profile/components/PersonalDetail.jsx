@@ -84,17 +84,13 @@ function PersonalDetails({ data, setData }) {
   const updateProfileMutation = useMutation({
     mutationFn: (data) => updatePersonalDetails(data),
     onSuccess: () => {
-      toast.success("Profile Details Updated!", {
-        autoClose: 1000,
-      });
+      toast.success("Profile Details Updated!");
       const updatedUser = { ...user, ...data };
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
     },
-    onError: () => {
-      toast.error("Error updating profile details!", {
-        autoClose: 1000,
-      });
+    onError: (error) => {
+      toast.error(error.response.data.message);
     },
   });
 
@@ -161,6 +157,7 @@ function PersonalDetails({ data, setData }) {
                   id="email"
                   {...register("Email_Id")}
                   placeholder="Enter Email"
+                  disabled
                 />
                 {errors.Email_Id && (
                   <span className="text-danger">{errors.Email_Id.message}</span>
@@ -176,6 +173,7 @@ function PersonalDetails({ data, setData }) {
                   id="phone"
                   {...register("Phone_Number")}
                   placeholder="Enter Phone Number"
+                  disabled
                 />
                 {errors.Phone_Number && (
                   <span className="text-danger">

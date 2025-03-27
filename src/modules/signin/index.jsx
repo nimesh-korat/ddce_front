@@ -136,18 +136,18 @@ function SignIn() {
                   </span>
                 </div>
               </div>
-              {/* <div className="mb-32 flex-between flex-wrap gap-8 justify-content-end">
+              <div className="mb-32 flex-between flex-wrap gap-8 justify-content-end">
                 <Link
                   to="/forget_password"
                   className="text-main-600 hover-text-decoration-underline text-15 fw-medium"
                 >
                   Forgot Password?
                 </Link>
-              </div> */}
+              </div>
               <button type="submit" className="btn btn-main rounded-pill w-100">
                 Sign In
               </button>
-              {/* <p className="mt-32 text-gray-600 text-center">
+              <p className="mt-32 text-gray-600 text-center">
                 New on our platform? &nbsp;
                 <Link
                   to={"/signup"}
@@ -155,7 +155,7 @@ function SignIn() {
                 >
                   Create an account
                 </Link>
-              </p> */}
+              </p>
               {/* <div className="divider my-32 position-relative text-center">
                 <span className="divider__text text-gray-600 text-13 fw-medium px-26 bg-white">
                   or

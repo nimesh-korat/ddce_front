@@ -1,8 +1,10 @@
 import React from "react";
 import { format } from "date-fns"; // Ensure using the correct version of date-fns
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function StudentQuizCard({ test }) {
+  const navigate = useNavigate();
   const startDate = new Date(test && test.start_date);
   const endDate = new Date(test && test.end_date);
   const currentDate = new Date(); // Get the current date
@@ -18,6 +20,15 @@ function StudentQuizCard({ test }) {
   // Format the dates correctly
   const formattedStartDate = format(startDate, "dd/MM/yyyy 'at' hh:mm a");
   const formattedEndDate = format(endDate, "dd/MM/yyyy 'at' hh:mm a");
+
+  const showFakeAlert = () => {
+    Swal.fire({
+      icon: "warning",
+      title: "Oops!",
+      text: `Sorry, this quiz is not for you.`,
+      confirmButtonText: "Okay",
+    });
+  };
 
   return (
     <div className="col-xxl-3 col-lg-4 col-sm-6">
@@ -101,13 +112,18 @@ function StudentQuizCard({ test }) {
             </div>
             <div className="flex-between gap-4 flex-wrap mt-24">
               {testStatus === "current" && test.has_taken !== 1 ? (
-                <Link
-                  to={`/test`}
-                  state={{ exam: test }}
+                <button
+                  onClick={() => {
+                    if (test.isFake === "1") {
+                      showFakeAlert();
+                    } else {
+                      navigate("/test", { state: { exam: test } });
+                    }
+                  }}
                   className="btn btn-outline-main rounded-pill py-9 w-100 mt-24"
                 >
                   Give Test
-                </Link>
+                </button>
               ) : testStatus === "completed" && test.has_taken === 1 ? (
                 <Link
                   to={`/exam-result`}

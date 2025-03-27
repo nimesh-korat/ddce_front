@@ -18,16 +18,14 @@ function Header({ toggleSidebar }) {
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
     refetchOnMount: false,
   });
+  
   const logoutQuery = useMutation({
     mutationFn: (data) => logout(data),
     onSuccess: () => {
       toast.success("Logged out successfully", {
         autoClose: 1000,
         onClose: () => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("session");
-          localStorage.removeItem("user");
-          localStorage.removeItem("admin");
+          localStorage.clear();
           navigate("/signin");
         },
       });

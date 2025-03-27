@@ -17,8 +17,12 @@ const schema = yup.object().shape({
     .required("Description is required")
     .min(5, "Invalid description")
     .max(500, "Description must not exceed 100 characters"),
-  for_who: yup.string().required("Default batch is required"),
-  link: yup.string().required("Batch is required"),
+  for_who: yup.string().required("For who is required"),
+  isFake: yup.string().required("Is fake is required"),
+  link: yup
+    .string()
+    .url("Please enter a valid URL")
+    .required("Batch link is required"),
 });
 
 function AddSession() {
@@ -47,13 +51,12 @@ function AddSession() {
     mutationFn: (data) => addSession(data),
     onSuccess: (data) => {
       toast.success("Session created successfully!", {
-        autoClose: 1000,
-        onClose: () => navigate("/admin/showTests"),
+        onClose: () => navigate("/admin/showSession"),
       });
       reset();
     },
     onError: (error) => {
-      toast.error("Something went wrong!");
+      toast.error(error.response.data.message);
       console.log("Error:", error);
     },
   });
@@ -102,7 +105,7 @@ function AddSession() {
                   <div className="row gy-20">
                     <div className="col-xxl-12 col-md-12 col-sm-12">
                       <div className="row g-20">
-                        <div className="col-sm-6">
+                        <div className="col-sm-4">
                           <label className="h5 mb-8 fw-semibold font-heading">
                             Title
                           </label>
@@ -123,21 +126,35 @@ function AddSession() {
                             {errors.description?.message}
                           </small>
                         </div>
-                        <div className="col-sm-6">
+                        <div className="col-sm-4">
                           <label className="h5 mb-8 fw-semibold font-heading">
                             For Who?
                           </label>
-                          <select
-                            className="form-control form-control-select"
+                          <input
+                            type="text"
+                            className="form-control py-11"
+                            placeholder="Online/Offline/Both"
+                            maxLength={25}
                             {...register("for_who")}
-                          >
-                            <option value={""}>Select any one</option>
-                            <option value={"Online"}>Online Student</option>
-                            <option value={"Offline"}>Offline Student</option>
-                            <option value={"Both"}>Both</option>
-                          </select>
+                          />
                           <small className="text-danger">
                             {errors.for_who?.message}
+                          </small>
+                        </div>
+                        <div className="col-sm-4">
+                          <label className="h5 mb-8 fw-semibold font-heading">
+                            Is Fake?
+                          </label>
+                          <select
+                            className="form-select py-11"
+                            {...register("isFake")}
+                          >
+                            <option value="">Select</option>
+                            <option value={"1"}>Yes</option>
+                            <option value={"0"}>No</option>
+                          </select>
+                          <small className="text-danger">
+                            {errors.isFake?.message}
                           </small>
                         </div>
 

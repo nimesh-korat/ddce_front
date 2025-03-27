@@ -10584,3 +10584,9 @@ button:focus {
   transition: 0.3s;
   color: white;
 }
+
+.old-meeting {
+  background-color: #e9e3f3da;
+  /* box-shadow: 0 0 6px rgba(0, 0, 0, 0.5); */
+  color: white;
+}

@@ -160,7 +160,7 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* <Route
+          <Route
             path="/signup"
             element={
               <PrivateRoute>
@@ -184,7 +184,7 @@ function App() {
                 <ResetPassword />
               </PrivateRoute>
             }
-          /> */}
+          />
           {/* <Route
             path="/two_step_verification"
             element={<TwoStepVerification />}

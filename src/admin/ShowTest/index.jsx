@@ -31,6 +31,8 @@ function ShowTests() {
     },
   });
 
+  console.log(quiz);
+
   useEffect(() => {
     if (quiz) {
       setquizes(quiz.data);

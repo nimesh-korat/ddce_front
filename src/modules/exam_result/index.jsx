@@ -82,14 +82,14 @@ function ExamResult() {
             ).toFixed(2)}%)`,
         },
       },
-      events: {
-        dataPointSelection: (event, chartContext, config) => {
-          const selectedLabel = config.w.globals.labels[config.dataPointIndex];
-          const label = selectedLabel.split(" ")[2]; // Extract "Correct", "Incorrect", or "Skipped"
-          setFilterType(label.toLowerCase()); // Update filter based on the label (correct, incorrect, skipped)
-          console.log("Selected Label:", label); // Log the selected label only
-        },
-      },
+      // events: {
+      //   dataPointSelection: (event, chartContext, config) => {
+      //     const selectedLabel = config.w.globals.labels[config.dataPointIndex];
+      //     const label = selectedLabel.split(" ")[2]; // Extract "Correct", "Incorrect", or "Skipped"
+      //     setFilterType(label.toLowerCase()); // Update filter based on the label (correct, incorrect, skipped)
+      //     console.log("Selected Label:", label); // Log the selected label only
+      //   },
+      // },
     },
   };
 

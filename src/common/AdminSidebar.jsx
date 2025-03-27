@@ -63,7 +63,7 @@ function AdminSidebar({ isActive, closeSidebar }) {
           {/* <img src="assets/images/logo/logo.png" alt="Logo" /> */}
           <img
             className="w-100 text-center"
-            src="./assets/images/logo/logo4.png"
+            src="../assets/images/logo/logo4.png"
             alt=""
             style={{ width: "100px", height: "70px", objectFit: "contain" }}
           />

@@ -14,16 +14,16 @@ const ResultOverview = ({
     ...pieChartData.options,
     chart: {
       ...pieChartData.options.chart,
-      events: {
-        // Event handler for selecting a section of the pie chart
-        dataPointSelection: (event, chartContext, config) => {
-          const selectedLabel = config.w.globals.labels[config.dataPointIndex];
-          // Extract the label (e.g., "Correct", "Incorrect", or "Skipped")
-          const label = selectedLabel.split(" ")[2];
-          setFilterType(label.toLowerCase()); // Update the filter based on selection
-          // console.log("Selected Label:", selectedLabel); // Debug log of selected label
-        },
-      },
+      // events: {
+      //   // Event handler for selecting a section of the pie chart
+      //   dataPointSelection: (event, chartContext, config) => {
+      //     const selectedLabel = config.w.globals.labels[config.dataPointIndex];
+      //     // Extract the label (e.g., "Correct", "Incorrect", or "Skipped")
+      //     const label = selectedLabel.split(" ")[2];
+      //     setFilterType(label.toLowerCase()); // Update the filter based on selection
+      //     // console.log("Selected Label:", selectedLabel); // Debug log of selected label
+      //   },
+      // },
     },
   };
   const series = pieChartData.series;

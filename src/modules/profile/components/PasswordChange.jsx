@@ -40,13 +40,11 @@ function PasswordChange(id) {
   const changePasswordMuation = useMutation({
     mutationFn: (data) => changePassword(data),
     onSuccess: () => {
-      toast.success("Password changed successfully!", {
-        autoClose: 1000,
-      });
+      toast.success("Password changed successfully!");
       reset();
     },
     onError: (error) => {
-      toast.error(error.response.data.message, { autoClose: 3000 });
+      toast.error(error.response.data.message);
       console.log(error);
     },
   });
@@ -56,6 +54,7 @@ function PasswordChange(id) {
       toast.error("New password cannot be same as old password");
       return;
     }
+
     changePasswordMuation.mutate({
       ...data,
       Id: Id,
