@@ -87,7 +87,6 @@ function Question({
           data.option_d_text.trim() !== "");
     return isValid;
   };
-  console.log(data);
 
   return (
     <div className="col-lg-8 order-2 order-lg-1 mt-10 mt-lg-0">

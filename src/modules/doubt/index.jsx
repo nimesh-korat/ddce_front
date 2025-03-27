@@ -27,8 +27,6 @@ function Doubts() {
     queryFn: getSubjects,
   });
 
-  console.log("Subjects: ", subjects);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 

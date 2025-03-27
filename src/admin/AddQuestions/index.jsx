@@ -179,7 +179,6 @@ function AddQuestion() {
     Object.keys(paragraphData).forEach((key) => {
       formData.append(key, paragraphData[key]);
     });
-    console.log([...formData]);
 
     addParagraphMutation.mutate(formData);
   };

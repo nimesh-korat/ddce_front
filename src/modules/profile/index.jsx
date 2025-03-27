@@ -52,7 +52,6 @@ function Profile() {
 
   useEffect(() => {
     if (fetchProfileQuery.data) {
-      console.log(fetchProfileQuery.data.data);
       setProfileDetail(fetchProfileQuery.data.data);
     }
   }, [fetchProfileQuery.data]);

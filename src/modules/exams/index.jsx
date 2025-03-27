@@ -25,7 +25,6 @@ function Exam() {
     mutationFn: getTestForStudent,
     onSuccess: (data) => {
       setQuizes(data.data); // Ensure data is an array of quizzes
-      console.log(data.data);
     },
     onError: (error) => {
       console.error("Error fetching quizzes:", error.message);

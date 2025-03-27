@@ -13,7 +13,7 @@ import { Pagination } from "@mui/material";
 function Schedule() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 16;
 
   function formatDateInUserTimezone(date) {
     // const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -322,37 +322,37 @@ function Schedule() {
                             className={`col-xxl-3 col-lg-4 col-sm-6`}
                             key={schedule.sr_no}
                           >
-                            <div
-                              className={`card border border-gray-100 ${
-                                isActive
-                                  ? "today-meeting"
-                                  : currentDate > endDate
-                                  ? "old-meeting"
-                                  : ""
-                              }`}
-                            >
+                            <div className={`card border border-gray-100 `}>
                               <div className="card-body p-8">
                                 <div className="p-8">
-                                  <div className="flex-align gap-10">
-                                    <span className="text-13 py-2 px-10 rounded-pill bg-warning-100 text-success-600 mb-16 shadow-sm">
+                                  <div className="flex-align gap-5 flex-wrap">
+                                    <span className="text-13 py-2 px-10 rounded-pill bg-warning-100 text-success-600 mb-8 shadow-sm">
                                       {schedule.for_who}
                                     </span>
-                                    <span className="text-13 py-2 px-10 rounded-pill bg-success-50 text-success-600 mb-16 shadow-sm">
-                                      {schedule.type}
+                                    <span className="text-13 py-2 px-10 rounded-pill bg-success-50 text-success-600 mb-8 shadow-sm">
+                                      {schedule.type === "Session"
+                                        ? "Lecture"
+                                        : schedule.type}
+                                    </span>
+                                    <span
+                                      className={`text-13 py-3 px-10 badge ${
+                                        isActive
+                                          ? "bg-primary text-white"
+                                          : currentDate > endDate
+                                          ? "bg-danger text-white"
+                                          : "bg-info text-white"
+                                      } mb-8 shadow-sm`}
+                                    >
+                                      {isActive
+                                        ? "Active"
+                                        : currentDate > endDate
+                                        ? "Completed"
+                                        : "Upcoming"}
                                     </span>
                                   </div>
+
                                   <h5 className="mb-8">
-                                    {schedule.session_link ? (
-                                      <a
-                                        href={schedule.session_link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                      >
-                                        {schedule.description}
-                                      </a>
-                                    ) : (
-                                      schedule.description
-                                    )}
+                                    {schedule.description}
                                   </h5>
                                   <div className="row gap-8">
                                     <div className="flex-align gap-4">
@@ -417,7 +417,7 @@ function Schedule() {
                                           }
                                         }}
                                         className="btn btn-outline-main rounded-pill py-9 flex-align gap-4"
-                                        disabled={currentDate > endDate}
+                                        disabled={!isActive}
                                       >
                                         Join Session
                                         <span className="d-flex text-xl">

@@ -89,7 +89,6 @@ function ForgetPassword() {
 
   const handleOtpVerification = () => {
     if (Phone_OTP.length === 6) {
-      console.log("Phone_OTP:", Phone_OTP, "Phone:", phone);
 
       resetPasswordOtpQuery.mutate({
         otp: Phone_OTP,

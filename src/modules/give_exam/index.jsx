@@ -171,8 +171,6 @@ function GiveExam() {
       })),
     };
 
-    console.log("Submission Data:", submissionData);
-
     // Trigger the mutation to submit the test
     submitTestQuery.mutate(submissionData);
   };

@@ -67,8 +67,6 @@ function StudentTable() {
     },
   });
 
-  console.log(data);
-
   if (isError) {
     return <p className="text-gray-400">Failed to fetch data.</p>;
   }

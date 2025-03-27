@@ -6,7 +6,6 @@ function ParagraphBasedQuestion({ data, setData, handleSave }) {
     paragraph_text: "",
     paragraph_img: "",
   });
-  console.log(data);
 
   // Validation function to check required fields and apply trimming and minlength
   const validate = () => {
