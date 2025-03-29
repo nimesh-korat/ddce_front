@@ -36,6 +36,7 @@ import AssignBatchToTest from "./admin/AssignBatchToTest";
 import AddSession from "./admin/AddSessions";
 import ShowSession from "./admin/ShowSession";
 import AssignSessionToBatch from "./admin/AssignSessionToBatch";
+import Solutions from "./modules/solutions";
 
 function App() {
   return (
@@ -128,12 +129,27 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/solutions"
+            element={
+              <ProtectedRoute>
+                <Solutions />
+              </ProtectedRoute>
+            }
+          />
           {/* <Route path="/mentors" element={<Mentor />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/events" element={<Events />} />
           <Route path="/library" element={<Library />} />*/}
-          <Route path="/pricing" element={<Pricing />} />
+          <Route
+            path="/pricing"
+            element={
+              <ProtectedRoute>
+                <Pricing />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/profile"
             element={

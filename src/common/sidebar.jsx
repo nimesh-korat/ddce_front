@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Swal from "sweetalert2";
 
 // remove position-relative from parent class when unlocks
 
@@ -297,30 +296,15 @@ function Sidebar({ isActive, closeSidebar }) {
                 </p>
               </li>
               <li className="sidebar-menu__item">
-                <p
-                  onClick={() => {
-                    Swal.fire({
-                      title: "Hello Aspirants!",
-                      text: "Solutions will be available in 24 hours.",
-                      icon: "info",
-                      confirmButtonText: "OK",
-                    });
-                  }}
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
-                  style={{ cursor: "pointer" }} // Add cursor pointer for better UX
+                <Link
+                  to="/solutions"
+                  className="sidebar-menu__link d-flex align-items-center"
                 >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-folder-open" />
                   </span>
                   <span className="text">Solutions</span>
-                  <i
-                    className="ph ph-clock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
+                </Link>
               </li>
               <li
                 className={`sidebar-menu__item  ${
