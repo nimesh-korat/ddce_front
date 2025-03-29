@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 
 // remove position-relative from parent class when unlocks
 
@@ -83,9 +84,9 @@ function Sidebar({ isActive, closeSidebar }) {
           {/* <img src="assets/images/logo/logo.png" alt="Logo" /> */}
           <img
             className="w-100 text-center"
-            src="./assets/images/logo/logo4.png"
+            src="./assets/images/logo/logo6.png"
             alt=""
-            style={{ width: "100px", height: "70px", objectFit: "contain" }}
+            style={{ width: "100px", height: "80px", objectFit: "cover" }}
           />
         </Link>
         <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
@@ -297,15 +298,23 @@ function Sidebar({ isActive, closeSidebar }) {
               </li>
               <li className="sidebar-menu__item">
                 <p
-                  to="/resources"
-                  className="sidebar-menu__link   d-flex align-items-center position-relative"
+                  onClick={() => {
+                    Swal.fire({
+                      title: "Hello Aspirants!",
+                      text: "Solutions will be available in 24 hours.",
+                      icon: "info",
+                      confirmButtonText: "OK",
+                    });
+                  }}
+                  className="sidebar-menu__link d-flex align-items-center position-relative"
+                  style={{ cursor: "pointer" }} // Add cursor pointer for better UX
                 >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-folder-open" />
                   </span>
-                  <span className="text">Materials</span>
+                  <span className="text">Solutions</span>
                   <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
+                    className="ph ph-clock position-absolute top-50 end-0 translate-middle-y"
                     style={{
                       fontSize: "18px",
                       color: "#B0B0B0",
@@ -409,7 +418,7 @@ function Sidebar({ isActive, closeSidebar }) {
               <li
                 className={`sidebar-menu__item  ${
                   activeItem === "profile" ? "activePage" : ""
-                }`}
+                } mb-18`}
               >
                 <Link
                   to="/profile"

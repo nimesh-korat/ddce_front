@@ -293,7 +293,6 @@ function AssignSessionToBatch() {
                                     type="datetime-local"
                                     className="form-control"
                                     name="start_date"
-                                    min={new Date().toISOString().slice(0, 16)}
                                     value={newBatch.start_date}
                                     onChange={handleInputChange}
                                   />
@@ -303,7 +302,6 @@ function AssignSessionToBatch() {
                                     type="datetime-local"
                                     className="form-control"
                                     name="end_date"
-                                    min={newBatch.start_date}
                                     value={newBatch.end_date}
                                     onChange={handleInputChange}
                                   />

@@ -79,6 +79,7 @@ function StudentTable() {
     const hash = [...name].reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return randomImage[hash % randomImage.length];
   }
+
   return (
     <>
       {isLoading ? (
@@ -88,7 +89,7 @@ function StudentTable() {
           <div className="card mt-24">
             <div className="card-body">
               <h4 className="mb-20">
-                Recent {studentData.length} Students of {data.totalUsers}{" "}
+                Recent {limitedStudentData.length} Students of {data.totalUsers}{" "}
                 Students
               </h4>
               <div className="row g-20">
@@ -112,7 +113,8 @@ function StudentTable() {
                               className="follow-btn py-2 px-8 flex-align gap-4 text-13 fw-medium text-white border border-white rounded-pill position-absolute inset-block-start-0 inset-inline-end-0 mt-8 me-8 transition-1"
                             >
                               <span className="text">
-                                {formattedTimeAgo || "N/A"}
+                                {/* {formattedTimeAgo || "N/A"} */}
+                                recently joined
                               </span>
                             </button>
                           </div>

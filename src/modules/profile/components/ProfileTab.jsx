@@ -120,7 +120,7 @@ function ProfileTab({ data }) {
                     className="w-120 h-120 rounded-circle border border-white"
                     onError={(e) => {
                       e.target.onerror = null; // Prevent infinite loop if fallback fails
-                      e.target.src = "../assets/images/thumbs/user-img.png";
+                      e.target.src = "../assets/images/icons/nodp.webp";
                     }}
                   />
                   <div

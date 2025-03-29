@@ -10,6 +10,7 @@ import MostActivity from "./components/MostActivity";
 import Preloader from "../../utils/preloader/Preloader";
 import { useQuery } from "@tanstack/react-query";
 import { getDashboardCounts } from "../../apis/apis";
+import Marquee from "react-fast-marquee";
 
 function Home() {
   const [isReady, setIsReady] = useState(false);
@@ -46,6 +47,17 @@ function Home() {
           <Preloader />
         ) : (
           <div className="dashboard-body">
+            <Marquee
+              speed={60}
+              pauseOnHover={true}
+              gradient={false}
+              className="pb-10"
+            >
+              <p className="ms-15 mt-0">
+                🎉🔥 New Quiz Just Dropped! Are You Ready? 🚀🎯
+              </p>
+            </Marquee>
+
             <div className="row gy-4">
               <div className="col-xxl-8">
                 <Greetings />

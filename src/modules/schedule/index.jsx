@@ -399,10 +399,15 @@ function Schedule() {
                                         disabled={currentDate > endDate}
                                         className="btn btn-outline-main rounded-pill py-9 flex-align gap-4"
                                       >
-                                        View Details
-                                        <span className="d-flex text-xl">
-                                          <i className="ph ph-arrow-right" />
-                                        </span>
+                                        {testStatus === "completed"
+                                          ? `Test Ended`
+                                          : `View Details`}
+                                        {testStatus === "current" ||
+                                          (testStatus === "upcoming" && (
+                                            <span className="d-flex text-xl">
+                                              <i className="ph ph-arrow-right" />
+                                            </span>
+                                          ))}
                                       </button>
                                     ) : schedule.type === "Session" ? (
                                       <button
@@ -419,10 +424,14 @@ function Schedule() {
                                         className="btn btn-outline-main rounded-pill py-9 flex-align gap-4"
                                         disabled={!isActive}
                                       >
-                                        Join Session
-                                        <span className="d-flex text-xl">
-                                          <i className="ph ph-arrow-right" />
-                                        </span>
+                                        {testStatus === "completed"
+                                          ? `Session Ended`
+                                          : `Join Session`}
+                                        {isActive && (
+                                          <span className="d-flex text-xl">
+                                            <i className="ph ph-arrow-right" />
+                                          </span>
+                                        )}
                                       </button>
                                     ) : null}
                                   </div>
