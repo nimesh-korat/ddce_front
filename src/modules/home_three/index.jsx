@@ -37,6 +37,42 @@ function Home() {
     setIsReady(true); // Ensure the DOM is ready before rendering the chart
   }, []);
 
+  const marqueeContent = [
+    {
+      title: "⭐ Soft Skill Grammer Material Added",
+    },
+    {
+      title: "🌀 Soft Skill Grammer Quiz Added",
+    },
+    {
+      title: "🧑‍🎓 Soft Skill Material Solution Added",
+    },
+    {
+      title: "📖 New Soft Skill Material Added",
+    },
+    {
+      title: "🗣️ Soft Skill - Word & Sentence Quiz Added",
+    },
+    {
+      title: "🛠️ Electric Current Practice Set Solution Added",
+    },
+    {
+      title: "⚡ Electric Current Practice Set Added",
+    },
+    {
+      title: "🔌 Electric Current Quiz Added",
+    },
+    // {
+    //   title: "⚖️ Classical Mechanics Practice Set Solution Added",
+    // },
+    // {
+    //   title: "🏋️‍♂️ Classical Mechanics Practice Set Added",
+    // },
+    // {
+    //   title: "🌀 Classical Mechanics Quiz Added",
+    // },
+  ];
+
   return (
     <>
       <Sidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
@@ -53,9 +89,11 @@ function Home() {
               gradient={false}
               className="pb-10"
             >
-              <p className="ms-15 mt-0">
-                🎉🔥 New Quiz Just Dropped! Are You Ready? 🚀🎯
-              </p>
+              {marqueeContent.map((item, index) => (
+                <div className="ms-15 mt-0" key={index}>
+                  {item.title}
+                </div>
+              ))}
             </Marquee>
 
             <div className="row gy-4">

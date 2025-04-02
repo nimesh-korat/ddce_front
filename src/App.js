@@ -37,11 +37,12 @@ import AddSession from "./admin/AddSessions";
 import ShowSession from "./admin/ShowSession";
 import AssignSessionToBatch from "./admin/AssignSessionToBatch";
 import Solutions from "./modules/solutions";
+import ViewGivenExamData from "./admin/ViewGivenExamData";
 
 function App() {
   return (
     <>
-      <ToastContainer autoClose={1000} />
+      <ToastContainer autoClose={1500} stacked />
       <BrowserRouter>
         <Routes>
           <Route
@@ -301,6 +302,14 @@ function App() {
             element={
               <AdminRoutes>
                 <AssignSessionToBatch />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/viewGivenExamData"
+            element={
+              <AdminRoutes>
+                <ViewGivenExamData />
               </AdminRoutes>
             }
           />

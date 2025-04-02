@@ -119,7 +119,7 @@ function GiveExam() {
     mutationFn: (data) => studentSubmitTest(data),
     onSuccess: (data) => {
       toast.success("Test submitted successfully!", {
-        onClose: () => navigate("/exams"),
+        onClose: () => navigate("/exams", { replace: true }),
       });
     },
     onError: (error) => {

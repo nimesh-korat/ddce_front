@@ -62,7 +62,7 @@ function Header({ toggleSidebar }) {
           <div className="d-lg-none d-block">
             <img
               className="img-fluid"
-              src="./assets/images/logo/logo6.png"
+              src="../assets/images/logo/logo6.png"
               alt="logo"
               style={{ width: "100%", height: "80px", objectFit: "contain" }}
             />

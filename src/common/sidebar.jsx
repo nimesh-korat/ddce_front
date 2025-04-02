@@ -303,7 +303,7 @@ function Sidebar({ isActive, closeSidebar }) {
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-folder-open" />
                   </span>
-                  <span className="text">Solutions</span>
+                  <span className="text">Materials & Solutions</span>
                 </Link>
               </li>
               <li

@@ -1,6 +1,6 @@
 import React from "react";
 import { toZonedTime } from "date-fns-tz";
-import { formatDistanceToNow } from "date-fns";
+import { addHours, addMinutes, formatDistanceToNow } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRecentRegNotification } from "../../../apis/apis";
 import Preloader from "../../../utils/preloader/Preloader";
@@ -37,7 +37,10 @@ import { Link } from "react-router-dom";
 
 function timeAgo(date) {
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const dateInUserTimeZone = toZonedTime(date, userTimeZone);
+  let dateUTC = new Date(date);
+  dateUTC = addHours(dateUTC, 5);
+  dateUTC = addMinutes(dateUTC, 30);
+  const dateInUserTimeZone = toZonedTime(dateUTC, userTimeZone);
   return formatDistanceToNow(dateInUserTimeZone, { addSuffix: true });
 }
 
@@ -113,8 +116,8 @@ function StudentTable() {
                               className="follow-btn py-2 px-8 flex-align gap-4 text-13 fw-medium text-white border border-white rounded-pill position-absolute inset-block-start-0 inset-inline-end-0 mt-8 me-8 transition-1"
                             >
                               <span className="text">
-                                {/* {formattedTimeAgo || "N/A"} */}
-                                recently joined
+                                {formattedTimeAgo || "N/A"}
+                                {/* recently joined */}
                               </span>
                             </button>
                           </div>

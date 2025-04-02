@@ -29,6 +29,9 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/showSession":
         setActiveItem("Show Session");
         break;
+      case "/admin/viewGivenExamData":
+        setActiveItem("Given Exam Data");
+        break;
 
       default:
         setActiveItem("");
@@ -141,6 +144,21 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-blueprint" />
                   </span>
                   <span className="text">Show Session</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Given Exam Data" ? "activePage" : ""
+                } `}
+              >
+                <Link
+                  to="/admin/viewGivenExamData"
+                  className="sidebar-menu__link "
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-blueprint" />
+                  </span>
+                  <span className="text">Given Exam Data</span>
                 </Link>
               </li>
               {/* <li

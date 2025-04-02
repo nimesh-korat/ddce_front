@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchRecentRegNotification } from "../../../apis/apis";
 import { Link } from "react-router-dom";
 import { toZonedTime } from "date-fns-tz";
-import { addHours, formatDistanceToNow, subHours } from "date-fns";
+import { addHours, addMinutes, formatDistanceToNow } from "date-fns";
 
 // Helper function to calculate time ago
 
@@ -56,7 +56,7 @@ function timeAgo(date) {
 
   // Subtract 5 hours and 30 minutes
   dateUTC = addHours(dateUTC, 5);
-  dateUTC = addHours(dateUTC, 30);
+  dateUTC = addMinutes(dateUTC, 30);
 
   // Convert the adjusted UTC date to the user's local timezone
   const dateInUserTimeZone = toZonedTime(dateUTC, userTimeZone);
@@ -131,8 +131,8 @@ function Notification() {
                               registered in this portal.
                             </p>
                             <span className="text-gray-200 text-13">
-                              {/* {timeAgoFormatted} */}
-                              recently joined
+                              {timeAgoFormatted}
+                              {/* recently joined */}
                             </span>
                           </div>
                         </div>

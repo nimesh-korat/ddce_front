@@ -125,6 +125,15 @@ function StudentQuizCard({ test }) {
                   >
                     Give Test
                   </button>
+                ) : testStatus === "current" && test.has_taken === 1 ? (
+                  <button
+                    type="button"
+                    disabled
+                    className="btn btn-outline-main rounded-pill py-9 w-100 mt-24"
+                    style={{ textTransform: "none" }}
+                  >
+                    Result will be available after {formattedEndDate}
+                  </button>
                 ) : testStatus === "completed" && test.has_taken === 1 ? (
                   <Link
                     to={`/exam-result`}
@@ -136,8 +145,6 @@ function StudentQuizCard({ test }) {
                 ) : testStatus === "completed" && test.has_taken !== 1 ? (
                   <button
                     disabled
-                    to={`/exam-result`}
-                    state={{ test }}
                     className="btn btn-outline-main rounded-pill py-9 w-100 mt-24"
                   >
                     Quiz Not Attempted

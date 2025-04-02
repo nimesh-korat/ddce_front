@@ -39,6 +39,9 @@ function QuizQuestion({
     }
     // eslint-disable-next-line
   }, [currentQuestion, currentQuestionIndex, questionStatus]);
+
+  console.log(currentQuestion);
+
   return (
     <MathJaxContext config={config}>
       <div className="col-md-8 order-md-1 order-2">
@@ -49,6 +52,26 @@ function QuizQuestion({
           <div className="card-body">
             {currentQuestion ? (
               <form>
+                {currentQuestion.paragraph_text && (
+                  <>
+                    <div className="mb-0">
+                      <label
+                        className="h5 mb-8 fw-semibold"
+                        style={{ userSelect: "none" }}
+                      >
+                        Passage
+                      </label>
+                    </div>
+                    <div className="mb-20">
+                      <label
+                        className="h5 mb-8 fw-semibold"
+                        style={{ userSelect: "none" }}
+                      >
+                        {currentQuestion.paragraph_text}
+                      </label>
+                    </div>
+                  </>
+                )}
                 <div className="mb-20">
                   <label
                     className="h5 mb-8 fw-semibold"

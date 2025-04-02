@@ -648,3 +648,27 @@ export async function studentGetResult(data) {
     throw error;
   }
 }
+
+//?==================== GET ACTIVE SCHEDULE API ====================
+export async function getTestNames() {
+  try {
+    const response = await axiosInstance.get(`/admin/getTestNames`);
+    return response.data.data;
+  } catch (error) {
+    console.error("getTestNames() error", error);
+    throw error;
+  }
+}
+
+//?==================== GET ACTIVE SCHEDULE API ====================
+export async function getUsersWithExamData(test_id) {
+  try {
+    const response = await axiosInstance.get(
+      `/admin/getUsersWithExamData/${test_id}`
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("getTestNames() error", error);
+    throw error;
+  }
+}

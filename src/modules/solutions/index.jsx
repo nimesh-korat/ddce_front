@@ -15,21 +15,65 @@ function Solutions() {
 
   const solutions = [
     {
+      title: "SOFT SKILLS - GRAMMER PRACTICE SET 1",
+      description:
+        "Parts of Speech (A) Noun (B) Pronoun (C) Adjective (D) Adverb (E) Verb (F) Preposition (G) Connectors (H) Interjection, Tenses, Subject Verb Agreement.",
+      material: "./assets/materials/SKGS1.pdf",
+      solution: null,
+    },
+    {
+      title: "SOFT SKILLS - GRAMMER PRACTICE SET 2",
+      description:
+        "Parts of Speech (A) Noun (B) Pronoun (C) Adjective (D) Adverb (E) Verb (F) Preposition (G) Connectors (H) Interjection, Tenses, Subject Verb Agreement.",
+      material: "./assets/materials/SKGS2.pdf",
+      solution: null,
+    },
+    {
+      title: "SOFT SKILS - WORDS & SENTENCES PRACTICE SET 1",
+      description: "Word Correction, Sentence Correction.",
+      material: "./assets/materials/SKWS1.pdf",
+      solution: "./assets/materials/SKWSS1.pdf",
+    },
+    {
+      title: "SOFT SKILLS - WORDS & SENTENCES PRACTICE SET 2",
+      description: "Word Correction, Sentence Correction.",
+      material: "./assets/materials/SKWS2.pdf",
+      solution: "./assets/materials/SKWSS2.pdf",
+    },
+    {
+      title: "ELECTRIC CUREENT PRACTICE SET 1",
+      description:
+        "Ohm’s Law and application. Charge, interaction of charges, Coulomb’s force. Electric field, electric potential, electric flux, electric current.",
+      material: "./assets/materials/ECS1.pdf",
+      solution: "./assets/materials/ECSS1.pdf",
+    },
+    {
+      title: "ELECTRIC CUREENT PRACTICE SET 2",
+      description:
+        "Ohm’s Law and application. Charge, interaction of charges, Coulomb’s force. Electric field, electric potential, electric flux, electric current.",
+      material: "./assets/materials/ECS2.pdf",
+      solution: "./assets/materials/ECSS2.pdf",
+    },
+    {
       title: "CLASSICAL MECHANICS SET 1",
       description:
         "Linear motion, velocity, acceleration, force, Newton’s laws of motion, linear momentum and impulse of force.",
-      downloadFile: "./assets/solutions/cms3.pdf",
+      material: "./assets/materials/CMS1.pdf",
+      solution: "./assets/materials/CMSS1.pdf",
     },
     {
       title: "CLASSICAL MECHANICS SET 2",
       description:
-        "Circular motion, angular velocity, angular acceleration, centripetal and centrifugal force.",
-      downloadFile: "./assets/solutions/cms3.pdf",
+        "Linear motion, velocity, acceleration, force, Newton’s laws of motion, linear momentum and impulse of force.",
+      material: "./assets/materials/CMS2.pdf",
+      solution: "./assets/materials/CMSS2.pdf",
     },
     {
       title: "CLASSICAL MECHANICS SET 3",
-      description: "Work, energy, kinetic energy, potential energy, power.",
-      downloadFile: "./assets/solutions/cms3.pdf",
+      description:
+        "Linear motion, velocity, acceleration, force, Newton’s laws of motion, linear momentum and impulse of force.",
+      material: "./assets/materials/CMS3.pdf",
+      solution: "./assets/materials/CMSS3.pdf",
     },
   ];
 
@@ -65,7 +109,7 @@ function Solutions() {
               </li>
               <li>
                 <span className="text-main-600 fw-normal text-15">
-                  Solutions
+                  Materials & Solutions
                 </span>
               </li>
             </ul>
@@ -75,32 +119,46 @@ function Solutions() {
               <div className="col-lg-12">
                 <div className="card border border-gray-100">
                   <div className="card-header border-bottom border-gray-100 flex-between gap-8">
-                    <h6 className="mb-0">Solutions</h6>
+                    <h6 className="mb-0">Materials & Solutions</h6>
                   </div>
                   <div className="card-body">
                     <div className="row g-2">
                       {solutions.map((item, index) => (
                         <div className="col-lg-6" key={index}>
                           <div className="payment-method payment-method-two form-check form-radio d-flex align-items-center justify-content-between mb-16 rounded-16 bg-main-50 p-20 cursor-pointer position-relative transition-2">
-                            <div className="flex-align align-items-start gap-16">
-                              <div>
-                                <h6 className="title mb-0">{item.title}</h6>
+                            <div className="flex-align align-items-start gap-16 col-12">
+                              <div className="col-12">
+                                <h6 className="title mb-0 ">{item.title}</h6>
                                 <span className="d-block">
                                   {item.description}
                                 </span>
-                                <div className="text-13 flex-align gap-8 mt-12 pt-12 border-top border-gray-100">
+                                <div className="text-13 d-flex justify-content-between mt-12 pt-12 border-top border-gray-100 ">
                                   <button
                                     onClick={() =>
                                       handleDownload(
-                                        item.downloadFile,
+                                        item.material,
                                         `${item.title}.pdf`
                                       )
                                     }
                                     className="text-gray-900 hover-text-main-600 btn btn-link p-0"
                                   >
-                                    <span>Download Now</span> 
+                                    <span>Material</span>
                                     <i className="ph ph-download-simple ms-4" />
-                                  </button>
+                                  </button>{" "}
+                                  {item.solution && (
+                                    <button
+                                      onClick={() =>
+                                        handleDownload(
+                                          item.solution,
+                                          `${item.title} SOLUTION.pdf`
+                                        )
+                                      }
+                                      className="text-gray-900 hover-text-main-600 btn btn-link p-0"
+                                    >
+                                      <span>Solution</span>
+                                      <i className="ph ph-download-simple ms-4" />
+                                    </button>
+                                  )}
                                 </div>
                               </div>
                             </div>
