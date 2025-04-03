@@ -73,15 +73,13 @@ function StudentQuizTab({ activeTab, setActiveTab, quizes }) {
         </div>
         <div className="tab-content">
           <div className="row g-20">
-            {getCurrentPageQuizes(filteredQuizes)
-              .reverse()
-              .map((quiz, index) => (
-                <StudentQuizCard
-                  key={index}
-                  test={quiz}
-                  testStatus={determineTestStatus(quiz)}
-                />
-              ))}
+            {getCurrentPageQuizes(filteredQuizes).map((quiz, index) => (
+              <StudentQuizCard
+                key={index}
+                test={quiz}
+                testStatus={determineTestStatus(quiz)}
+              />
+            ))}
             {!hasQuizes && <p>No quizzes found.</p>}
           </div>
 

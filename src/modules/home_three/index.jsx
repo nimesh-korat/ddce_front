@@ -39,6 +39,18 @@ function Home() {
 
   const marqueeContent = [
     {
+      title: "⚖️ Logarithm & Statistics Material Solution Added",
+    },
+    {
+      title: "⚡ Logarithm & Statistics Material Added",
+    },
+    {
+      title: "➗ Logarithm & Statistics Quiz Added",
+    },
+    {
+      title: "😎 Soft Skill Grammer Material Solution Added",
+    },
+    {
       title: "⭐ Soft Skill Grammer Material Added",
     },
     {
@@ -56,12 +68,12 @@ function Home() {
     {
       title: "🛠️ Electric Current Practice Set Solution Added",
     },
-    {
-      title: "⚡ Electric Current Practice Set Added",
-    },
-    {
-      title: "🔌 Electric Current Quiz Added",
-    },
+    // {
+    //   title: "⚡ Electric Current Practice Set Added",
+    // },
+    // {
+    //   title: "🔌 Electric Current Quiz Added",
+    // },
     // {
     //   title: "⚖️ Classical Mechanics Practice Set Solution Added",
     // },

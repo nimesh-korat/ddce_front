@@ -15,18 +15,32 @@ function Solutions() {
 
   const solutions = [
     {
+      title: "LOGARITHM - STATISTICS PRACTICE SET 1",
+      description:
+        "Logarithm as a function, Laws of Logarithm and related Simple examples, Mean, Median and Mode for ungrouped data",
+      material: "./assets/materials/MLS1.pdf",
+      solution: "./assets/materials/MLSS1.pdf",
+    },
+    {
+      title: "LOGARITHM - STATISTICS PRACTICE SET 2",
+      description:
+        "Logarithm as a function, Laws of Logarithm and related Simple examples, Mean, Median and Mode for ungrouped data",
+      material: "./assets/materials/MLS2.pdf",
+      solution: "./assets/materials/MLSS2.pdf",
+    },
+    {
       title: "SOFT SKILLS - GRAMMER PRACTICE SET 1",
       description:
         "Parts of Speech (A) Noun (B) Pronoun (C) Adjective (D) Adverb (E) Verb (F) Preposition (G) Connectors (H) Interjection, Tenses, Subject Verb Agreement.",
       material: "./assets/materials/SKGS1.pdf",
-      solution: null,
+      solution: "./assets/materials/SKGSS1.pdf",
     },
     {
       title: "SOFT SKILLS - GRAMMER PRACTICE SET 2",
       description:
         "Parts of Speech (A) Noun (B) Pronoun (C) Adjective (D) Adverb (E) Verb (F) Preposition (G) Connectors (H) Interjection, Tenses, Subject Verb Agreement.",
       material: "./assets/materials/SKGS2.pdf",
-      solution: null,
+      solution: "./assets/materials/SKGSS2.pdf",
     },
     {
       title: "SOFT SKILS - WORDS & SENTENCES PRACTICE SET 1",
