@@ -15,6 +15,20 @@ function Solutions() {
 
   const solutions = [
     {
+      title: "DETERMINANT & MATRICES PRACTICE SET 1",
+      description:
+        "Determinant and its value up to 3rd order (Without properties). Concept of a Matrix. Types of Matrices. Addition, Subtraction and multiplication by scalar of matrices. Product of two matrices. Adjoint and Inverse of a matrix of order 2X2. Solution of Simultaneous linear equations of two variables",
+      material: "./assets/materials/MDMS1.pdf",
+      solution: null,
+    },
+    {
+      title: "DETERMINANT & MATRICES PRACTICE SET 2",
+      description:
+        "Determinant and its value up to 3rd order (Without properties). Concept of a Matrix. Types of Matrices. Addition, Subtraction and multiplication by scalar of matrices. Product of two matrices. Adjoint and Inverse of a matrix of order 2X2. Solution of Simultaneous linear equations of two variables",
+      material: "./assets/materials/MDMS2.pdf",
+      solution: null,
+    },
+    {
       title: "LOGARITHM - STATISTICS PRACTICE SET 1",
       description:
         "Logarithm as a function, Laws of Logarithm and related Simple examples, Mean, Median and Mode for ungrouped data",

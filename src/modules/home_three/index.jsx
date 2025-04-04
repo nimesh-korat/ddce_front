@@ -39,6 +39,12 @@ function Home() {
 
   const marqueeContent = [
     {
+      title: "📑 Determinant & Matrices Material Added",
+    },
+    {
+      title: "🗣️ Determinant & Matrices Quiz Added",
+    },
+    {
       title: "⚖️ Logarithm & Statistics Material Solution Added",
     },
     {
@@ -62,12 +68,12 @@ function Home() {
     {
       title: "📖 New Soft Skill Material Added",
     },
-    {
-      title: "🗣️ Soft Skill - Word & Sentence Quiz Added",
-    },
-    {
-      title: "🛠️ Electric Current Practice Set Solution Added",
-    },
+    // {
+    //   title: "🗣️ Soft Skill - Word & Sentence Quiz Added",
+    // },
+    // {
+    //   title: "🛠️ Electric Current Practice Set Solution Added",
+    // },
     // {
     //   title: "⚡ Electric Current Practice Set Added",
     // },
