@@ -2,9 +2,20 @@ import React, { useState } from "react";
 import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import { Link } from "react-router-dom";
+import { Document, Page, pdfjs } from "react-pdf";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
 function Solutions() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
+  const [selectedPdf, setSelectedPdf] = useState(null);
+  const [numPages, setNumPages] = useState(null);
+  const [showPdfModal, setShowPdfModal] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfError, setPdfError] = useState(null);
   const toggleSidebar = () => {
     setIsSidebarActive((prevState) => !prevState);
   };
@@ -105,13 +116,30 @@ function Solutions() {
     },
   ];
 
-  const handleDownload = (fileUrl, fileName) => {
-    const link = document.createElement("a");
-    link.href = fileUrl;
-    link.setAttribute("download", fileName); // Forces download
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+    setPdfLoading(false);
+    setPdfError(null);
+  };
+
+  const onDocumentLoadError = (error) => {
+    console.error("PDF load error:", error);
+    setPdfError(`Failed to load PDF: ${error.message}. Please try again.`);
+    setPdfLoading(false);
+  };
+
+  const openPdfViewer = (pdfUrl) => {
+    setPdfLoading(true);
+    setPdfError(null);
+    setSelectedPdf(pdfUrl);
+    setShowPdfModal(true);
+  };
+
+  const closePdfViewer = () => {
+    setShowPdfModal(false);
+    setSelectedPdf(null);
+    setPdfLoading(false);
+    setPdfError(null);
   };
 
   return (
@@ -142,6 +170,7 @@ function Solutions() {
               </li>
             </ul>
           </div>
+
           <div className="container-fluid dashboard-content">
             <div className="row g-2">
               <div className="col-lg-12">
@@ -162,38 +191,26 @@ function Solutions() {
                                 </span>
                                 <div className="text-13 d-flex justify-content-between mt-12 pt-12 border-top border-gray-100 ">
                                   <button
-                                    onClick={() =>
-                                      handleDownload(
-                                        item.material,
-                                        `${item.title}.pdf`
-                                      )
-                                    }
+                                    onClick={() => openPdfViewer(item.material)}
                                     className="text-gray-900 hover-text-main-600 btn btn-link p-0"
                                   >
-                                    <span>Material</span>
-                                    <i className="ph ph-download-simple ms-4" />
-                                  </button>{" "}
+                                    <span>View Material</span>
+                                    <i className="ph ph-file-pdf ms-4" />
+                                  </button>
                                   {item.solution && (
                                     <button
                                       onClick={() =>
-                                        handleDownload(
-                                          item.solution,
-                                          `${item.title} SOLUTION.pdf`
-                                        )
+                                        openPdfViewer(item.solution)
                                       }
                                       className="text-gray-900 hover-text-main-600 btn btn-link p-0"
                                     >
-                                      <span>Solution</span>
-                                      <i className="ph ph-download-simple ms-4" />
+                                      <span>View Solution</span>
+                                      <i className="ph ph-file-pdf ms-4" />
                                     </button>
                                   )}
                                 </div>
                               </div>
                             </div>
-                            <label
-                              className="position-absolute inset-block-start-0 inset-inline-start-0 w-100 h-100 cursor-pointer"
-                              htmlFor="visaCard"
-                            />
                           </div>
                         </div>
                       ))}
@@ -205,6 +222,98 @@ function Solutions() {
           </div>
         </div>
       </div>
+
+      {/* PDF Viewer Modal */}
+      {showPdfModal && (
+        <div className="modal-overlay" onClick={closePdfViewer}>
+          <div className="pdf-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="pdf-modal-header">
+              <button onClick={closePdfViewer} className="close-button">
+                <i className="ph ph-x" />
+              </button>
+            </div>
+            <div className="pdf-modal-body">
+              {/* {pdfLoading && <div className="pdf-loading">Loading PDF...</div>} */}
+              {pdfError && <div className="pdf-error">{pdfError}</div>}
+              {!pdfError && (
+                <Document
+                  file={selectedPdf}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                  onLoadError={onDocumentLoadError}
+                  // loading={<div>Loading PDF...</div>}
+                  error={<div>Failed to load PDF.</div>}
+                >
+                  {Array.from(new Array(numPages), (el, index) => (
+                    <Page
+                      key={`page_${index + 1}`}
+                      pageNumber={index + 1}
+                      width={Math.min(window.innerWidth * 0.8, 800)}
+                      renderTextLayer={false}
+                      renderAnnotationLayer={false}
+                    />
+                  ))}
+                </Document>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style type="text/css">{`
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.7);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+        }
+
+        .pdf-modal {
+          background: white;
+          border-radius: 8px;
+          width: 90%;
+          max-width: 900px;
+          max-height: 90vh;
+          overflow: auto;
+          padding: 20px;
+        }
+
+        .pdf-modal-header {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 15px;
+        }
+
+        .close-button {
+          background: none;
+          border: none;
+          font-size: 20px;
+          cursor: pointer;
+        }
+
+        .pdf-modal-body {
+          height: calc(90vh - 60px);
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .pdf-loading,
+        .pdf-error {
+          padding: 20px;
+          text-align: center;
+        }
+
+        .pdf-error {
+          color: red;
+        }
+      `}</style>
     </>
   );
 }
