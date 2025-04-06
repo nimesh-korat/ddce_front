@@ -39,6 +39,18 @@ function Home() {
 
   const marqueeContent = [
     {
+      title: "⚡ Chemistry - Acids, Bases & Salts Material Solution Added",
+    },
+    {
+      title: "⚗️ Chemistry - Acids, Bases & Salts Material Added",
+    },
+    {
+      title: "🧪 Chemistry - Acids, Bases & Salts Quiz Added",
+    },
+    {
+      title: "📖 Determinant & Matrices Material Solution Added",
+    },
+    {
       title: "📑 Determinant & Matrices Material Added",
     },
     {
@@ -56,18 +68,18 @@ function Home() {
     {
       title: "😎 Soft Skill Grammer Material Solution Added",
     },
-    {
-      title: "⭐ Soft Skill Grammer Material Added",
-    },
-    {
-      title: "🌀 Soft Skill Grammer Quiz Added",
-    },
-    {
-      title: "🧑‍🎓 Soft Skill Material Solution Added",
-    },
-    {
-      title: "📖 New Soft Skill Material Added",
-    },
+    // {
+    //   title: "⭐ Soft Skill Grammer Material Added",
+    // },
+    // {
+    //   title: "🌀 Soft Skill Grammer Quiz Added",
+    // },
+    // {
+    //   title: "🧑‍🎓 Soft Skill Material Solution Added",
+    // },
+    // {
+    //   title: "📖 New Soft Skill Material Added",
+    // },
     // {
     //   title: "🗣️ Soft Skill - Word & Sentence Quiz Added",
     // },

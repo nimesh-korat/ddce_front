@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import { Link } from "react-router-dom";
@@ -14,8 +14,17 @@ function Solutions() {
   const [selectedPdf, setSelectedPdf] = useState(null);
   const [numPages, setNumPages] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
+  //eslint-disable-next-line
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState(null);
+
+  const [scale, setScale] = useState(1.0);
+  const pdfContainerRef = useRef(null);
+  const [touchStartDistance, setTouchStartDistance] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [scrollPos, setScrollPos] = useState({ left: 0, top: 0 });
+
   const toggleSidebar = () => {
     setIsSidebarActive((prevState) => !prevState);
   };
@@ -24,20 +33,42 @@ function Solutions() {
     setIsSidebarActive(false);
   };
 
+  const zoomIn = () => {
+    setScale((prevScale) => Math.min(prevScale + 0.1, 3.0)); // Max scale of 3.0
+  };
+
+  const zoomOut = () => {
+    setScale((prevScale) => Math.max(prevScale - 0.1, 0.5)); // Min scale of 0.5
+  };
+
   const solutions = [
+    {
+      title: "CHEMISTRY - ACID BASES & SALTS PRACTICE SET 4",
+      description:
+        "Understanding the Chemical Properties of Acids and Bases. Reaction of Metallic Oxides with Acids, Reactions of an Acid or a Base in Water Solutions. Importance of pH in Everyday life. Salts: Family of salts, pH of salts",
+      material: "./assets/materials/CABS4.pdf",
+      solution: "./assets/materials/CABSS4.pdf",
+    },
+    {
+      title: "CHEMISTRY - ACID BASES & SALTS PRACTICE SET 5",
+      description:
+        "Understanding the Chemical Properties of Acids and Bases. Reaction of Metallic Oxides with Acids, Reactions of an Acid or a Base in Water Solutions. Importance of pH in Everyday life. Salts: Family of salts, pH of salts",
+      material: "./assets/materials/CABS5.pdf",
+      solution: "./assets/materials/CABSS5.pdf",
+    },
     {
       title: "DETERMINANT & MATRICES PRACTICE SET 1",
       description:
         "Determinant and its value up to 3rd order (Without properties). Concept of a Matrix. Types of Matrices. Addition, Subtraction and multiplication by scalar of matrices. Product of two matrices. Adjoint and Inverse of a matrix of order 2X2. Solution of Simultaneous linear equations of two variables",
       material: "./assets/materials/MDMS1.pdf",
-      solution: null,
+      solution: "./assets/materials/MDMSS1.pdf",
     },
     {
       title: "DETERMINANT & MATRICES PRACTICE SET 2",
       description:
         "Determinant and its value up to 3rd order (Without properties). Concept of a Matrix. Types of Matrices. Addition, Subtraction and multiplication by scalar of matrices. Product of two matrices. Adjoint and Inverse of a matrix of order 2X2. Solution of Simultaneous linear equations of two variables",
       material: "./assets/materials/MDMS2.pdf",
-      solution: null,
+      solution: "./assets/materials/MDMSS2.pdf",
     },
     {
       title: "LOGARITHM - STATISTICS PRACTICE SET 1",
@@ -133,6 +164,7 @@ function Solutions() {
     setPdfError(null);
     setSelectedPdf(pdfUrl);
     setShowPdfModal(true);
+    setScale(1.0); // Reset zoom when opening new PDF
   };
 
   const closePdfViewer = () => {
@@ -141,7 +173,127 @@ function Solutions() {
     setPdfLoading(false);
     setPdfError(null);
   };
+  // Disable right-click and text selection
+  const disablePdfActions = (e) => {
+    e.preventDefault();
+    return false;
+  };
 
+  useEffect(() => {
+    const handleWheel = (e) => {
+      if (e.metaKey || e.shiftKey) {
+        e.preventDefault();
+        const delta = e.deltaY;
+        setScale((prevScale) => {
+          const newScale =
+            delta < 0
+              ? Math.min(prevScale + 0.1, 3.0)
+              : Math.max(prevScale - 0.1, 0.5);
+          return newScale;
+        });
+      }
+    };
+
+    const container = pdfContainerRef.current;
+    if (container) {
+      container.addEventListener("wheel", handleWheel, { passive: false });
+      return () => container.removeEventListener("wheel", handleWheel);
+    }
+  }, [selectedPdf]);
+
+  // Handle pinch-to-zoom on mobile
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 2) {
+      setTouchStartDistance(getDistance(e.touches[0], e.touches[1]));
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const currentDistance = getDistance(e.touches[0], e.touches[1]);
+      if (touchStartDistance) {
+        setScale((prevScale) => {
+          const newScale = prevScale * (currentDistance / touchStartDistance);
+          return Math.min(Math.max(newScale, 0.5), 3.0);
+        });
+      }
+      setTouchStartDistance(currentDistance);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTouchStartDistance(null);
+  };
+
+  const getDistance = (touch1, touch2) => {
+    return Math.hypot(
+      touch2.clientX - touch1.clientX,
+      touch2.clientY - touch1.clientY
+    );
+  };
+  const handleMouseDown = (e) => {
+    if (scale > 1) {
+      // Only enable drag when zoomed in
+      setIsDragging(true);
+      setStartPos({
+        x: e.clientX,
+        y: e.clientY,
+      });
+      setScrollPos({
+        left: e.currentTarget.scrollLeft,
+        top: e.currentTarget.scrollTop,
+      });
+      e.currentTarget.style.cursor = "grabbing";
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+
+    const dx = e.clientX - startPos.x;
+    const dy = e.clientY - startPos.y;
+
+    const container = pdfContainerRef.current;
+    container.scrollLeft = scrollPos.left - dx;
+    container.scrollTop = scrollPos.top - dy;
+
+    // Log the current scroll position
+    console.log("Current scroll position:", {
+      scrollLeft: container.scrollLeft,
+      scrollTop: container.scrollTop,
+    });
+
+    e.preventDefault();
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    if (pdfContainerRef.current) {
+      pdfContainerRef.current.style.cursor = "grab";
+    }
+  };
+
+  // Update cursor style based on zoom level
+  useEffect(() => {
+    if (pdfContainerRef.current) {
+      pdfContainerRef.current.style.cursor = scale > 1 ? "grab" : "default";
+    }
+
+    console.log("Current scale:", scale);
+  }, [scale]);
+
+  useEffect(() => {
+    if (pdfContainerRef.current) {
+      const pages = pdfContainerRef.current.querySelectorAll(".pdf-page");
+      pages.forEach((page, index) => {
+        console.log(`Page ${index + 1} dimensions:`, {
+          width: page.clientWidth,
+          height: page.clientHeight,
+        });
+      });
+    }
+  }, [numPages, scale]);
   return (
     <>
       <Sidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
@@ -194,7 +346,7 @@ function Solutions() {
                                     onClick={() => openPdfViewer(item.material)}
                                     className="text-gray-900 hover-text-main-600 btn btn-link p-0"
                                   >
-                                    <span>View Material</span>
+                                    <span>Material</span>
                                     <i className="ph ph-file-pdf ms-4" />
                                   </button>
                                   {item.solution && (
@@ -204,7 +356,7 @@ function Solutions() {
                                       }
                                       className="text-gray-900 hover-text-main-600 btn btn-link p-0"
                                     >
-                                      <span>View Solution</span>
+                                      <span>Solution</span>
                                       <i className="ph ph-file-pdf ms-4" />
                                     </button>
                                   )}
@@ -226,32 +378,58 @@ function Solutions() {
       {/* PDF Viewer Modal */}
       {showPdfModal && (
         <div className="modal-overlay" onClick={closePdfViewer}>
-          <div className="pdf-modal" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="pdf-modal"
+            onClick={(e) => e.stopPropagation()}
+            onContextMenu={disablePdfActions}
+          >
             <div className="pdf-modal-header">
+              <span className="zoom-level">{Math.round(scale * 100)}%</span>
+              <button onClick={zoomIn}>Zoom In</button>
+              <button onClick={zoomOut}>Zoom Out</button>
               <button onClick={closePdfViewer} className="close-button">
                 <i className="ph ph-x" />
               </button>
             </div>
-            <div className="pdf-modal-body">
-              {/* {pdfLoading && <div className="pdf-loading">Loading PDF...</div>} */}
+            <div
+              className="pdf-modal-body"
+              ref={pdfContainerRef}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp} // Stop dragging if mouse leaves
+            >
               {pdfError && <div className="pdf-error">{pdfError}</div>}
               {!pdfError && (
                 <Document
                   file={selectedPdf}
+                  renderTextLayer={false}
+                  renderAnnotationLayer={false}
                   onLoadSuccess={onDocumentLoadSuccess}
                   onLoadError={onDocumentLoadError}
-                  // loading={<div>Loading PDF...</div>}
                   error={<div>Failed to load PDF.</div>}
                 >
-                  {Array.from(new Array(numPages), (el, index) => (
-                    <Page
-                      key={`page_${index + 1}`}
-                      pageNumber={index + 1}
-                      width={Math.min(window.innerWidth * 0.8, 800)}
-                      renderTextLayer={false}
-                      renderAnnotationLayer={false}
-                    />
-                  ))}
+                  <div className="pdf-pages-container p-20">
+                    {Array.from(new Array(numPages), (el, index) => (
+                      <div
+                        key={`page-wrapper-${index + 1}`}
+                        className="pdf-page-wrapper"
+                      >
+                        <Page
+                          key={`page_${index + 1}`}
+                          pageNumber={index + 1}
+                          scale={scale}
+                          renderTextLayer={false}
+                          renderAnnotationLayer={false}
+                          className="pdf-page"
+                          width={Math.min(window.innerWidth * scale * 1, 800)} // Adjust width based on scale
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </Document>
               )}
             </div>
@@ -279,14 +457,25 @@ function Solutions() {
           width: 90%;
           max-width: 900px;
           max-height: 90vh;
-          overflow: auto;
-          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          touch-action: none;
         }
 
         .pdf-modal-header {
           display: flex;
-          justify-content: flex-end;
-          margin-bottom: 15px;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 15px;
+          background: #f8f9fa;
+          border-bottom: 1px solid #dee2e6;
+          flex-shrink: 0;
+        }
+
+        .zoom-level {
+          font-size: 14px;
+          color: #555;
         }
 
         .close-button {
@@ -296,23 +485,67 @@ function Solutions() {
           cursor: pointer;
         }
 
-        .pdf-modal-body {
-          height: calc(90vh - 60px);
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
+       .pdf-modal-body {
+    flex: 1;
+    overflow: auto;
+    padding: 15px;
+    display: flex;
+    // justify-content: center; /* Center content horizontally */
+    align-items: flex-start; /* Align to top vertically */
+    user-select: none;
+    width: 100%;
+    min-height: 100%;
+  }
 
-        .pdf-loading,
+        .pdf-pages-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content; /* Let content determine width */
+    min-width: 100%; /* Ensure it fills container when not zoomed */
+  }
+
+        .pdf-page-wrapper {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content; /* Let content determine width */
+    max-width: 100%; /* Prevent overflow when not zoomed */
+  }
+
+        .pdf-page {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    height: auto;
+    display: block;
+  }
+
+
         .pdf-error {
+          color: red;
           padding: 20px;
           text-align: center;
         }
 
-        .pdf-error {
-          color: red;
+        /* Scrollbar styling */
+        .pdf-modal-body::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
         }
+
+        .pdf-modal-body::-webkit-scrollbar-thumb {
+          background: #888;
+          border-radius: 3px;
+        }
+
+        .pdf-modal-body::-webkit-scrollbar-thumb:hover {
+          background: #555;
+        }
+
+         .react-pdf__Page {
+    display: flex;
+    justify-content: center;
+  }
       `}</style>
     </>
   );

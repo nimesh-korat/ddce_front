@@ -133,9 +133,9 @@ function App() {
           <Route
             path="/solutions"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
                 <Solutions />
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
           {/* <Route path="/mentors" element={<Mentor />} />
