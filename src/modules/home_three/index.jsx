@@ -39,35 +39,95 @@ function Home() {
 
   const marqueeContent = [
     {
-      title: "⚡ Chemistry - Acids, Bases & Salts Material Solution Added",
+      title: "⚖️ Units & Measurement Quiz Added",
     },
     {
-      title: "⚗️ Chemistry - Acids, Bases & Salts Material Added",
+      title: "⚡ Units & Measurement Material Added",
     },
     {
-      title: "🧪 Chemistry - Acids, Bases & Salts Quiz Added",
+      title: "📖 Function & Limit Material Solution Added",
     },
     {
-      title: "📖 Determinant & Matrices Material Solution Added",
+      title: "🌀 Function & Limit Quiz Added",
     },
     {
-      title: "📑 Determinant & Matrices Material Added",
+      title: "🧑‍🎓 Function & Limit Material Added",
     },
     {
-      title: "🗣️ Determinant & Matrices Quiz Added",
+      title: "⚗️ Units & Measurement Material Solution Added",
     },
     {
-      title: "⚖️ Logarithm & Statistics Material Solution Added",
+      title: "💀 Units & Measurement Quiz Added",
     },
     {
-      title: "⚡ Logarithm & Statistics Material Added",
+      title: "➗ Units & Measurement Material Added",
     },
     {
-      title: "➗ Logarithm & Statistics Quiz Added",
+      title: "🌴 Environmental Sciences Material Solution Added",
     },
     {
-      title: "😎 Soft Skill Grammer Material Solution Added",
+      title: "🎋 Environmental Sciences Material Added",
     },
+    // {
+    //   title: "⚖️ Trigonometry Material Solution Added",
+    // },
+    // {
+    //   title: "⚡ Trigonometry Material Added",
+    // },
+    // {
+    //   title: "📖 Classical Mechanics Material Solution Added",
+    // },
+    // {
+    //   title: "🌳 Environmental Sciences Quiz Added",
+    // },
+    // {
+    //   title: "🟰 Trigonometry Quiz Added",
+    // },
+    // {
+    //   title: "⚖️ Classical Mechanics Quiz Added",
+    // },
+    // {
+    //   title: "⚡ Classical Mechanics Material Added",
+    // },
+    // {
+    //   title: "👨‍💻 Computer Practice Material Solution Added",
+    // },
+    // {
+    //   title: "⌨️ Computer Practice Quiz Added",
+    // },
+    // {
+    //   title: "💻 Computer Practice Material Added",
+    // },
+    // {
+    //   title: "⚡ Chemistry - Acids, Bases & Salts Material Solution Added",
+    // },
+    // {
+    //   title: "⚗️ Chemistry - Acids, Bases & Salts Material Added",
+    // },
+    // {
+    //   title: "🧪 Chemistry - Acids, Bases & Salts Quiz Added",
+    // },
+    // {
+    //   title: "📖 Determinant & Matrices Material Solution Added",
+    // },
+    // {
+    //   title: "📑 Determinant & Matrices Material Added",
+    // },
+    // {
+    //   title: "🗣️ Determinant & Matrices Quiz Added",
+    // },
+    // {
+    //   title: "⚖️ Logarithm & Statistics Material Solution Added",
+    // },
+    // {
+    //   title: "⚡ Logarithm & Statistics Material Added",
+    // },
+    // {
+    //   title: "➗ Logarithm & Statistics Quiz Added",
+    // },
+    // {
+    //   title: "😎 Soft Skill Grammer Material Solution Added",
+    // },
     // {
     //   title: "⭐ Soft Skill Grammer Material Added",
     // },
