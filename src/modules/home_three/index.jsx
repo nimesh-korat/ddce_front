@@ -39,35 +39,71 @@ function Home() {
 
   const marqueeContent = [
     {
-      title: "⚖️ Units & Measurement Quiz Added",
+      title: "🟰 Mathematics - Integration Material Solution Added",
     },
     {
-      title: "⚡ Units & Measurement Material Added",
+      title: "⚗️ Physics, English & Environmental Sciences Material Solution Added",
     },
     {
-      title: "📖 Function & Limit Material Solution Added",
+      title: "🧑‍🎓 Combined Quiz 2 Added",
     },
     {
-      title: "🌀 Function & Limit Quiz Added",
+      title: "⚖️ Mathematics - Integration Material Added",
     },
     {
-      title: "🧑‍🎓 Function & Limit Material Added",
+      title: "🌴 Physics, English & Environmental Sciences Material Added",
     },
     {
-      title: "⚗️ Units & Measurement Material Solution Added",
+      title: "📖 Computer Practice, Soft Skill & Chemistry Material Solution Added",
     },
     {
-      title: "💀 Units & Measurement Quiz Added",
+      title: "🌀 Combined Quiz 1 Added",
     },
     {
-      title: "➗ Units & Measurement Material Added",
+      title: "🧑‍🎓 Computer Practice, Soft Skill & Chemistry Material Added",
     },
-    {
-      title: "🌴 Environmental Sciences Material Solution Added",
-    },
-    {
-      title: "🎋 Environmental Sciences Material Added",
-    },
+    // {
+    //   title: "⚗️ Metals & Non-Metals Material Solution Added",
+    // },
+    // {
+    //   title: "💀 Metals & Non-Metals Material Added",
+    // },
+    // {
+    //   title: "⚖️ Metals & Non-Metals Quiz Added",
+    // },
+    // {
+    //   title: "🟰 Units & Measurement Material Solution Added",
+    // },
+    // {
+    //   title: "⚖️ Units & Measurement Quiz Added",
+    // },
+    // {
+    //   title: "⚡ Units & Measurement Material Added",
+    // },
+    // {
+    //   title: "📖 Function & Limit Material Solution Added",
+    // },
+    // {
+    //   title: "🌀 Function & Limit Quiz Added",
+    // },
+    // {
+    //   title: "🧑‍🎓 Function & Limit Material Added",
+    // },
+    // {
+    //   title: "⚗️ Units & Measurement Material Solution Added",
+    // },
+    // {
+    //   title: "💀 Units & Measurement Quiz Added",
+    // },
+    // {
+    //   title: "➗ Units & Measurement Material Added",
+    // },
+    // {
+    //   title: "🌴 Environmental Sciences Material Solution Added",
+    // },
+    // {
+    //   title: "🎋 Environmental Sciences Material Added",
+    // },
     // {
     //   title: "⚖️ Trigonometry Material Solution Added",
     // },
