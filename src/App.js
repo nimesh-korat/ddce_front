@@ -38,6 +38,7 @@ import ShowSession from "./admin/ShowSession";
 import AssignSessionToBatch from "./admin/AssignSessionToBatch";
 import Solutions from "./modules/solutions";
 import ViewGivenExamData from "./admin/ViewGivenExamData";
+import StudentWiseExamData from "./admin/StudentWiseExamData";
 
 function App() {
   return (
@@ -310,6 +311,14 @@ function App() {
             element={
               <AdminRoutes>
                 <ViewGivenExamData />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/viewStudentWiseGivenExamData"
+            element={
+              <AdminRoutes>
+                <StudentWiseExamData />
               </AdminRoutes>
             }
           />

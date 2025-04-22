@@ -660,7 +660,7 @@ export async function getTestNames() {
   }
 }
 
-//?==================== GET ACTIVE SCHEDULE API ====================
+//?==================== GET USER WITH EXAM DATA API ====================
 export async function getUsersWithExamData(test_id) {
   try {
     const response = await axiosInstance.get(
@@ -668,7 +668,18 @@ export async function getUsersWithExamData(test_id) {
     );
     return response.data.data;
   } catch (error) {
-    console.error("getTestNames() error", error);
+    console.error("getUsersWithExamData() error", error);
+    throw error;
+  }
+}
+
+//?==================== GET USER WISE EXAM DATA API ====================
+export async function getUsersWiseExamData() {
+  try {
+    const response = await axiosInstance.get(`/admin/getStudentWiseExamData`);
+    return response.data.data;
+  } catch (error) {
+    console.error("getUsersWiseExamData() error", error);
     throw error;
   }
 }
