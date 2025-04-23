@@ -30,7 +30,12 @@ function StudentWiseExamData() {
     semester: "",
     registration_time: "",
     total_quiz_attempts: "",
-    average_marks: "",
+    total_questions_asked: "",
+    total_attempted: "",
+    total_correct: "",
+    total_incorrect: "",
+    total_skipped: "",
+    accuracy: "",
   });
 
   const toggleSidebar = () => {
@@ -229,7 +234,15 @@ function StudentWiseExamData() {
         }
 
         // Handle numeric fields
-        if (key === "average_marks" || key === "total_quiz_attempts") {
+        if (
+          key === "accuracy" ||
+          key === "total_quiz_attempts" ||
+          key === "total_questions_asked" ||
+          key === "total_attempted" ||
+          key === "total_correct" ||
+          key === "total_incorrect" ||
+          key === "total_skipped"
+        ) {
           if (!filterValue) return true;
 
           const { operator, value } = parseMarksFilter(filterValue);
@@ -589,27 +602,99 @@ function StudentWiseExamData() {
                               <small className="text-muted">{`Use >, <, >=, <=, or =`}</small>
                             </th>
                             <th className="h6 text-gray-300">
-                              Average Marks
+                              Attempted/Asked
                               <input
                                 type="text"
                                 className="form-control form-control-sm mt-1"
-                                placeholder="e.g. >5, <10, =20"
-                                value={columnFilters.average_marks}
+                                placeholder="e.g. >50, <100"
+                                value={columnFilters.total_attempted}
                                 onChange={(e) =>
                                   handleFilterChange(
-                                    "average_marks",
+                                    "total_attempted",
                                     e.target.value
                                   )
                                 }
                               />
                               <small className="text-muted">{`Use >, <, >=, <=, or =`}</small>
                             </th>
+                            {/* <th className="h6 text-gray-300">
+                              Attempted
+                              <input
+                                type="text"
+                                className="form-control form-control-sm mt-1"
+                                placeholder="Filter..."
+                                value={columnFilters.total_attempted}
+                                onChange={(e) =>
+                                  handleFilterChange(
+                                    "total_attempted",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </th> */}
+                            {/* <th className="h6 text-gray-300">
+                              Correct
+                              <input
+                                type="text"
+                                className="form-control form-control-sm mt-1"
+                                placeholder="Filter..."
+                                value={columnFilters.total_correct}
+                                onChange={(e) =>
+                                  handleFilterChange(
+                                    "total_correct",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </th>
+                            <th className="h6 text-gray-300">
+                              Incorrect
+                              <input
+                                type="text"
+                                className="form-control form-control-sm mt-1"
+                                placeholder="Filter..."
+                                value={columnFilters.total_incorrect}
+                                onChange={(e) =>
+                                  handleFilterChange(
+                                    "total_incorrect",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </th>
+                            <th className="h6 text-gray-300">
+                              Skipped
+                              <input
+                                type="text"
+                                className="form-control form-control-sm mt-1"
+                                placeholder="Filter..."
+                                value={columnFilters.total_skipped}
+                                onChange={(e) =>
+                                  handleFilterChange(
+                                    "total_skipped",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </th> */}
+                            <th className="h6 text-gray-300">
+                              Accuracy (%)
+                              <input
+                                type="text"
+                                className="form-control form-control-sm mt-1"
+                                placeholder="e.g. >70, <90"
+                                value={columnFilters.accuracy}
+                                onChange={(e) =>
+                                  handleFilterChange("accuracy", e.target.value)
+                                }
+                              />
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
                           {isUserWiseExamDataLoading ? (
                             <tr>
-                              <td colSpan="14" className="text-center">
+                              <td colSpan="18" className="text-center">
                                 Loading...
                               </td>
                             </tr>
@@ -646,12 +731,39 @@ function StudentWiseExamData() {
                                     {user.total_quiz_attempts}
                                   </span>
                                 </td>
-                                <td>{user.average_marks}</td>
+                                <td>
+                                  {user.total_attempted +
+                                    "/" +
+                                    user.total_questions_asked}
+                                </td>
+                                {/* <td>{user.total_attempted}</td> */}
+                                {/* <td>{user.total_correct}</td>
+                                <td>{user.total_incorrect}</td>
+                                <td>{user.total_skipped}</td> */}
+                                <td>
+                                  <span
+                                    className={`text-13 py-2 px-8 bg-${
+                                      user.accuracy >= 70
+                                        ? "success"
+                                        : user.accuracy >= 50
+                                        ? "warning"
+                                        : "danger"
+                                    }-50 text-${
+                                      user.accuracy >= 70
+                                        ? "success"
+                                        : user.accuracy >= 50
+                                        ? "warning"
+                                        : "danger"
+                                    }-600 d-inline-flex align-items-center gap-8 rounded-pill`}
+                                  >
+                                    {user.accuracy}%
+                                  </span>
+                                </td>
                               </tr>
                             ))
                           ) : (
                             <tr>
-                              <td colSpan="14" className="text-center">
+                              <td colSpan="18" className="text-center">
                                 No data found
                               </td>
                             </tr>
