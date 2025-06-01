@@ -5,6 +5,9 @@ const api = process.env.REACT_APP_API_URL;
 
 axios.defaults.withCredentials = true;
 
+// Track if we've shown a session expired toast
+let hasShownSessionExpiredToast = false;
+
 const axiosInstance = axios.create({
   baseURL: `${api}/api`, // Add /api to all requests
 });
@@ -27,10 +30,16 @@ axiosInstance.interceptors.response.use(
     // If the error status is 401 (Unauthorized), handle it
     if (error.response && error.response.status === 401) {
       // Handle the 401 error (e.g., redirect to login)
+      if (!hasShownSessionExpiredToast) {
+        hasShownSessionExpiredToast = true;
 
-      toast.error("Session Expired! Please login again.", {
-        onClose: () => localStorage.clear()((window.location.href = "/signin")),
-      });
+        toast.error("Session Expired! Please login again.", {
+          onClose: () => {
+            localStorage.clear();
+            window.location.href = "/signin";
+          },
+        });
+      }
 
       // Optionally, you can clear the token from localStorage and redirect the user
       // Or use your preferred redirect method
@@ -40,6 +49,11 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// // Reset the flag when a new token is set (optional)
+// export const resetSessionExpiredFlag = () => {
+//   hasShownSessionExpiredToast = false;
+// };
 
 //?==================== AUTH CHECK API ====================
 export async function checkSession() {
@@ -680,6 +694,17 @@ export async function getUsersWiseExamData() {
     return response.data.data;
   } catch (error) {
     console.error("getUsersWiseExamData() error", error);
+    throw error;
+  }
+}
+
+//?==================== DDCET College Prediction API ====================
+export async function DdcetRankPredict(data) {
+  try {
+    const response = await axiosInstance.post(`/ddcetRankPredict`, data);
+    return response.data;
+  } catch (error) {
+    console.log("DdcetRankPredict() Err: ", error);
     throw error;
   }
 }

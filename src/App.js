@@ -39,6 +39,7 @@ import AssignSessionToBatch from "./admin/AssignSessionToBatch";
 import Solutions from "./modules/solutions";
 import ViewGivenExamData from "./admin/ViewGivenExamData";
 import StudentWiseExamData from "./admin/StudentWiseExamData";
+import CollgePredication from "./modules/college_predication";
 
 function App() {
   return (
@@ -330,6 +331,7 @@ function App() {
               </AdminRoutes>
             }
           />
+          <Route path="/college-prediction" element={<CollgePredication />} />
 
           <Route path="*" element={<Error404 />} />
         </Routes>
