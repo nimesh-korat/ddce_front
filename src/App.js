@@ -40,6 +40,8 @@ import Solutions from "./modules/solutions";
 import ViewGivenExamData from "./admin/ViewGivenExamData";
 import StudentWiseExamData from "./admin/StudentWiseExamData";
 import CollgePredication from "./modules/college_predication";
+import AdminDashboard from "./admin/Dashboard";
+import AdminMaterials from "./admin/Materials";
 
 function App() {
   return (
@@ -217,6 +219,22 @@ function App() {
               <PrivateRoute>
                 <AdminLogin />
               </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AdminRoutes>
+                <AdminDashboard />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/materials"
+            element={
+              <AdminRoutes>
+                <AdminMaterials />
+              </AdminRoutes>
             }
           />
           <Route

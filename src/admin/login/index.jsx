@@ -51,7 +51,7 @@ function AdminLogin() {
           localStorage.setItem("admin", JSON.stringify(data.data));
           localStorage.setItem("token", data.auth.token);
           localStorage.setItem("session", data.auth.session);
-          navigate("/admin/addQuestion");
+          navigate("/admin/dashboard");
         },
       });
     },

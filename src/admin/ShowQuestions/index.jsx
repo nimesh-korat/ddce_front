@@ -100,8 +100,9 @@ function ShowQuestions() {
                 return (
                   <AdminQuestionCard
                     key={index}
-                    ref={lastQuestionRef} // Attach the ref to the last question
+                    ref={lastQuestionRef}
                     index={index + 1}
+                    questionId={question.id}
                     question={question.question_text}
                     questionImg={question.question_image}
                     option1={question.option_a_text}
@@ -113,6 +114,8 @@ function ShowQuestions() {
                     optionimg3={question.option_c_image}
                     optionimg4={question.option_d_image}
                     answer={question.answer_text}
+                    marks={question.question_marks}
+                    difficulty={question.question_difficulty}
                   />
                 );
               }
@@ -120,6 +123,7 @@ function ShowQuestions() {
                 <AdminQuestionCard
                   key={index}
                   index={index + 1}
+                  questionId={question.id}
                   question={question.question_text}
                   questionImg={question.question_image}
                   option1={question.option_a_text}
@@ -131,6 +135,8 @@ function ShowQuestions() {
                   optionimg3={question.option_c_image}
                   optionimg4={question.option_d_image}
                   answer={question.answer_text}
+                  marks={question.question_marks}
+                  difficulty={question.question_difficulty}
                 />
               );
             })}

@@ -11,6 +11,12 @@ function AdminSidebar({ isActive, closeSidebar }) {
 
   useEffect(() => {
     switch (location.pathname) {
+      case "/admin/dashboard":
+        setActiveItem("Dashboard");
+        break;
+      case "/admin/materials":
+        setActiveItem("Materials");
+        break;
       case "/admin/addQuestion":
         setActiveItem("Add Questions");
         break;
@@ -77,6 +83,30 @@ function AdminSidebar({ isActive, closeSidebar }) {
         <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
           <div className="p-20 pt-10">
             <ul className="sidebar-menu">
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Dashboard" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/dashboard" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-squares-four" />
+                  </span>
+                  <span className="text">Dashboard</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Materials" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/materials" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-files" />
+                  </span>
+                  <span className="text">Materials</span>
+                </Link>
+              </li>
               <li
                 className={`sidebar-menu__item ${
                   activeItem === "Add Questions" ? "activePage" : ""

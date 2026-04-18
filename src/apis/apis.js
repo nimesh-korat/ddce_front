@@ -47,7 +47,7 @@ axiosInstance.interceptors.response.use(
 
     // If the error is not a 401, reject it as usual
     return Promise.reject(error);
-  }
+  },
 );
 
 // // Reset the flag when a new token is set (optional)
@@ -290,7 +290,7 @@ export async function getTopicWiseQuestionAnalytics(data) {
   try {
     const response = await axiosInstance.get(
       `/getTopicWiseQuestionAnalytics`,
-      data
+      data,
     );
     return response.data;
   } catch (error) {
@@ -348,7 +348,7 @@ export async function getQuestionsForTest(data) {
   try {
     const response = await axiosInstance.post(
       `/admin/getQuestionsForTest`,
-      data
+      data,
     );
     return response.data;
   } catch (error) {
@@ -362,7 +362,7 @@ export async function getQuestionsForVerification(data) {
   try {
     const response = await axiosInstance.post(
       `/admin/getQuestionsForVerification`,
-      data
+      data,
     );
     return response.data;
   } catch (error) {
@@ -446,7 +446,7 @@ export const adminGetQuestions = async ({ pageParam = 1 }) => {
     if (error.response) {
       console.error("Error response from server:", error.response);
       throw new Error(
-        error.response.data.message || "Failed to fetch questions"
+        error.response.data.message || "Failed to fetch questions",
       );
     } else {
       console.error("Error setting up the request:", error.message);
@@ -561,7 +561,7 @@ export async function assignBatchToSession(data) {
   try {
     const response = await axiosInstance.post(
       `/admin/assignBatchToSession`,
-      data
+      data,
     );
     return response.data;
   } catch (error) {
@@ -588,7 +588,7 @@ export async function updateIsFeaturedSession(data) {
   try {
     const response = await axiosInstance.post(
       `/admin/updateIsFeaturedSession`,
-      data
+      data,
     );
     return response.data.data;
   } catch (error) {
@@ -678,7 +678,7 @@ export async function getTestNames() {
 export async function getUsersWithExamData(test_id) {
   try {
     const response = await axiosInstance.get(
-      `/admin/getUsersWithExamData/${test_id}`
+      `/admin/getUsersWithExamData/${test_id}`,
     );
     return response.data.data;
   } catch (error) {
@@ -705,6 +705,204 @@ export async function DdcetRankPredict(data) {
     return response.data;
   } catch (error) {
     console.log("DdcetRankPredict() Err: ", error);
+    throw error;
+  }
+}
+
+//?==================== ADMIN DASHBOARD STATS API ====================
+export async function getAdminDashboardStats() {
+  try {
+    const response = await axiosInstance.get(`/admin/dashboardStats`);
+    return response.data;
+  } catch (error) {
+    console.error("getAdminDashboardStats() error", error);
+    throw error;
+  }
+}
+
+//?==================== MATERIALS — ADMIN ====================
+export async function adminAddMaterial(data) {
+  try {
+    const response = await axiosInstance.post(`/admin/materials`, data);
+    return response.data;
+  } catch (error) {
+    console.error("adminAddMaterial() error", error);
+    throw error;
+  }
+}
+
+export async function adminGetMaterials() {
+  try {
+    const response = await axiosInstance.get(`/admin/materials`);
+    return response.data;
+  } catch (error) {
+    console.error("adminGetMaterials() error", error);
+    throw error;
+  }
+}
+
+export async function adminUpdateMaterial(id, data) {
+  try {
+    const response = await axiosInstance.put(`/admin/materials/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("adminUpdateMaterial() error", error);
+    throw error;
+  }
+}
+
+export async function adminDeleteMaterial(id) {
+  try {
+    const response = await axiosInstance.delete(`/admin/materials/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("adminDeleteMaterial() error", error);
+    throw error;
+  }
+}
+
+export async function adminToggleSolutionVisibility(id) {
+  try {
+    const response = await axiosInstance.put(
+      `/admin/materials/${id}/toggleSolution`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("adminToggleSolutionVisibility() error", error);
+    throw error;
+  }
+}
+
+//?==================== MATERIALS — USER ====================
+export async function getUserMaterials() {
+  try {
+    const response = await axiosInstance.get(`/materials`);
+    return response.data;
+  } catch (error) {
+    console.error("getUserMaterials() error", error);
+    throw error;
+  }
+}
+
+//?==================== QUESTIONS — EDIT / DELETE ====================
+export async function adminUpdateQuestion(id, data) {
+  try {
+    const response = await axiosInstance.put(`/admin/questions/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("adminUpdateQuestion() error", error);
+    throw error;
+  }
+}
+
+export async function adminDeleteQuestion(id) {
+  try {
+    const response = await axiosInstance.delete(`/admin/questions/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("adminDeleteQuestion() error", error);
+    throw error;
+  }
+}
+
+export async function adminDeleteTestQuestion(test_id, question_id) {
+  try {
+    const response = await axiosInstance.delete(
+      `/admin/tests/${test_id}/questions/${question_id}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("adminDeleteTestQuestion() error", error);
+    throw error;
+  }
+}
+
+//?==================== TESTS — EDIT / DELETE ====================
+export async function adminUpdateTest(id, data) {
+  try {
+    const response = await axiosInstance.put(`/admin/tests/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("adminUpdateTest() error", error);
+    throw error;
+  }
+}
+
+export async function adminDeleteTest(id) {
+  try {
+    const response = await axiosInstance.delete(`/admin/tests/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("adminDeleteTest() error", error);
+    throw error;
+  }
+}
+
+//?==================== BATCH — EDIT / DELETE ====================
+export async function adminUpdateBatch(id, data) {
+  try {
+    const response = await axiosInstance.put(`/admin/batch/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("adminUpdateBatch() error", error);
+    throw error;
+  }
+}
+
+export async function adminDeleteBatch(id) {
+  try {
+    const response = await axiosInstance.delete(`/admin/batch/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("adminDeleteBatch() error", error);
+    throw error;
+  }
+}
+
+//?==================== SESSION — EDIT / DELETE ====================
+export async function adminUpdateSession(id, data) {
+  try {
+    const response = await axiosInstance.put(`/admin/session/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("adminUpdateSession() error", error);
+    throw error;
+  }
+}
+
+export async function adminDeleteSession(id) {
+  try {
+    const response = await axiosInstance.delete(`/admin/session/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("adminDeleteSession() error", error);
+    throw error;
+  }
+}
+
+//?==================== EDIT ASSIGNED TEST TO BATCH ====================
+export async function editAssignedTestToBatch(data) {
+  try {
+    const response = await axiosInstance.post(
+      `/admin/editAssignedTestToBatch`,
+      data,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("editAssignedTestToBatch() error", error);
+    throw error;
+  }
+}
+
+//?==================== DELETE TEST BATCH ASSIGNMENT ====================
+export async function deleteTestBatchAssignment(id) {
+  try {
+    const response = await axiosInstance.delete(
+      `/admin/testBatchAssignment/${id}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("deleteTestBatchAssignment() error", error);
     throw error;
   }
 }

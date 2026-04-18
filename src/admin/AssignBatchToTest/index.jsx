@@ -5,12 +5,15 @@ import Header from "../../common/header/Header";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   assignTestToBatch,
+  editAssignedTestToBatch,
+  deleteTestBatchAssignment,
   getAllBatch,
   getAllPhase,
   getTestWiseBatch,
   updateIsFeatured,
 } from "../../apis/apis";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 function AssignBatchToTest() {
   const location = useLocation();
@@ -21,72 +24,95 @@ function AssignBatchToTest() {
   const [editBatch, setEditBatch] = useState(null);
   const [newBatch, setNewBatch] = useState(null);
 
-  //eslint-disable-next-line
-  const { data: phases, isLoading: isLoadingPhaseData } = useQuery({
+  const { data: phases, isLoading: isLoadingPhases } = useQuery({
     queryKey: ["allPhase"],
     queryFn: getAllPhase,
+    staleTime: 5 * 60 * 1000,
   });
 
-  const { data: batches, isLoading: isLoadingData } = useQuery({
+  const { data: batches, isLoading: isLoadingBatches } = useQuery({
     queryKey: ["allBatch"],
     queryFn: getAllBatch,
+    staleTime: 5 * 60 * 1000,
   });
 
+  const phaseList = phases || [];
+  const batchList = batches?.data || batches || [];
+
+  // Fetch test-wise assignments
   const getTestWiseBatchData = useMutation({
-    mutationKey: ["getTestWiseBatch"],
     mutationFn: (data) => getTestWiseBatch(data),
-    onSuccess: (data) => {
-      setBatchData(data);
-      console.log(data);
-    },
+    onSuccess: (data) => setBatchData(data || []),
   });
 
+  // Toggle featured
   const updateIsFeaturedMutation = useMutation({
-    mutationKey: ["updateIsFeatured"],
     mutationFn: (data) => updateIsFeatured(data),
     onSuccess: (data) => {
-      if (testData) {
-        getTestWiseBatchData.mutate(testData.test_id);
-      }
+      getTestWiseBatchData.mutate(testData.test_id);
       toast.success(data.message, { autoClose: 1000 });
     },
-    onError: (error) => {
-      toast.error(error.response.data.message, { autoClose: 1000 });
+    onError: (err) =>
+      toast.error(err.response?.data?.message, { autoClose: 1000 }),
+  });
+
+  // Assign new batch
+  const assignMutation = useMutation({
+    mutationFn: (data) => assignTestToBatch(data),
+    onSuccess: (data) => {
+      getTestWiseBatchData.mutate(testData.test_id);
+      toast.success(data.message, { autoClose: 1000 });
+      setNewBatch(null);
     },
+    onError: (err) =>
+      toast.error(err.response?.data?.message, { autoClose: 1000 }),
+  });
+
+  // Edit existing assignment
+  const editMutation = useMutation({
+    mutationFn: (data) => editAssignedTestToBatch(data),
+    onSuccess: (data) => {
+      getTestWiseBatchData.mutate(testData.test_id);
+      toast.success(data.message || "Assignment updated!", { autoClose: 1000 });
+      setEditBatch(null);
+    },
+    onError: (err) =>
+      toast.error(err.response?.data?.message || "Failed to update", {
+        autoClose: 1000,
+      }),
+  });
+
+  // Delete assignment
+  const deleteMutation = useMutation({
+    mutationFn: (id) => deleteTestBatchAssignment(id),
+    onSuccess: () => {
+      getTestWiseBatchData.mutate(testData.test_id);
+      toast.success("Assignment removed!", { autoClose: 1000 });
+    },
+    onError: (err) =>
+      toast.error(err.response?.data?.message || "Failed to delete", {
+        autoClose: 1000,
+      }),
   });
 
   useEffect(() => {
-    if (testData) {
-      getTestWiseBatchData.mutate(testData.test_id);
-    }
-    //eslint-disable-next-line
+    if (testData) getTestWiseBatchData.mutate(testData.test_id);
+    // eslint-disable-next-line
   }, [testData]);
 
   const toggleSidebar = () => setIsSidebarActive((prev) => !prev);
   const closeSidebar = () => setIsSidebarActive(false);
 
-  // Toggle "Is Featured"
   const handleToggleFeatured = (id) => {
-    setBatchData((prevData) =>
-      prevData.map((batch) =>
-        batch.assigned_batch_id === id
-          ? { ...batch, isFeatured: batch.isFeatured === "1" ? "0" : "1" }
-          : batch
-      )
-    );
-
+    const batch = batchData.find((b) => b.assigned_batch_id === id);
+    if (!batch) return;
     updateIsFeaturedMutation.mutate({
-      id: id,
-      isFeatured:
-        batchData.find((batch) => batch.assigned_batch_id === id).isFeatured ===
-        "1"
-          ? "0"
-          : "1",
+      id,
+      isFeatured: batch.isFeatured === "1" ? "0" : "1",
     });
   };
 
-  // Handle "Add Batch" Button Click
-  const handleAddBatch = () => {
+  const handleAddBatch = () =>
     setNewBatch({
       tbl_test: testData.test_id,
       tbl_phase: "",
@@ -95,72 +121,73 @@ function AssignBatchToTest() {
       end_date: "",
       isFeatured: "0",
     });
+
+  const handleInputChange = (e, forEdit = false) => {
+    const { name, value } = e.target;
+    if (forEdit) setEditBatch((prev) => ({ ...prev, [name]: value }));
+    else setNewBatch((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle Input Changes for New & Edited Batch
-  const handleInputChange = (e, batchId = null) => {
-    const { name, type, checked, value } = e.target;
-    if (batchId !== null) {
-      setEditBatch((prevEditBatch) => ({
-        ...prevEditBatch,
-        [name]: type === "checkbox" ? checked : value, // Handle checkbox separately
-      }));
-    } else {
-      setNewBatch((prev) => ({ ...prev, [name]: value }));
-    }
-  };
-
-  const assignTestToBatchMutation = useMutation({
-    mutationFn: (data) => assignTestToBatch(data),
-    onSuccess: (data) => {
-      if (testData) {
-        getTestWiseBatchData.mutate(testData.test_id);
-      }
-      toast.success(data.message, { autoClose: 1000 });
-      setNewBatch(null);
-    },
-    onError: (error) => {
-      toast.error(error.response.data.message, { autoClose: 1000 });
-    },
-  });
-
-  // Save New Batch
   const handleSaveNewBatch = () => {
-    const batchWithUtcDates = {
+    if (
+      !newBatch.tbl_phase ||
+      !newBatch.tbl_batch ||
+      !newBatch.start_date ||
+      !newBatch.end_date
+    ) {
+      toast.error("Please fill all fields");
+      return;
+    }
+    assignMutation.mutate({
       ...newBatch,
       start_date: new Date(newBatch.start_date).toISOString(),
       end_date: new Date(newBatch.end_date).toISOString(),
-    };
-    assignTestToBatchMutation.mutate(batchWithUtcDates);
+    });
   };
 
-  // Edit Batch
-  const handleEditBatch = (batch) => {
-    setEditBatch({ ...batch });
+  const handleSaveEdit = () => {
+    if (
+      !editBatch.tbl_phase ||
+      !editBatch.tbl_batch ||
+      !editBatch.start_date ||
+      !editBatch.end_date
+    ) {
+      toast.error("Please fill all fields");
+      return;
+    }
+    editMutation.mutate({
+      id: editBatch.assigned_batch_id,
+      tbl_batch: editBatch.tbl_batch,
+      tbl_test: testData.test_id,
+      start_date: new Date(editBatch.start_date).toISOString(),
+      end_date: new Date(editBatch.end_date).toISOString(),
+      isFeatured: editBatch.isFeatured,
+    });
   };
 
-  // Save Edited Batch
-  const handleSaveEditBatch = () => {
-    console.log(editBatch);
-
-    setBatchData((prevData) =>
-      prevData.map((batch) =>
-        batch.assigned_batch_id === editBatch.assigned_batch_id
-          ? editBatch
-          : batch
-      )
-    );
-    setEditBatch(null);
+  const handleDelete = (batch) => {
+    Swal.fire({
+      title: "Remove Assignment?",
+      text: `Remove batch "${batch.batch_name}" from this test?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Yes, Remove",
+    }).then((result) => {
+      if (result.isConfirmed) deleteMutation.mutate(batch.assigned_batch_id);
+    });
   };
 
-  // Cancel Edit
-  const handleCancelEdit = () => {
-    setEditBatch(null);
-  };
-
-  // Cancel Save
-  const handleCancelNewBatch = () => {
-    setNewBatch(null);
+  // Format a stored date string for datetime-local input
+  const toDatetimeLocal = (dateStr) => {
+    if (!dateStr) return "";
+    try {
+      const d = new Date(dateStr);
+      return d.toISOString().slice(0, 16);
+    } catch {
+      return "";
+    }
   };
 
   return (
@@ -174,10 +201,10 @@ function AssignBatchToTest() {
             <ul className="flex-align gap-4">
               <li>
                 <Link
-                  to={"/"}
+                  to="/admin/showTests"
                   className="text-gray-200 fw-normal text-15 hover-text-main-600"
                 >
-                  Home
+                  Tests
                 </Link>
               </li>
               <li>
@@ -187,7 +214,7 @@ function AssignBatchToTest() {
               </li>
               <li>
                 <span className="text-main-600 fw-normal text-15">
-                  Assign Batch To Test
+                  Assign Batch
                 </span>
               </li>
             </ul>
@@ -195,54 +222,66 @@ function AssignBatchToTest() {
 
           <div className="row">
             <div className="col-lg-12">
-              <div className="card card-default card-md mb-4">
-                <div className="card-header">
-                  <h3 className="card-title">{testData.test_name}</h3>
+              <div className="card border border-gray-100">
+                <div className="card-header flex-between">
+                  <h5 className="fw-semibold mb-0">{testData.test_name}</h5>
+                  <button
+                    type="button"
+                    className="btn btn-main rounded-pill py-9 flex-align gap-8"
+                    onClick={handleAddBatch}
+                  >
+                    <i className="ph ph-plus" />
+                    Assign Batch
+                  </button>
                 </div>
-                <div className="card-body pt-0">
-                  <div className="p-1 text-end">
-                    <button
-                      type="button"
-                      className="btn btn-main"
-                      onClick={handleAddBatch}
-                    >
-                      Assign Batch
-                    </button>
-                  </div>
+
+                <div className="card-body p-0">
                   <div className="table-responsive">
-                    <table className="table table-bordered">
-                      <thead>
-                        <tr className="bg-light">
-                          <th>No.</th>
-                          <th>Phase</th>
-                          <th>Batch</th>
-                          <th>Start Date</th>
-                          <th>End Date</th>
-                          <th>Is Featured</th>
-                          <th>Action</th>
+                    <table className="table table-bordered mb-0">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="text-13 text-gray-600 fw-medium">#</th>
+                          <th className="text-13 text-gray-600 fw-medium">
+                            Phase
+                          </th>
+                          <th className="text-13 text-gray-600 fw-medium">
+                            Batch
+                          </th>
+                          <th className="text-13 text-gray-600 fw-medium">
+                            Start Date
+                          </th>
+                          <th className="text-13 text-gray-600 fw-medium">
+                            End Date
+                          </th>
+                          <th className="text-13 text-gray-600 fw-medium">
+                            Featured
+                          </th>
+                          <th className="text-13 text-gray-600 fw-medium">
+                            Actions
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
-                        {/* New Batch Row */}
+                        {/* ── New Assignment Row ── */}
                         {newBatch && (
-                          <tr>
-                            <td>#</td>
+                          <tr className="bg-main-50">
+                            <td className="text-13">New</td>
                             <td>
                               <select
-                                className="form-select"
+                                className="form-select form-select-sm"
                                 name="tbl_phase"
                                 value={newBatch.tbl_phase}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, false)}
                               >
-                                <option value="" selected disabled>
+                                <option value="" disabled>
                                   Select Phase
                                 </option>
-                                {isLoadingData ? (
+                                {isLoadingPhases ? (
                                   <option>Loading...</option>
                                 ) : (
-                                  phases.map((phase) => (
-                                    <option key={phase.Id} value={phase.Id}>
-                                      {phase.title}
+                                  phaseList.map((p) => (
+                                    <option key={p.Id} value={p.Id}>
+                                      {p.title}
                                     </option>
                                   ))
                                 )}
@@ -250,20 +289,20 @@ function AssignBatchToTest() {
                             </td>
                             <td>
                               <select
-                                className="form-select"
+                                className="form-select form-select-sm"
                                 name="tbl_batch"
                                 value={newBatch.tbl_batch}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, false)}
                               >
-                                <option value="" selected disabled>
+                                <option value="" disabled>
                                   Select Batch
                                 </option>
-                                {isLoadingData ? (
+                                {isLoadingBatches ? (
                                   <option>Loading...</option>
                                 ) : (
-                                  batches.map((batch) => (
-                                    <option key={batch.id} value={batch.id}>
-                                      {batch.batch_title}
+                                  batchList.map((b) => (
+                                    <option key={b.id} value={b.id}>
+                                      {b.batch_title}
                                     </option>
                                   ))
                                 )}
@@ -272,191 +311,227 @@ function AssignBatchToTest() {
                             <td>
                               <input
                                 type="datetime-local"
-                                className="form-control"
+                                className="form-control form-control-sm"
                                 name="start_date"
                                 value={newBatch.start_date}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, false)}
                               />
                             </td>
                             <td>
                               <input
                                 type="datetime-local"
-                                className="form-control"
+                                className="form-control form-control-sm"
                                 name="end_date"
                                 value={newBatch.end_date}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, false)}
                               />
                             </td>
                             <td>
                               <select
-                                className="form-select"
+                                className="form-select form-select-sm"
                                 name="isFeatured"
                                 value={newBatch.isFeatured}
-                                onChange={handleInputChange}
+                                onChange={(e) => handleInputChange(e, false)}
                               >
-                                <option value={"0"}>No</option>
-                                <option value={"1"}>Yes</option>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
                               </select>
                             </td>
                             <td>
-                              <button
-                                className="btn btn-sm btn-success"
-                                onClick={handleSaveNewBatch}
-                              >
-                                <i className="ph ph-floppy-disk" /> Save
-                              </button>
-                              <button
-                                className="btn btn-sm btn-danger ms-2"
-                                onClick={handleCancelNewBatch}
-                              >
-                                <i className="ph ph-x" /> Cancel
-                              </button>
+                              <div className="flex-align gap-6">
+                                <button
+                                  className="btn btn-sm btn-success rounded-pill"
+                                  onClick={handleSaveNewBatch}
+                                  disabled={assignMutation.isPending}
+                                >
+                                  {assignMutation.isPending ? (
+                                    <span className="spinner-border spinner-border-sm" />
+                                  ) : (
+                                    <>
+                                      <i className="ph ph-floppy-disk me-4" />
+                                      Save
+                                    </>
+                                  )}
+                                </button>
+                                <button
+                                  className="btn btn-sm btn-outline-secondary rounded-pill"
+                                  onClick={() => setNewBatch(null)}
+                                >
+                                  <i className="ph ph-x" />
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         )}
 
-                        {/* Existing Batches */}
+                        {/* ── Existing Assignments ── */}
+                        {batchData.length === 0 && !newBatch && (
+                          <tr>
+                            <td
+                              colSpan={7}
+                              className="text-center text-gray-400 text-13 py-20"
+                            >
+                              No batch assignments yet. Click "Assign Batch" to
+                              add one.
+                            </td>
+                          </tr>
+                        )}
+
                         {batchData.map((batch, index) => (
                           <tr key={batch.assigned_batch_id}>
-                            <td>{index + 1}</td>
+                            <td className="text-13">{index + 1}</td>
 
-                            {/* Edit Mode */}
-                            {editBatch &&
-                            editBatch.assigned_batch_id ===
-                              batch.assigned_batch_id ? (
+                            {editBatch?.assigned_batch_id ===
+                            batch.assigned_batch_id ? (
+                              /* ── Edit Row ── */
                               <>
                                 <td>
                                   <select
-                                    className="form-select"
+                                    className="form-select form-select-sm"
                                     name="tbl_phase"
-                                    value={editBatch.tbl_phase}
-                                    onChange={handleInputChange}
+                                    value={editBatch.tbl_phase || ""}
+                                    onChange={(e) => handleInputChange(e, true)}
                                   >
-                                    <option value="" selected disabled>
+                                    <option value="" disabled>
                                       Select Phase
                                     </option>
-                                    {isLoadingData ? (
-                                      <option>Loading...</option>
-                                    ) : (
-                                      phases.map((phase) => (
-                                        <option key={phase.Id} value={phase.Id}>
-                                          {phase.title}
-                                        </option>
-                                      ))
-                                    )}
+                                    {phaseList.map((p) => (
+                                      <option key={p.Id} value={p.Id}>
+                                        {p.title}
+                                      </option>
+                                    ))}
                                   </select>
                                 </td>
                                 <td>
                                   <select
-                                    className="form-select"
-                                    name="name"
-                                    value={editBatch.name}
-                                    onChange={(e) =>
-                                      handleInputChange(
-                                        e,
-                                        batch.assigned_session_id
-                                      )
-                                    }
+                                    className="form-select form-select-sm"
+                                    name="tbl_batch"
+                                    value={editBatch.tbl_batch || ""}
+                                    onChange={(e) => handleInputChange(e, true)}
                                   >
-                                    <option value="" selected disabled>
+                                    <option value="" disabled>
                                       Select Batch
                                     </option>
-                                    {isLoadingData ? (
-                                      <option>Loading...</option>
-                                    ) : (
-                                      batches.map((batch) => (
-                                        <option key={batch.id} value={batch.id}>
-                                          {batch.batch_title}
-                                        </option>
-                                      ))
-                                    )}
+                                    {batchList.map((b) => (
+                                      <option key={b.id} value={b.id}>
+                                        {b.batch_title}
+                                      </option>
+                                    ))}
                                   </select>
                                 </td>
                                 <td>
                                   <input
                                     type="datetime-local"
-                                    className="form-control"
-                                    name="startDate"
-                                    value={editBatch.startDate}
-                                    onChange={(e) =>
-                                      handleInputChange(
-                                        e,
-                                        batch.assigned_batch_id
-                                      )
-                                    }
+                                    className="form-control form-control-sm"
+                                    name="start_date"
+                                    value={toDatetimeLocal(
+                                      editBatch.start_date,
+                                    )}
+                                    onChange={(e) => handleInputChange(e, true)}
                                   />
                                 </td>
                                 <td>
                                   <input
                                     type="datetime-local"
-                                    className="form-control"
-                                    name="endDate"
-                                    value={editBatch.endDate}
-                                    onChange={(e) =>
-                                      handleInputChange(
-                                        e,
-                                        batch.assigned_batch_id
-                                      )
-                                    }
+                                    className="form-control form-control-sm"
+                                    name="end_date"
+                                    value={toDatetimeLocal(editBatch.end_date)}
+                                    onChange={(e) => handleInputChange(e, true)}
                                   />
                                 </td>
-                                <td>-</td>
                                 <td>
-                                  <button
-                                    className="btn btn-sm btn-success"
-                                    onClick={handleSaveEditBatch}
+                                  <select
+                                    className="form-select form-select-sm"
+                                    name="isFeatured"
+                                    value={editBatch.isFeatured || "0"}
+                                    onChange={(e) => handleInputChange(e, true)}
                                   >
-                                    Save
-                                  </button>
-                                  <button
-                                    className="btn btn-sm btn-secondary ms-2"
-                                    onClick={handleCancelEdit}
-                                  >
-                                    Cancel
-                                  </button>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                  </select>
+                                </td>
+                                <td>
+                                  <div className="flex-align gap-6">
+                                    <button
+                                      className="btn btn-sm btn-success rounded-pill"
+                                      onClick={handleSaveEdit}
+                                      disabled={editMutation.isPending}
+                                    >
+                                      {editMutation.isPending ? (
+                                        <span className="spinner-border spinner-border-sm" />
+                                      ) : (
+                                        <>
+                                          <i className="ph ph-floppy-disk me-4" />
+                                          Save
+                                        </>
+                                      )}
+                                    </button>
+                                    <button
+                                      className="btn btn-sm btn-outline-secondary rounded-pill"
+                                      onClick={() => setEditBatch(null)}
+                                    >
+                                      <i className="ph ph-x" />
+                                    </button>
+                                  </div>
                                 </td>
                               </>
                             ) : (
+                              /* ── View Row ── */
                               <>
-                                <td>{batch.phase_name}</td>
-                                <td>{batch.batch_name}</td>
-                                <td>
-                                  {new Date(batch.start_date).toLocaleString()}
+                                <td className="text-13">
+                                  {batch.phase_name || "—"}
+                                </td>
+                                <td className="text-13">
+                                  {batch.batch_name || "—"}
+                                </td>
+                                <td className="text-13">
+                                  {batch.start_date
+                                    ? new Date(
+                                        batch.start_date,
+                                      ).toLocaleString()
+                                    : "—"}
+                                </td>
+                                <td className="text-13">
+                                  {batch.end_date
+                                    ? new Date(batch.end_date).toLocaleString()
+                                    : "—"}
                                 </td>
                                 <td>
-                                  {new Date(batch.end_date).toLocaleString()}
-                                </td>
-                                <td>
-                                  <div className="form-check form-switch">
+                                  <div className="form-check form-switch mb-0">
                                     <input
                                       className="form-check-input"
                                       type="checkbox"
                                       role="switch"
-                                      name="isFeatured"
-                                      id={`featuredSwitch${batch.assigned_batch_id}`}
                                       checked={batch.isFeatured === "1"}
                                       onChange={() =>
                                         handleToggleFeatured(
-                                          batch.assigned_batch_id
+                                          batch.assigned_batch_id,
                                         )
                                       }
                                     />
-                                    <label
-                                      className="form-check-label"
-                                      htmlFor={`featuredSwitch${batch.assigned_batch_id}`}
-                                    >
+                                    <label className="form-check-label text-13">
                                       {batch.isFeatured === "1" ? "Yes" : "No"}
                                     </label>
                                   </div>
                                 </td>
-
                                 <td>
-                                  <button
-                                    className="btn btn-sm btn-outline-main"
-                                    onClick={() => handleEditBatch(batch)}
-                                  >
-                                    Edit
-                                  </button>
+                                  <div className="flex-align gap-6">
+                                    <button
+                                      className="btn btn-sm btn-info rounded-pill"
+                                      onClick={() => setEditBatch({ ...batch })}
+                                      title="Edit"
+                                    >
+                                      <i className="ph ph-pencil text-14" />
+                                    </button>
+                                    <button
+                                      className="btn btn-sm btn-danger rounded-pill"
+                                      onClick={() => handleDelete(batch)}
+                                      disabled={deleteMutation.isPending}
+                                      title="Remove"
+                                    >
+                                      <i className="ph ph-trash text-14" />
+                                    </button>
+                                  </div>
                                 </td>
                               </>
                             )}
