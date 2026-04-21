@@ -906,3 +906,17 @@ export async function deleteTestBatchAssignment(id) {
     throw error;
   }
 }
+
+//?==================== EDIT SESSION BATCH ASSIGNMENT ====================
+export async function editSessionBatchAssignment(data) {
+  try {
+    const response = await axiosInstance.post(
+      `/admin/editSessionBatchAssignment`,
+      data,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("editSessionBatchAssignment() error", error);
+    throw error;
+  }
+}

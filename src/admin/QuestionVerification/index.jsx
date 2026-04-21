@@ -57,7 +57,7 @@ function QuestionVerification() {
   useEffect(() => {
     if (questions?.data) {
       setAvailableQuestions(questions.data);
-      console.log(availableQuestions);
+      // console.log(availableQuestions);
     }
   }, [questions, availableQuestions]);
 

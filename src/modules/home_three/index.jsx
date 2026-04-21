@@ -30,7 +30,7 @@ function Home() {
   });
 
   if (isError) {
-    console.log(error);
+    // console.log(error);
   }
 
   useEffect(() => {

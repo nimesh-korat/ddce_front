@@ -26,14 +26,14 @@ function AdminVerifyQuestionCard({ questions = [] }) {
     [questions, currentIndex]
   );
 
-  console.log("Current Question:", currentQuestion);
+  // console.log("Current Question:", currentQuestion);
   
 
   const verifyQuestionMutation = useMutation({
     mutationKey: ["verifyQuestion"],
     mutationFn: (data) => verifyQuestion(data),
     onSuccess: () => {
-      console.log("Question verified successfully");
+      // console.log("Question verified successfully");
 
       setShowDropdown(false);
       setShowSubmit(false);
@@ -43,7 +43,7 @@ function AdminVerifyQuestionCard({ questions = [] }) {
         prevIndex + 1 < questions.length ? prevIndex + 1 : prevIndex
       );
     },
-    onError: (error) => console.log("Error verifying question:", error),
+    // onError: (error) => console.log("Error verifying question:", error),
   });
 
   const logAndProceed = (isCorrect) => {

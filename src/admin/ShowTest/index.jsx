@@ -31,7 +31,7 @@ function ShowTests() {
     },
   });
 
-  console.log(quiz);
+  // console.log(quiz);
 
   useEffect(() => {
     if (quiz) {

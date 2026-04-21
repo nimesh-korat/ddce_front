@@ -12,7 +12,7 @@ function Preloader() {
           loop={true}
           autoplay={true}
           onComplete={() => {
-            console.log("anmation");
+            // console.log("anmation");
           }}
           style={{ width: 200, height: 200 }}
         />

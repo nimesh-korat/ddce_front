@@ -29,7 +29,7 @@ function TopicWeightage() {
   }, [data]); // Run only when `data` is updated
 
   if (isError) {
-    console.log(error);
+    // console.log(error);
     return <div>Error loading data</div>;
   }
 

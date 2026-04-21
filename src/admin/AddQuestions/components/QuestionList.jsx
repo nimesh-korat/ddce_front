@@ -8,7 +8,7 @@ function QuestionList({
   editingIndex, // Receiving editingIndex as a prop
 }) {
   const handleEdit = (index) => {
-    console.log("Editing index:", index);
+    // console.log("Editing index:", index);
     onEdit(index); // Call the parent function to edit
   };
 

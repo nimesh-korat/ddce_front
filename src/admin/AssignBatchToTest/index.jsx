@@ -112,6 +112,22 @@ function AssignBatchToTest() {
     });
   };
 
+  const handleOpenEdit = (batch) => {
+    // Map the API field names (batch_id, phase_id) to the form field names
+    // (tbl_batch, tbl_phase) so the selects are correctly pre-filled
+    setEditBatch({
+      assigned_batch_id: batch.assigned_batch_id,
+      tbl_phase: String(batch.phase_id ?? ""),
+      tbl_batch: String(batch.batch_id ?? ""),
+      start_date: batch.start_date,
+      end_date: batch.end_date,
+      isFeatured: batch.isFeatured ?? "0",
+      // Keep display names for reference (not used in form but harmless)
+      phase_name: batch.phase_name,
+      batch_name: batch.batch_name,
+    });
+  };
+
   const handleAddBatch = () =>
     setNewBatch({
       tbl_test: testData.test_id,
@@ -157,6 +173,7 @@ function AssignBatchToTest() {
     }
     editMutation.mutate({
       id: editBatch.assigned_batch_id,
+      tbl_phase: editBatch.tbl_phase,
       tbl_batch: editBatch.tbl_batch,
       tbl_test: testData.test_id,
       start_date: new Date(editBatch.start_date).toISOString(),
@@ -354,7 +371,7 @@ function AssignBatchToTest() {
                                   )}
                                 </button>
                                 <button
-                                  className="btn btn-sm btn-outline-secondary rounded-pill"
+                                  className="btn btn-sm btn-danger rounded-pill"
                                   onClick={() => setNewBatch(null)}
                                 >
                                   <i className="ph ph-x" />
@@ -467,7 +484,7 @@ function AssignBatchToTest() {
                                       )}
                                     </button>
                                     <button
-                                      className="btn btn-sm btn-outline-secondary rounded-pill"
+                                      className="btn btn-sm btn-secondary rounded-pill"
                                       onClick={() => setEditBatch(null)}
                                     >
                                       <i className="ph ph-x" />
@@ -518,7 +535,7 @@ function AssignBatchToTest() {
                                   <div className="flex-align gap-6">
                                     <button
                                       className="btn btn-sm btn-info rounded-pill"
-                                      onClick={() => setEditBatch({ ...batch })}
+                                      onClick={() => handleOpenEdit(batch)}
                                       title="Edit"
                                     >
                                       <i className="ph ph-pencil text-14" />

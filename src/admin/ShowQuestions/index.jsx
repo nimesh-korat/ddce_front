@@ -51,7 +51,7 @@ function ShowQuestions() {
   );
 
   if (isError) {
-    console.log("Error:", error);
+    // console.log("Error:", error);
 
     return (
       <div>

@@ -221,7 +221,7 @@ function Schedule() {
   // ];
 
   if (isError) {
-    console.log(error);
+    // console.log(error);
   }
   // Get the current date and time
   const now = new Date();

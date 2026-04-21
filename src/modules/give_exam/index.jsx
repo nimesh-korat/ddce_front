@@ -124,7 +124,7 @@ function GiveExam() {
     },
     onError: (error) => {
       toast.error("Something went wrong!");
-      console.log("Error:", error);
+      // console.log("Error:", error);
     },
   });
 

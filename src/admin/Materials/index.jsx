@@ -40,7 +40,7 @@ function AdminMaterials() {
 
   const materials = materialsData?.data || [];
   const subjects = subjectsData?.data || [];
-  console.log(subjects);
+  // console.log(subjects);
 
   const addMutation = useMutation({
     mutationFn: (data) => adminAddMaterial(data),
