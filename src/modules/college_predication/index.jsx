@@ -433,7 +433,7 @@ function CollgePredication() {
             <div className="dce-form-header">
               <img
                 src="./assets/images/logo/logo7.png"
-                alt="Unity Logo"
+                alt="ddcet Logo"
                 style={{ width: "90%" }}
               />
               {/* <h3 className="mt-5 mb-0">Possible College Allocation</h3> */}
@@ -445,7 +445,7 @@ function CollgePredication() {
             >
               <div className="dce-form-section">
                 <div className="dce-section-title">
-                  DDCET Merit Rank Based College Allocation Probability (2025)
+                  DDCET Merit Rank Based College Allocation Probability (2026)
                 </div>
                 <div className="row g-3 mb-3">
                   <div className="col-md-6">

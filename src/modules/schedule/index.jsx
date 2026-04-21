@@ -298,7 +298,7 @@ function Schedule() {
               <div className="container mt-5">
                 <h2 className="text-center mb-15">Schedule</h2>
 
-                <div className="row g-20">
+                <div className="row g-20 align-items-stretch">
                   {currentItems.length === 0 ? (
                     <>No Schedule Found.</>
                   ) : (
@@ -319,12 +319,13 @@ function Schedule() {
                       return (
                         <>
                           <div
-                            className={`col-xxl-3 col-lg-4 col-sm-6`}
+                            className="col-xxl-3 col-lg-4 col-sm-6 d-flex"
                             key={schedule.sr_no}
                           >
-                            <div className={`card border border-gray-100 `}>
-                              <div className="card-body p-8">
-                                <div className="p-8">
+                            <div className="card border border-gray-100 h-100 d-flex flex-column w-100">
+                              <div className="card-body p-8 d-flex flex-column h-100">
+                                <div className="p-8 d-flex flex-column h-100">
+                                  {/* Badges */}
                                   <div className="flex-align gap-5 flex-wrap">
                                     <span className="text-13 py-2 px-10 rounded-pill bg-warning-100 text-success-600 mb-8 shadow-sm">
                                       {schedule.for_who}
@@ -339,21 +340,24 @@ function Schedule() {
                                         isActive
                                           ? "bg-primary text-white"
                                           : currentDate > endDate
-                                          ? "bg-danger text-white"
-                                          : "bg-info text-white"
+                                            ? "bg-danger text-white"
+                                            : "bg-info text-white"
                                       } mb-8 shadow-sm`}
                                     >
                                       {isActive
                                         ? "Active"
                                         : currentDate > endDate
-                                        ? "Completed"
-                                        : "Upcoming"}
+                                          ? "Completed"
+                                          : "Upcoming"}
                                     </span>
                                   </div>
 
+                                  {/* Title */}
                                   <h5 className="mb-8">
                                     {schedule.description}
                                   </h5>
+
+                                  {/* Dates */}
                                   <div className="row gap-8">
                                     <div className="flex-align gap-4">
                                       <span className="text-sm text-main-600 d-flex">
@@ -362,10 +366,10 @@ function Schedule() {
                                       <span className="text-13 text-gray-600">
                                         <b>Starts at: </b>{" "}
                                         {formatDateInUserTimezone(
-                                          schedule.start_date
+                                          schedule.start_date,
                                         )}
                                       </span>
-                                    </div>{" "}
+                                    </div>
                                     <div className="flex-align gap-4">
                                       <span className="text-sm text-main-600 d-flex">
                                         <i className="ph ph-clock" />
@@ -373,12 +377,14 @@ function Schedule() {
                                       <span className="text-13 text-gray-600">
                                         <b>Ends at: </b>{" "}
                                         {formatDateInUserTimezone(
-                                          schedule.end_date
+                                          schedule.end_date,
                                         )}
                                       </span>
                                     </div>
                                   </div>
-                                  <div className="flex-between gap-4 flex-wrap mt-20">
+
+                                  {/* Button — always at bottom */}
+                                  <div className="flex-between gap-4 flex-wrap mt-auto pt-20">
                                     {schedule.type === "Test" ? (
                                       <button
                                         onClick={() => {
@@ -389,10 +395,10 @@ function Schedule() {
                                               testStatus === "current"
                                                 ? "/exams#current"
                                                 : testStatus === "completed"
-                                                ? "/exams#completed"
-                                                : testStatus === "upcoming"
-                                                ? "/exams#upcoming"
-                                                : "#";
+                                                  ? "/exams#completed"
+                                                  : testStatus === "upcoming"
+                                                    ? "/exams#upcoming"
+                                                    : "#";
                                             window.location.href = link;
                                           }
                                         }}
@@ -402,12 +408,12 @@ function Schedule() {
                                         {testStatus === "completed"
                                           ? `Test Ended`
                                           : `View Details`}
-                                        {testStatus === "current" ||
-                                          (testStatus === "upcoming" && (
-                                            <span className="d-flex text-xl">
-                                              <i className="ph ph-arrow-right" />
-                                            </span>
-                                          ))}
+                                        {(testStatus === "current" ||
+                                          testStatus === "upcoming") && (
+                                          <span className="d-flex text-xl">
+                                            <i className="ph ph-arrow-right" />
+                                          </span>
+                                        )}
                                       </button>
                                     ) : schedule.type === "Session" ? (
                                       <button
@@ -417,7 +423,7 @@ function Schedule() {
                                           } else {
                                             window.open(
                                               schedule.session_link,
-                                              "_blank"
+                                              "_blank",
                                             );
                                           }
                                         }}

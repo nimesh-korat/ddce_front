@@ -60,12 +60,13 @@ function Header({ toggleSidebar }) {
           </button>
           {/* Toggle Button End */}
           <div className="d-lg-none d-block">
-            <img
+            {/* <img
               className="img-fluid"
               src="../assets/images/logo/logo6.png"
               alt="logo"
               style={{ width: "100%", height: "80px", objectFit: "contain" }}
-            />
+            /> */}
+            <h2>DDCET EXAM</h2>
           </div>
         </div>
         <div className="flex-align gap-16">

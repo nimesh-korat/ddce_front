@@ -38,30 +38,30 @@ function Home() {
   }, []);
 
   const marqueeContent = [
-    {
-      title: "🟰 Mathematics - Integration Material Solution Added",
-    },
-    {
-      title: "⚗️ Physics, English & Environmental Sciences Material Solution Added",
-    },
-    {
-      title: "🧑‍🎓 Combined Quiz 2 Added",
-    },
-    {
-      title: "⚖️ Mathematics - Integration Material Added",
-    },
-    {
-      title: "🌴 Physics, English & Environmental Sciences Material Added",
-    },
-    {
-      title: "📖 Computer Practice, Soft Skill & Chemistry Material Solution Added",
-    },
-    {
-      title: "🌀 Combined Quiz 1 Added",
-    },
-    {
-      title: "🧑‍🎓 Computer Practice, Soft Skill & Chemistry Material Added",
-    },
+    // {
+    //   title: "🟰 Mathematics - Integration Material Solution Added",
+    // },
+    // {
+    //   title: "⚗️ Physics, English & Environmental Sciences Material Solution Added",
+    // },
+    // {
+    //   title: "🧑‍🎓 Combined Quiz 2 Added",
+    // },
+    // {
+    //   title: "⚖️ Mathematics - Integration Material Added",
+    // },
+    // {
+    //   title: "🌴 Physics, English & Environmental Sciences Material Added",
+    // },
+    // {
+    //   title: "📖 Computer Practice, Soft Skill & Chemistry Material Solution Added",
+    // },
+    // {
+    //   title: "🌀 Combined Quiz 1 Added",
+    // },
+    // {
+    //   title: "🧑‍🎓 Computer Practice, Soft Skill & Chemistry Material Added",
+    // },
     // {
     //   title: "⚗️ Metals & Non-Metals Material Solution Added",
     // },

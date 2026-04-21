@@ -30,9 +30,9 @@ function Doubts() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Show SweetAlert2 popup asking for Unity ID
+    // Show SweetAlert2 popup asking for membership ID
     Swal.fire({
-      title: "Enter Unity ID",
+      title: "Enter membership ID",
       input: "text",
       inputAttributes: {
         autocapitalize: "off",
@@ -42,7 +42,7 @@ function Doubts() {
       showLoaderOnConfirm: true,
       preConfirm: async (unityId) => {
         if (!unityId || unityId.trim() === "") {
-          Swal.showValidationMessage("Please enter a Unity ID."); // Error below Submit button
+          Swal.showValidationMessage("Please enter a membership ID."); // Error below Submit button
           return false; // Stops submission
         }
 
@@ -53,7 +53,7 @@ function Doubts() {
             } else {
               Swal.fire({
                 title: "Error!",
-                text: "Invalid Unity ID or ID is not associated with any paid membership.",
+                text: "Invalid membership ID or ID is not associated with any paid membership.",
                 icon: "error",
                 confirmButtonText: "OK",
               });

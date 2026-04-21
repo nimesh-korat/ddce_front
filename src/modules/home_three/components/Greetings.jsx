@@ -16,8 +16,7 @@ function Greetings() {
                   <img src="assets/images/icons/wave-hand.png" alt="" />
                 </h2>
                 <h2 className="fw-medium mb-16 unity-animatted-text">
-                  What do you want to learn today with your <b>Unity</b>{" "}
-                  partner?
+                  What do you want to learn today?
                 </h2>
                 <p className="text-15 text-gray-400">
                   Discover unique questions, track progress, and achieve your

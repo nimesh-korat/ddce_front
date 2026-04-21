@@ -37,7 +37,7 @@ function PredictionResult({ results, onBack, formData }) {
           <div className="dce-form-header">
             <img
               src="./assets/images/logo/logo7.png"
-              alt="Unity Logo"
+              alt="ddcet Logo"
               style={{ width: "90%" }}
             />
           </div>
