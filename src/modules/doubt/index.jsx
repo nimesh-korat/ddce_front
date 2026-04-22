@@ -42,7 +42,7 @@ function Doubts() {
       showLoaderOnConfirm: true,
       preConfirm: async (unityId) => {
         if (!unityId || unityId.trim() === "") {
-          Swal.showValidationMessage("Please enter a membership ID."); // Error below Submit button
+          Swal.showValidationMessage("Please enter a UNITY ID."); // Error below Submit button
           return false; // Stops submission
         }
 

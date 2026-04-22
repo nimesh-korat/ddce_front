@@ -130,7 +130,7 @@ function ForgetPassword() {
           <div className="auth-right__inner mx-auto w-100">
             <Link to="/" className="auth-right__logo">
               {/* <img src="assets/images/logo/logo.png" alt="a" /> */}
-              {/* <UnityLogo /> */}
+              <UnityLogo />
             </Link>
             <h2 className="mb-8">Forgot Password?</h2>
             <p className="text-gray-600 text-15 mb-32">

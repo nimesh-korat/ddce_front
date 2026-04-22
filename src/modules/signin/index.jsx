@@ -75,7 +75,7 @@ function SignIn() {
             <div className="d-flex align-items-center justify-content-center">
               <Link to={"/#"} className="auth-right__logo mb-24">
                 {/* <img src="assets/images/logo/logo.png" alt="" /> */}
-                {/* <UnityLogo /> */}
+                <UnityLogo />
               </Link>
             </div>
             <h2 className="mb-8">Welcome 👋</h2>
