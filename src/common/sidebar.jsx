@@ -81,13 +81,13 @@ function Sidebar({ isActive, closeSidebar }) {
           className="sidebar__logo text-center p-10 position-sticky inset-block-start-0 bg-white w-100 z-1 pb-5"
         >
           {/* <img src="assets/images/logo/logo.png" alt="Logo" /> */}
-          {/* <img
+          <img
             className="w-100 text-center"
             src="./assets/images/logo/logo6.png"
             alt=""
             style={{ width: "100px", height: "80px", objectFit: "cover" }}
-          /> */}
-          <h2>DDCET EXAM</h2>
+          />
+          {/* <h2>DDCET EXAM</h2> */}
         </Link>
         <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
           <div className="p-20 pt-10">
