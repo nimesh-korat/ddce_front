@@ -6,6 +6,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { useQuery } from "@tanstack/react-query";
 import { getUserMaterials } from "../../apis/apis";
 import Preloader from "../../utils/preloader/Preloader";
+import Swal from "sweetalert2";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -53,6 +54,24 @@ function Solutions() {
       (m.material_type && m.material_type.toLowerCase().includes(q))
     );
   });
+
+  // Show SweetAlert2 popup when solution is not yet available
+  const handleLockedSolution = () => {
+    Swal.fire({
+      icon: "info",
+      title: "Solution Not Available Yet",
+      html: `
+        <p style="font-size:15px; color:#555; margin-top:8px;">
+          The solution for this material will be available
+          <strong> on the day of the exam</strong>.
+        </p>
+      
+      `,
+      confirmButtonText: "Got it",
+      confirmButtonColor: "#4f46e5",
+      showCloseButton: true,
+    });
+  };
 
   // ── PDF Viewer logic (unchanged from original) ──────────────
 
@@ -300,9 +319,9 @@ function Solutions() {
                     <div className="card-header border-bottom border-gray-100 flex-between gap-8">
                       <h6 className="mb-0">
                         Materials & Solutions
-                        <span className="text-gray-400 fw-normal text-14 ms-8">
+                        {/* <span className="text-gray-400 fw-normal text-14 ms-8">
                           ({filtered.length})
-                        </span>
+                        </span> */}
                       </h6>
                     </div>
                     <div className="card-body">
@@ -312,12 +331,6 @@ function Solutions() {
                             <div className="payment-method payment-method-two form-check form-radio d-flex align-items-center justify-content-between mb-16 rounded-16 bg-main-50 p-20 cursor-pointer position-relative transition-2">
                               <div className="flex-align align-items-start gap-16 col-12">
                                 <div className="col-12">
-                                  {/* Type badge */}
-                                  {item.material_type && (
-                                    <span className="text-12 bg-main-100 text-main-700 py-2 px-10 rounded-pill fw-medium d-inline-block mb-8">
-                                      {item.material_type}
-                                    </span>
-                                  )}
                                   <h6 className="title mb-0">{item.title}</h6>
                                   {item.description && (
                                     <span className="d-block text-14 text-gray-600 mt-4">
@@ -346,7 +359,7 @@ function Solutions() {
                                       </span>
                                     )}
 
-                                    {/* Solution button — only if visible */}
+                                    {/* Solution button — opens PDF if visible, popup if locked */}
                                     {item.solution_available ? (
                                       <button
                                         onClick={() =>
@@ -361,10 +374,13 @@ function Solutions() {
                                         <i className="ph ph-file-pdf ms-4" />
                                       </button>
                                     ) : (
-                                      <span className="text-gray-400 text-13">
+                                      <button
+                                        onClick={handleLockedSolution}
+                                        className="text-gray-400 hover-text-main-600 btn btn-link p-0"
+                                      >
                                         <i className="ph ph-lock me-4" />
-                                        Solution not yet available
-                                      </span>
+                                        <span>Solution</span>
+                                      </button>
                                     )}
                                   </div>
                                 </div>
