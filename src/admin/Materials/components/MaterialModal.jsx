@@ -139,7 +139,7 @@ function MaterialModal({ material, subjects, onClose, onSubmit, isLoading }) {
             <select className="form-control" {...register("subject_id")}>
               <option value="">— Select Subject (optional) —</option>
               {subjects.map((s) => (
-                <option key={s.id} value={s.id}>
+                <option key={s.Id} value={s.Id}>
                   {s.Sub_Name}
                 </option>
               ))}
@@ -220,7 +220,7 @@ function MaterialModal({ material, subjects, onClose, onSubmit, isLoading }) {
             <button
               type="button"
               onClick={onClose}
-              className="btn btn-outline-secondary rounded-pill py-9 px-20"
+              className="btn btn-secondary rounded-pill py-9 px-20"
               disabled={isLoading}
             >
               Cancel

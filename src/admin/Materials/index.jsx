@@ -316,14 +316,14 @@ function AdminMaterials() {
                               <div className="flex-align gap-8 justify-content-center">
                                 <button
                                   onClick={() => handleOpenEdit(m)}
-                                  className="btn btn-sm btn-outline-info-600 rounded-pill"
+                                  className="btn btn-sm btn-info rounded-pill"
                                   title="Edit"
                                 >
                                   <i className="ph ph-pencil text-14" />
                                 </button>
                                 <button
                                   onClick={() => handleDelete(m.id, m.title)}
-                                  className="btn btn-sm btn-outline-danger rounded-pill"
+                                  className="btn btn-sm btn-danger rounded-pill"
                                   disabled={deleteMutation.isPending}
                                   title="Delete"
                                 >
