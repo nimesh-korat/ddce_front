@@ -70,7 +70,7 @@ function MasteryMatrix() {
                         <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-primary">
-                              {data?.OverallAnalytics?.TotalQuestionsAsked}
+                              {data?.OverallAnalytics?.TotalQuestionsAsked || 0}
                             </p>
                             <p className="mastery-stat-text">Asked</p>
                           </div>
@@ -78,7 +78,7 @@ function MasteryMatrix() {
                         <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-info">
-                              {data?.OverallAnalytics?.TotalAttempted}
+                              {data?.OverallAnalytics?.TotalAttempted || 0}
                             </p>
                             <p className="mastery-stat-text">Attempted</p>
                           </div>
@@ -86,7 +86,7 @@ function MasteryMatrix() {
                         <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-success">
-                              {data?.OverallAnalytics?.TotalCorrect}
+                              {data?.OverallAnalytics?.TotalCorrect || 0}
                             </p>
                             <p className="mastery-stat-text">Correct</p>
                           </div>
@@ -94,7 +94,7 @@ function MasteryMatrix() {
                         <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-danger">
-                              {data?.OverallAnalytics?.TotalIncorrect}
+                              {data?.OverallAnalytics?.TotalIncorrect || 0}
                             </p>
                             <p className="mastery-stat-text">Incorrect</p>
                           </div>
@@ -102,7 +102,7 @@ function MasteryMatrix() {
                         <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-warning">
-                              {data?.OverallAnalytics?.TotalSkipped}
+                              {data?.OverallAnalytics?.TotalSkipped || 0}
                             </p>
                             <p className="mastery-stat-text">Skipped</p>
                           </div>
@@ -110,7 +110,7 @@ function MasteryMatrix() {
                         <div className="col-6 col-md-4 col-lg-2 mb-8">
                           <div className="mastery-stat-box">
                             <p className="mastery-stat-number text-success">
-                              {data?.OverallAnalytics?.Accuracy}%
+                              {data?.OverallAnalytics?.Accuracy || 0}%
                             </p>
                             <p className="mastery-stat-text">Accuracy</p>
                           </div>
