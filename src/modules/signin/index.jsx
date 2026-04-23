@@ -147,7 +147,7 @@ function SignIn() {
               <button type="submit" className="btn btn-main rounded-pill w-100">
                 Sign In
               </button>
-              {/* <p className="mt-32 text-gray-600 text-center">
+              <p className="mt-32 text-gray-600 text-center">
                 New on our platform? &nbsp;
                 <Link
                   to={"/signup"}
@@ -155,7 +155,7 @@ function SignIn() {
                 >
                   Create an account
                 </Link>
-              </p> */}
+              </p>
               {/* <div className="divider my-32 position-relative text-center">
                 <span className="divider__text text-gray-600 text-13 fw-medium px-26 bg-white">
                   or
