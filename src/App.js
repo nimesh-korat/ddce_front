@@ -181,14 +181,14 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* <Route
+          <Route
             path="/signup"
             element={
               <PrivateRoute>
                 <Signup />
               </PrivateRoute>
             }
-          /> */}
+          />
 
           <Route
             path="/forget_password"
