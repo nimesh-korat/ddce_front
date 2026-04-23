@@ -165,12 +165,6 @@ function Home() {
     //   title: "😎 Soft Skill Grammer Material Solution Added",
     // },
     // {
-    //   title: "⭐ Soft Skill Grammer Material Added",
-    // },
-    // {
-    //   title: "🌀 Soft Skill Grammer Quiz Added",
-    // },
-    // {
     //   title: "🧑‍🎓 Soft Skill Material Solution Added",
     // },
     // {
@@ -191,12 +185,18 @@ function Home() {
     // {
     //   title: "⚖️ Classical Mechanics Practice Set Solution Added",
     // },
-    // {
-    //   title: "🏋️‍♂️ Classical Mechanics Practice Set Added",
-    // },
-    // {
-    //   title: "🌀 Classical Mechanics Quiz Added",
-    // },
+    {
+      title: "⭐ Soft Skill Grammer Material Added",
+    },
+    {
+      title: "🌀 Soft Skill Grammer Quiz Added",
+    },
+    {
+      title: "🏋️‍♂️ Classical Mechanics Practice Set Added",
+    },
+    {
+      title: "🌀 Classical Mechanics Quiz Added",
+    },
   ];
 
   return (
