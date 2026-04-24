@@ -156,22 +156,10 @@ function Home() {
     //   title: "⚖️ Logarithm & Statistics Material Solution Added",
     // },
     // {
-    //   title: "⚡ Logarithm & Statistics Material Added",
-    // },
-    // {
-    //   title: "➗ Logarithm & Statistics Quiz Added",
-    // },
-    // {
     //   title: "😎 Soft Skill Grammer Material Solution Added",
     // },
     // {
     //   title: "🧑‍🎓 Soft Skill Material Solution Added",
-    // },
-    // {
-    //   title: "📖 New Soft Skill Material Added",
-    // },
-    // {
-    //   title: "🗣️ Soft Skill - Word & Sentence Quiz Added",
     // },
     // {
     //   title: "🛠️ Electric Current Practice Set Solution Added",
@@ -185,6 +173,18 @@ function Home() {
     // {
     //   title: "⚖️ Classical Mechanics Practice Set Solution Added",
     // },
+    {
+      title: "⚡ Logarithm & Statistics Material Added",
+    },
+    {
+      title: "➗ Logarithm & Statistics Quiz Added",
+    },
+    {
+      title: "📖 Soft Skill - Word & Sentence Material Added",
+    },
+    {
+      title: "🗣️ Soft Skill - Word & Sentence Quiz Added",
+    },
     {
       title: "⭐ Soft Skill Grammer Material Added",
     },
