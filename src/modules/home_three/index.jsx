@@ -129,12 +129,6 @@ function Home() {
     //   title: "👨‍💻 Computer Practice Material Solution Added",
     // },
     // {
-    //   title: "⌨️ Computer Practice Quiz Added",
-    // },
-    // {
-    //   title: "💻 Computer Practice Material Added",
-    // },
-    // {
     //   title: "⚡ Chemistry - Acids, Bases & Salts Material Solution Added",
     // },
     // {
@@ -152,27 +146,30 @@ function Home() {
     // {
     //   title: "🗣️ Determinant & Matrices Quiz Added",
     // },
-    // {
-    //   title: "⚖️ Logarithm & Statistics Material Solution Added",
-    // },
-    // {
-    //   title: "😎 Soft Skill Grammer Material Solution Added",
-    // },
-    // {
-    //   title: "🧑‍🎓 Soft Skill Material Solution Added",
-    // },
-    // {
-    //   title: "🛠️ Electric Current Practice Set Solution Added",
-    // },
-    // {
-    //   title: "⚡ Electric Current Practice Set Added",
-    // },
-    // {
-    //   title: "🔌 Electric Current Quiz Added",
-    // },
-    // {
-    //   title: "⚖️ Classical Mechanics Practice Set Solution Added",
-    // },
+    {
+      title: "😎 Soft Skill Grammer Material Solution Added",
+    },
+    {
+      title: "🧑‍🎓 Soft Skill Material Solution Added",
+    },
+    {
+      title: "🛠️ Electric Current Practice Set Solution Added",
+    },
+    {
+      title: "⚡ Electric Current Practice Set Added",
+    },
+    {
+      title: "🔌 Electric Current Quiz Added",
+    },
+    {
+      title: "⚖️ Classical Mechanics Practice Set Solution Added",
+    },
+    {
+      title: "⌨️ Computer Practice Quiz Added",
+    },
+    {
+      title: "💻 Computer Practice Material Added",
+    },
     {
       title: "⚡ Logarithm & Statistics Material Added",
     },
@@ -185,18 +182,18 @@ function Home() {
     {
       title: "🗣️ Soft Skill - Word & Sentence Quiz Added",
     },
-    {
-      title: "⭐ Soft Skill Grammer Material Added",
-    },
-    {
-      title: "🌀 Soft Skill Grammer Quiz Added",
-    },
-    {
-      title: "🏋️‍♂️ Classical Mechanics Practice Set Added",
-    },
-    {
-      title: "🌀 Classical Mechanics Quiz Added",
-    },
+    // {
+    //   title: "⭐ Soft Skill Grammer Material Added",
+    // },
+    // {
+    //   title: "🌀 Soft Skill Grammer Quiz Added",
+    // },
+    // {
+    //   title: "🏋️‍♂️ Classical Mechanics Practice Set Added",
+    // },
+    // {
+    //   title: "🌀 Classical Mechanics Quiz Added",
+    // },
   ];
 
   return (
