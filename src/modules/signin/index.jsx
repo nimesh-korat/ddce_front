@@ -136,14 +136,14 @@ function SignIn() {
                   </span>
                 </div>
               </div>
-              <div className="mb-32 flex-between flex-wrap gap-8 justify-content-end">
+              {/* <div className="mb-32 flex-between flex-wrap gap-8 justify-content-end">
                 <Link
                   to="/forget_password"
                   className="text-main-600 hover-text-decoration-underline text-15 fw-medium"
                 >
                   Forgot Password?
                 </Link>
-              </div>
+              </div> */}
               <button type="submit" className="btn btn-main rounded-pill w-100">
                 Sign In
               </button>
