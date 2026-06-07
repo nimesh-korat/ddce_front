@@ -393,6 +393,17 @@ export async function adminLogin(data) {
   }
 }
 
+//?==================== MENTOR LOGIN API ====================
+export async function mentorLogin(data) {
+  try {
+    const response = await axiosInstance.post(`/mentor/login`, data);
+    return response.data;
+  } catch (error) {
+    console.log("mentorLogin() Err: ", error);
+    throw error;
+  }
+}
+
 //?==================== ADD QUESTIONS API ====================
 export async function adminAddQuestions(data) {
   try {
@@ -481,6 +492,7 @@ export async function addTestQuestions(data) {
 export async function getAllBatch() {
   try {
     const response = await axiosInstance.get(`/admin/getAllBatch`);
+
     return response.data.data;
   } catch (error) {
     console.error("getAllBatch() error", error);
@@ -917,6 +929,153 @@ export async function editSessionBatchAssignment(data) {
     return response.data;
   } catch (error) {
     console.error("editSessionBatchAssignment() error", error);
+    throw error;
+  }
+}
+
+//?==================== MENTOR — QUESTIONS ====================
+export async function mentorAddQuestion(data) {
+  try {
+    const response = await axiosInstance.post(`/mentor/addQuestion`, data);
+    return response.data;
+  } catch (error) {
+    console.error("mentorAddQuestion() error", error);
+    throw error;
+  }
+}
+
+export async function mentorGetQuestions(params) {
+  try {
+    const response = await axiosInstance.get(`/mentor/questions`, { params });
+    return response.data;
+  } catch (error) {
+    console.error("mentorGetQuestions() error", error);
+    throw error;
+  }
+}
+
+export async function mentorUpdateQuestion(id, data) {
+  try {
+    const response = await axiosInstance.put(`/mentor/questions/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("mentorUpdateQuestion() error", error);
+    throw error;
+  }
+}
+
+export async function mentorDeleteQuestion(id) {
+  try {
+    const response = await axiosInstance.delete(`/mentor/questions/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("mentorDeleteQuestion() error", error);
+    throw error;
+  }
+}
+
+//?==================== PRACTICE — ADMIN/MENTOR SIDE ====================
+export async function createPracticeAssignment(data) {
+  try {
+    const response = await axiosInstance.post(`/practice/assign`, data);
+    return response.data;
+  } catch (error) {
+    console.error("createPracticeAssignment() error", error);
+    throw error;
+  }
+}
+
+export async function getMyPracticeAssignments() {
+  try {
+    const response = await axiosInstance.get(`/practice/assignments`);
+    return response.data;
+  } catch (error) {
+    console.error("getMyPracticeAssignments() error", error);
+    throw error;
+  }
+}
+
+export async function deletePracticeAssignment(id) {
+  try {
+    const response = await axiosInstance.delete(`/practice/assignments/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("deletePracticeAssignment() error", error);
+    throw error;
+  }
+}
+
+export async function getQuestionsForPractice(params) {
+  try {
+    const response = await axiosInstance.get(`/practice/questions-pool`, {
+      params,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("getQuestionsForPractice() error", error);
+    throw error;
+  }
+}
+
+export async function getMentorsList() {
+  try {
+    const response = await axiosInstance.get(`/practice/mentors`);
+    return response.data;
+  } catch (error) {
+    console.error("getMentorsList() error", error);
+    throw error;
+  }
+}
+
+//?==================== PRACTICE — STUDENT SIDE ====================
+export async function getNextPracticeQuestion(params) {
+  try {
+    const response = await axiosInstance.get(`/practice/next`, { params });
+    return response.data;
+  } catch (error) {
+    console.error("getNextPracticeQuestion() error", error);
+    throw error;
+  }
+}
+
+export async function submitPracticeAnswer(data) {
+  try {
+    const response = await axiosInstance.post(`/practice/answer`, data);
+    return response.data;
+  } catch (error) {
+    console.error("submitPracticeAnswer() error", error);
+    throw error;
+  }
+}
+
+export async function getWrongPracticeAnswers(params) {
+  try {
+    const response = await axiosInstance.get(`/practice/wrong`, { params });
+    return response.data;
+  } catch (error) {
+    console.error("getWrongPracticeAnswers() error", error);
+    throw error;
+  }
+}
+
+export async function getPracticeStats() {
+  try {
+    const response = await axiosInstance.get(`/practice/stats`);
+    return response.data;
+  } catch (error) {
+    console.error("getPracticeStats() error", error);
+    throw error;
+  }
+}
+
+export async function getPracticeAccuracy(mode = "merged") {
+  try {
+    const response = await axiosInstance.get(`/practice/accuracy`, {
+      params: { mode },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("getPracticeAccuracy() error", error);
     throw error;
   }
 }

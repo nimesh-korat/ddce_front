@@ -42,6 +42,14 @@ import StudentWiseExamData from "./admin/StudentWiseExamData";
 import CollgePredication from "./modules/college_predication";
 import AdminDashboard from "./admin/Dashboard";
 import AdminMaterials from "./admin/Materials";
+import MentorLogin from "./mentor/login";
+import MentorRoutes from "./utils/MentorRoutes";
+import MentorDashboard from "./mentor/Dashboard";
+import MentorAddQuestion from "./mentor/AddQuestions";
+import MentorShowQuestions from "./mentor/ShowQuestions";
+import AssignPractice from "./mentor/AssignPractice";
+import MyAssignments from "./mentor/MyAssignments";
+import Practice from "./modules/practice";
 
 function App() {
   return (
@@ -171,7 +179,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           {/* Protect signin and signup routes */}
           <Route
             path="/signin"
@@ -181,15 +188,14 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/signup"
             element={
               <PrivateRoute>
                 <Signup />
-              </PrivateRoute>
+              </PrivateRoute>`
             }
-          />
-
+          /> */}
           <Route
             path="/forget_password"
             element={
@@ -211,7 +217,6 @@ function App() {
             element={<TwoStepVerification />}
           /> */}
           {/* <Route path="/live_class" element={<LiveClass />} /> */}
-
           {/* Admin Routes */}
           <Route
             path="/admin/login"
@@ -219,6 +224,89 @@ function App() {
               <PrivateRoute>
                 <AdminLogin />
               </PrivateRoute>
+            }
+          />{" "}
+          <Route
+            path="/mentor/login"
+            element={
+              <PrivateRoute>
+                <MentorLogin />
+              </PrivateRoute>
+            }
+          />
+          {/* ── Mentor Routes ── */}
+          <Route
+            path="/mentor/dashboard"
+            element={
+              <MentorRoutes>
+                <MentorDashboard />
+              </MentorRoutes>
+            }
+          />
+          <Route
+            path="/mentor/addQuestion"
+            element={
+              <MentorRoutes>
+                <MentorAddQuestion />
+              </MentorRoutes>
+            }
+          />
+          <Route
+            path="/mentor/showQuestions"
+            element={
+              <MentorRoutes>
+                <MentorShowQuestions />
+              </MentorRoutes>
+            }
+          />
+          <Route
+            path="/mentor/assignPractice"
+            element={
+              <MentorRoutes>
+                <AssignPractice
+                  Sidebar={require("./common/MentorSidebar").default}
+                  basePath="/mentor"
+                  headerText="Assign Practice"
+                />
+              </MentorRoutes>
+            }
+          />
+          <Route
+            path="/mentor/myAssignments"
+            element={
+              <MentorRoutes>
+                <MyAssignments />
+              </MentorRoutes>
+            }
+          />
+          {/* ── Admin Practice Routes ── */}
+          <Route
+            path="/admin/assignPractice"
+            element={
+              <AdminRoutes>
+                <AssignPractice
+                  Sidebar={require("./common/AdminSidebar").default}
+                  basePath="/admin"
+                  headerText="Assign Practice (Admin)"
+                />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/practiceAssignments"
+            element={
+              <AdminRoutes>
+                <MyAssignments />
+              </AdminRoutes>
+            }
+          />
+          {/* ── Student Practice Route ── */}
+          <Route
+            path="/practice"
+            element={
+              <ProtectedRoute>
+                <Practice />
+              </ProtectedRoute>
             }
           />
           <Route
@@ -350,7 +438,6 @@ function App() {
             }
           />
           <Route path="/college-prediction" element={<CollgePredication />} />
-
           <Route path="*" element={<Error404 />} />
         </Routes>
       </BrowserRouter>

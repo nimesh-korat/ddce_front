@@ -16,7 +16,11 @@ function AdminDashboard() {
   const toggleSidebar = () => setIsSidebarActive((prev) => !prev);
   const closeSidebar = () => setIsSidebarActive(false);
 
-  const { data: stats, isLoading, isError } = useQuery({
+  const {
+    data: stats,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["adminDashboardStats"],
     queryFn: getAdminDashboardStats,
     staleTime: 2 * 60 * 1000,
@@ -25,16 +29,16 @@ function AdminDashboard() {
   const d = stats?.data;
 
   const difficultyLabel = (key) => {
-    const map = { "0": "Easy", "1": "Medium", "2": "Hard", "3": "Time Consuming" };
+    const map = { 0: "Easy", 1: "Medium", 2: "Hard", 3: "Time Consuming" };
     return map[key] || key;
   };
 
   const difficultyColor = (key) => {
     const map = {
-      "0": "bg-success-50 text-success-600",
-      "1": "bg-info-50 text-info-600",
-      "2": "bg-warning-50 text-warning-600",
-      "3": "bg-danger-50 text-danger-600",
+      0: "bg-success-50 text-success-600",
+      1: "bg-info-50 text-info-600",
+      2: "bg-warning-50 text-warning-600",
+      3: "bg-danger-50 text-danger-600",
     };
     return map[key] || "bg-gray-50 text-gray-600";
   };
@@ -113,7 +117,7 @@ function AdminDashboard() {
                 label="Total Batches"
                 value={d?.total_batches ?? 0}
                 color="bg-purple-600"
-                link="/admin/assignBatch"
+                link="/admin/showBatches"
               />
               <StatCard
                 icon="ph-video-camera"
@@ -150,7 +154,7 @@ function AdminDashboard() {
                       <div className="d-flex flex-column gap-12">
                         {d.monthly_registrations.map((item, i) => {
                           const maxCount = Math.max(
-                            ...d.monthly_registrations.map((m) => m.count)
+                            ...d.monthly_registrations.map((m) => m.count),
                           );
                           const pct = maxCount
                             ? Math.round((item.count / maxCount) * 100)
@@ -179,7 +183,9 @@ function AdminDashboard() {
                         })}
                       </div>
                     ) : (
-                      <p className="text-gray-400 text-14">No registration data yet.</p>
+                      <p className="text-gray-400 text-14">
+                        No registration data yet.
+                      </p>
                     )}
                   </div>
                 </div>
@@ -208,11 +214,21 @@ function AdminDashboard() {
                       <table className="table table-sm">
                         <thead>
                           <tr>
-                            <th className="text-13 text-gray-500 fw-medium">#</th>
-                            <th className="text-13 text-gray-500 fw-medium">Name</th>
-                            <th className="text-13 text-gray-500 fw-medium">Phone</th>
-                            <th className="text-13 text-gray-500 fw-medium">College</th>
-                            <th className="text-13 text-gray-500 fw-medium">Registered</th>
+                            <th className="text-13 text-gray-500 fw-medium">
+                              #
+                            </th>
+                            <th className="text-13 text-gray-500 fw-medium">
+                              Name
+                            </th>
+                            <th className="text-13 text-gray-500 fw-medium">
+                              Phone
+                            </th>
+                            <th className="text-13 text-gray-500 fw-medium">
+                              College
+                            </th>
+                            <th className="text-13 text-gray-500 fw-medium">
+                              Registered
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -220,14 +236,18 @@ function AdminDashboard() {
                             d.recent_users.map((user, i) => (
                               <tr key={i}>
                                 <td className="text-13">{i + 1}</td>
-                                <td className="text-13 fw-medium">{user.Name}</td>
+                                <td className="text-13 fw-medium">
+                                  {user.Name}
+                                </td>
                                 <td className="text-13">{user.Phone_Number}</td>
-                                <td className="text-13">{user.College_Name || "—"}</td>
+                                <td className="text-13">
+                                  {user.College_Name || "—"}
+                                </td>
                                 <td className="text-13 text-gray-500">
                                   {user.registration_time
                                     ? format(
                                         new Date(user.registration_time),
-                                        "dd MMM yyyy"
+                                        "dd MMM yyyy",
                                       )
                                     : "—"}
                                 </td>
@@ -235,7 +255,10 @@ function AdminDashboard() {
                             ))
                           ) : (
                             <tr>
-                              <td colSpan={5} className="text-center text-gray-400 text-13">
+                              <td
+                                colSpan={5}
+                                className="text-center text-gray-400 text-13"
+                              >
                                 No recent registrations.
                               </td>
                             </tr>
@@ -264,7 +287,7 @@ function AdminDashboard() {
                           >
                             <span
                               className={`text-13 py-2 px-12 rounded-pill fw-medium ${difficultyColor(
-                                item.question_difficulty
+                                item.question_difficulty,
                               )}`}
                             >
                               {difficultyLabel(item.question_difficulty)}
@@ -276,7 +299,9 @@ function AdminDashboard() {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-gray-400 text-14">No question data yet.</p>
+                      <p className="text-gray-400 text-14">
+                        No question data yet.
+                      </p>
                     )}
                   </div>
                 </div>

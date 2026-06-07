@@ -307,6 +307,17 @@ function Sidebar({ isActive, closeSidebar }) {
                   <span className="text">Materials & Solutions</span>
                 </Link>
               </li>
+              <li className="sidebar-menu__item">
+                <Link
+                  to="/practice"
+                  className="sidebar-menu__link d-flex align-items-center"
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-barbell" />
+                  </span>
+                  <span className="text">Practice</span>
+                </Link>
+              </li>
               <li
                 className={`sidebar-menu__item  ${
                   activeItem === "doubts" ? "activePage" : ""

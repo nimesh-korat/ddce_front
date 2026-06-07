@@ -41,6 +41,12 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/viewStudentWiseGivenExamData":
         setActiveItem("Student Wise Given Exam Data");
         break;
+      case "/admin/assignPractice":
+        setActiveItem("Assign Practice");
+        break;
+      case "/admin/practiceAssignments":
+        setActiveItem("Practice Assignments");
+        break;
 
       default:
         setActiveItem("");
@@ -209,6 +215,32 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-blueprint" />
                   </span>
                   <span className="text">Student Wise Given Exam Data</span>
+                </Link>
+              </li>
+
+              {/* Practice — Admin */}
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Assign Practice" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/assignPractice" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-barbell" />
+                  </span>
+                  <span className="text">Assign Practice</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Practice Assignments" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/practiceAssignments" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-clipboard-text" />
+                  </span>
+                  <span className="text">Practice Assignments</span>
                 </Link>
               </li>
               {/* <li

@@ -388,7 +388,7 @@ function CollgePredication() {
         <meta property="og:type" content="website" />
         <meta
           property="og:url"
-          content="https://unityexams.com/college-prediction"
+          content="https://aim2rank.com/college-prediction"
         />
         <meta
           property="og:title"
@@ -400,7 +400,7 @@ function CollgePredication() {
         />
         <meta
           property="og:image"
-          content="https://unityexams.com/path-to-your-preview-image.jpg"
+          content="https://aim2rank.com/path-to-your-preview-image.jpg"
         />
       </Helmet> */}
 
