@@ -1,9 +1,9 @@
 // import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./modules/home_three";
-import Students from "./modules/students";
+// import Students from "./modules/students";
 import SignIn from "./modules/signin";
-import Signup from "./modules/signup";
+// import Signup from "./modules/signup";
 import ForgetPassword from "./modules/forget_password";
 import ResetPassword from "./modules/reset_password";
 import { ToastContainer } from "react-toastify";
@@ -29,7 +29,7 @@ import Analytics from "./modules/analytics";
 import StudentQuizDetails from "./modules/exams/components/StudentQuizDetails";
 import MasteryMatrix from "./modules/accuracy_matrix";
 import ViewQuizQuestions from "./admin/ViewQuizQuestion";
-import Pricing from "./modules/pricing";
+// import Pricing from "./modules/pricing";
 import Doubts from "./modules/doubt";
 import Schedule from "./modules/schedule";
 import AssignBatchToTest from "./admin/AssignBatchToTest";
@@ -69,14 +69,14 @@ function App() {
           <Route path="/home3" element={<Home />} />*/}
           <Route path="/schedule" element={<Schedule />} />
           {/* <Route path="/mentor_course" element={<StudentCourse />} />  */}
-          <Route
+          {/* <Route
             path="/students"
             element={
               <ProtectedRoute>
                 <Students />
               </ProtectedRoute>
             }
-          />
+          /> */}
           <Route
             path="/exams"
             element={
@@ -155,14 +155,14 @@ function App() {
           <Route path="/messages" element={<Messages />} />
           <Route path="/events" element={<Events />} />
           <Route path="/library" element={<Library />} />*/}
-          <Route
+          {/* <Route
             path="/pricing"
             element={
               <ProtectedRoute>
                 <Pricing />
               </ProtectedRoute>
             }
-          />
+          /> */}
           <Route
             path="/profile"
             element={

@@ -4,13 +4,25 @@ import Preloader from "../../../utils/preloader/Preloader";
 
 const mathConfig = {
   tex2jax: {
-    inlineMath: [["$", "$"], ["\\(", "\\)"]],
-    displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+    inlineMath: [
+      ["$", "$"],
+      ["\\(", "\\)"],
+    ],
+    displayMath: [
+      ["$$", "$$"],
+      ["\\[", "\\]"],
+    ],
   },
   messageStyle: "none",
 };
 
-function WrongAnswers({ data, isLoading, subjects, subjectFilter, setSubjectFilter }) {
+function WrongAnswers({
+  data,
+  isLoading,
+  subjects,
+  subjectFilter,
+  setSubjectFilter,
+}) {
   if (isLoading) return <Preloader />;
 
   if (data.length === 0) {
@@ -39,7 +51,8 @@ function WrongAnswers({ data, isLoading, subjects, subjectFilter, setSubjectFilt
   const getOptionStyle = (opt, q) => {
     const value = opt.text || opt.image;
     if (value === q.correct_answer) return "border-success-600 bg-success-50";
-    if (value === q.std_answer && value !== q.correct_answer) return "border-danger-600 bg-danger-50";
+    if (value === q.std_answer && value !== q.correct_answer)
+      return "border-danger-600 bg-danger-50";
     return "border-gray-100 bg-gray-50";
   };
 
@@ -56,20 +69,23 @@ function WrongAnswers({ data, isLoading, subjects, subjectFilter, setSubjectFilt
   return (
     <MathJaxContext config={mathConfig}>
       <div className="d-flex flex-column gap-16">
-        <div className="flex-between flex-wrap gap-8">
+        <div className="flex-between flex-wrap gap-8 col-sm-6 col-lg-2">
           <p className="text-14 text-gray-600 mb-0">
-            <strong>{data.length}</strong> wrong answer{data.length !== 1 ? "s" : ""}
+            <strong>{data.length}</strong> wrong answer
+            {data.length !== 1 ? "s" : ""}
           </p>
           {/* Subject filter within wrong answers */}
           <select
-            className="form-control form-control-sm rounded-pill"
+            className="form-control form-control-sm rounded-pill "
             style={{ minWidth: "160px" }}
             value={subjectFilter}
             onChange={(e) => setSubjectFilter(e.target.value)}
           >
             <option value="">All Subjects</option>
             {subjects.map((s) => (
-              <option key={s.Id} value={s.Id}>{s.Sub_Name}</option>
+              <option key={s.Id} value={s.Id}>
+                {s.Sub_Name}
+              </option>
             ))}
           </select>
         </div>
@@ -83,18 +99,18 @@ function WrongAnswers({ data, isLoading, subjects, subjectFilter, setSubjectFilt
                   <span className="w-28 h-28 rounded-circle bg-danger-600 text-white d-flex align-items-center justify-content-center text-13 fw-semibold flex-shrink-0">
                     {i + 1}
                   </span>
-                  {q.subject_name && (
+                  {/* {q.subject_name && (
                     <span className="text-12 bg-main-50 text-main-600 py-2 px-10 rounded-pill fw-medium">
                       {q.subject_name}
                     </span>
-                  )}
-                  {q.question_difficulty && (
+                  )} */}
+                  {/* {q.question_difficulty && (
                     <span className={`text-12 py-2 px-10 rounded-pill fw-medium ${diffBadge(q.question_difficulty)}`}>
                       {q.question_difficulty}
                     </span>
-                  )}
+                  )} */}
                 </div>
-                <span className="text-12 text-gray-400">{q.assignment_title}</span>
+                {/* <span className="text-12 text-gray-400">{q.assignment_title}</span> */}
               </div>
 
               {/* Question text */}
@@ -103,8 +119,15 @@ function WrongAnswers({ data, isLoading, subjects, subjectFilter, setSubjectFilt
                   <MathJax inline>{q.question_text}</MathJax>
                 </p>
                 {q.question_image && (
-                  <img src={q.question_image} alt="question"
-                    style={{ maxHeight: "180px", objectFit: "contain", borderRadius: "8px" }} />
+                  <img
+                    src={q.question_image}
+                    alt="question"
+                    style={{
+                      maxHeight: "180px",
+                      objectFit: "contain",
+                      borderRadius: "8px",
+                    }}
+                  />
                 )}
               </div>
 
@@ -115,35 +138,50 @@ function WrongAnswers({ data, isLoading, subjects, subjectFilter, setSubjectFilt
                   if (!value) return null;
                   const style = getOptionStyle(opt, q);
                   const isCorrect = value === q.correct_answer;
-                  const isWrong = value === q.std_answer && value !== q.correct_answer;
+                  const isWrong =
+                    value === q.std_answer && value !== q.correct_answer;
 
                   return (
-                    <div key={opt.label}
+                    <div
+                      key={opt.label}
                       className={`d-flex align-items-center gap-12 p-12 rounded-10 border-2 ${style}`}
                       style={{ border: "2px solid" }}
                     >
-                      <span className={`w-28 h-28 rounded-circle d-flex align-items-center justify-content-center fw-semibold text-13 flex-shrink-0 ${
-                        isCorrect ? "bg-success-600 text-white"
-                        : isWrong ? "bg-danger-600 text-white"
-                        : "bg-gray-100 text-gray-700"
-                      }`}>
+                      <span
+                        className={`w-28 h-28 rounded-circle d-flex align-items-center justify-content-center fw-semibold text-13 flex-shrink-0 ${
+                          isCorrect
+                            ? "bg-success-600 text-white"
+                            : isWrong
+                              ? "bg-danger-600 text-white"
+                              : "bg-gray-100 text-gray-700"
+                        }`}
+                      >
                         {opt.label}
                       </span>
                       <span className="flex-grow-1 text-14">
                         {opt.text && <MathJax inline>{opt.text}</MathJax>}
                         {opt.image && (
-                          <img src={opt.image} alt={opt.label}
-                            style={{ maxHeight: "70px", objectFit: "contain", display: "block" }} />
+                          <img
+                            src={opt.image}
+                            alt={opt.label}
+                            style={{
+                              maxHeight: "70px",
+                              objectFit: "contain",
+                              display: "block",
+                            }}
+                          />
                         )}
                       </span>
                       {isCorrect && (
                         <span className="flex-align gap-4 text-success-700 text-12 fw-semibold flex-shrink-0">
-                          <i className="ph-fill ph-check-circle text-16" />Correct
+                          <i className="ph-fill ph-check-circle text-16" />
+                          Correct
                         </span>
                       )}
                       {isWrong && (
                         <span className="flex-align gap-4 text-danger-700 text-12 fw-semibold flex-shrink-0">
-                          <i className="ph-fill ph-x-circle text-16" />Your Answer
+                          <i className="ph-fill ph-x-circle text-16" />
+                          Your Answer
                         </span>
                       )}
                     </div>
@@ -155,8 +193,7 @@ function WrongAnswers({ data, isLoading, subjects, subjectFilter, setSubjectFilt
               <div className="p-10 bg-success-50 rounded-8 border border-success-200">
                 <span className="text-13 fw-semibold text-success-700">
                   <i className="ph ph-check-circle me-6" />
-                  Correct Answer:{" "}
-                  <MathJax inline>{q.correct_answer}</MathJax>
+                  Correct Answer: <MathJax inline>{q.correct_answer}</MathJax>
                 </span>
               </div>
             </div>

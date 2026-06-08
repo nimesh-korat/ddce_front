@@ -356,12 +356,22 @@ function Sidebar({ isActive, closeSidebar }) {
                   activeItem === "Student" ? "activePage" : ""
                 }`}
               >
-                <Link to="/students" className="sidebar-menu__link">
+                <p
+                  to="/students"
+                  className="sidebar-menu__link position-relative "
+                >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-users-three" />
                   </span>
                   <span className="text">Students</span>
-                </Link>
+                  <i
+                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
+                    style={{
+                      fontSize: "18px",
+                      color: "#B0B0B0",
+                    }}
+                  />
+                </p>
               </li>
 
               <li className="sidebar-menu__item ">
@@ -388,22 +398,22 @@ function Sidebar({ isActive, closeSidebar }) {
                   activeItem === "pricing" ? "activePage" : ""
                 }`}
               >
-                <Link
+                <p
                   to="/pricing"
-                  className="sidebar-menu__link d-flex align-items-center"
+                  className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-tag" />
                   </span>
                   <span className="text">Pricing</span>
                   <i
-                    className="position-absolute top-50 end-0 translate-middle-y"
+                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
                     style={{
                       fontSize: "18px",
                       color: "#B0B0B0",
                     }}
                   />
-                </Link>
+                </p>
               </li>
               <li className="sidebar-menu__item ">
                 <span className="text-gray-300 text-sm px-20 pt-20 fw-semibold border-top border-gray-100 d-block text-uppercase">

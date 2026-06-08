@@ -135,7 +135,7 @@ function Practice() {
               </ul>
             </div>
             {/* Subject filter */}
-            <div className="flex-align gap-8">
+            {/* <div className="flex-align gap-8">
               <select
                 className="form-control form-control-sm rounded-pill"
                 style={{ minWidth: "160px" }}
@@ -153,7 +153,7 @@ function Practice() {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
 
           {/* Stats bar
@@ -215,11 +215,11 @@ function Practice() {
             >
               <i className="ph ph-x-circle me-6 text-danger-600" />
               Wrong Answers
-              {stats?.totals?.wrong > 0 && (
+              {/* {stats?.totals?.wrong > 0 && (
                 <span className="ms-6 text-12 bg-danger-600 text-white rounded-pill px-8 py-2">
                   {stats.totals.wrong}
                 </span>
-              )}
+              )} */}
             </button>
           </div>
 
@@ -244,14 +244,14 @@ function Practice() {
                         : "Check your wrong answers to review what you missed."}
                     </p>
                     <div className="flex-align gap-12 justify-content-center">
-                      {subjectFilter && (
+                      {/* {subjectFilter && (
                         <button
                           className="btn btn-outline-main rounded-pill py-9"
                           onClick={() => setSubjectFilter("")}
                         >
                           All Subjects
                         </button>
-                      )}
+                      )} */}
                       <button
                         className="btn btn-main rounded-pill py-9"
                         onClick={() => setActiveTab("wrong")}

@@ -3,8 +3,14 @@ import { MathJax, MathJaxContext } from "better-react-mathjax";
 
 const mathConfig = {
   tex2jax: {
-    inlineMath: [["$", "$"], ["\\(", "\\)"]],
-    displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+    inlineMath: [
+      ["$", "$"],
+      ["\\(", "\\)"],
+    ],
+    displayMath: [
+      ["$$", "$$"],
+      ["\\[", "\\]"],
+    ],
   },
   messageStyle: "none",
 };
@@ -23,10 +29,26 @@ function PracticeQuestion({
   const correctAnswer = answerResult?.correct_answer;
 
   const options = [
-    { label: "A", text: question.option_a_text, image: question.option_a_image },
-    { label: "B", text: question.option_b_text, image: question.option_b_image },
-    { label: "C", text: question.option_c_text, image: question.option_c_image },
-    { label: "D", text: question.option_d_text, image: question.option_d_image },
+    {
+      label: "A",
+      text: question.option_a_text,
+      image: question.option_a_image,
+    },
+    {
+      label: "B",
+      text: question.option_b_text,
+      image: question.option_b_image,
+    },
+    {
+      label: "C",
+      text: question.option_c_text,
+      image: question.option_c_image,
+    },
+    {
+      label: "D",
+      text: question.option_d_text,
+      image: question.option_d_image,
+    },
   ];
 
   const getOptionStyle = (opt) => {
@@ -59,7 +81,7 @@ function PracticeQuestion({
       <div className="card border border-gray-100 shadow-sm">
         <div className="card-body p-28">
           {/* Question header */}
-          <div className="flex-between mb-16">
+          {/* <div className="flex-between mb-16">
             <div className="flex-align gap-8">
               {question.subject_name && (
                 <span className="text-12 bg-main-50 text-main-600 py-2 px-10 rounded-pill fw-medium">
@@ -75,14 +97,22 @@ function PracticeQuestion({
             <span className="text-12 text-gray-400 fw-medium">
               {question.assignment_title}
             </span>
-          </div>
+          </div> */}
 
           {/* After-submit feedback banner */}
           {answered && (
-            <div className={`p-12 rounded-10 mb-20 flex-align gap-10 ${isCorrect ? "bg-success-50 border border-success-200" : "bg-danger-50 border border-danger-200"}`}>
-              <i className={`ph text-20 ${isCorrect ? "ph-check-circle text-success-600" : "ph-x-circle text-danger-600"}`} />
-              <span className={`fw-semibold text-15 ${isCorrect ? "text-success-700" : "text-danger-700"}`}>
-                {isCorrect ? "Correct! Well done." : "Incorrect. See the correct answer highlighted below."}
+            <div
+              className={`p-12 rounded-10 mb-20 flex-align gap-10 ${isCorrect ? "bg-success-50 border border-success-200" : "bg-danger-50 border border-danger-200"}`}
+            >
+              <i
+                className={`ph text-20 ${isCorrect ? "ph-check-circle text-success-600" : "ph-x-circle text-danger-600"}`}
+              />
+              <span
+                className={`fw-semibold text-15 ${isCorrect ? "text-success-700" : "text-danger-700"}`}
+              >
+                {isCorrect
+                  ? "Correct! Well done."
+                  : "Incorrect. Don't worry, review the correct answer."}
               </span>
             </div>
           )}
@@ -96,7 +126,12 @@ function PracticeQuestion({
               <img
                 src={question.question_image}
                 alt="question"
-                style={{ maxHeight: "220px", objectFit: "contain", borderRadius: "10px", marginTop: "8px" }}
+                style={{
+                  maxHeight: "220px",
+                  objectFit: "contain",
+                  borderRadius: "10px",
+                  marginTop: "8px",
+                }}
               />
             )}
           </div>
@@ -109,7 +144,10 @@ function PracticeQuestion({
               const style = getOptionStyle(opt);
               const isSelectedOpt = selectedAnswer === value;
               const isCorrectOpt = answered && value === correctAnswer;
-              const isWrongOpt = answered && value === answerResult?.std_answer && value !== correctAnswer;
+              const isWrongOpt =
+                answered &&
+                value === answerResult?.std_answer &&
+                value !== correctAnswer;
 
               return (
                 <button
@@ -120,12 +158,17 @@ function PracticeQuestion({
                   style={{ border: "2px solid", background: "none" }}
                 >
                   {/* Option letter circle */}
-                  <span className={`w-32 h-32 rounded-circle d-flex align-items-center justify-content-center fw-semibold text-14 flex-shrink-0 ${
-                    isCorrectOpt ? "bg-success-600 text-white"
-                    : isWrongOpt ? "bg-danger-600 text-white"
-                    : isSelectedOpt && !answered ? "bg-main-600 text-white"
-                    : "bg-gray-100 text-gray-700"
-                  }`}>
+                  <span
+                    className={`w-32 h-32 rounded-circle d-flex align-items-center justify-content-center fw-semibold text-14 flex-shrink-0 ${
+                      isCorrectOpt
+                        ? "bg-success-600 text-white"
+                        : isWrongOpt
+                          ? "bg-danger-600 text-white"
+                          : isSelectedOpt && !answered
+                            ? "bg-main-600 text-white"
+                            : "bg-gray-100 text-gray-700"
+                    }`}
+                  >
                     {opt.label}
                   </span>
 
@@ -133,14 +176,26 @@ function PracticeQuestion({
                   <span className="flex-grow-1 text-14 fw-medium">
                     {opt.text && <MathJax inline>{opt.text}</MathJax>}
                     {opt.image && (
-                      <img src={opt.image} alt={`option-${opt.label}`}
-                        style={{ maxHeight: "80px", objectFit: "contain", display: "block", marginTop: "4px" }} />
+                      <img
+                        src={opt.image}
+                        alt={`option-${opt.label}`}
+                        style={{
+                          maxHeight: "80px",
+                          objectFit: "contain",
+                          display: "block",
+                          marginTop: "4px",
+                        }}
+                      />
                     )}
                   </span>
 
                   {/* Result icon */}
-                  {answered && isCorrectOpt && <i className="ph-fill ph-check-circle text-success-600 text-20 flex-shrink-0" />}
-                  {answered && isWrongOpt && <i className="ph-fill ph-x-circle text-danger-600 text-20 flex-shrink-0" />}
+                  {answered && isCorrectOpt && (
+                    <i className="ph-fill ph-check-circle text-success-600 text-20 flex-shrink-0" />
+                  )}
+                  {answered && isWrongOpt && (
+                    <i className="ph-fill ph-x-circle text-danger-600 text-20 flex-shrink-0" />
+                  )}
                 </button>
               );
             })}
@@ -164,9 +219,15 @@ function PracticeQuestion({
                   disabled={!selectedAnswer || isSubmitting}
                 >
                   {isSubmitting ? (
-                    <><span className="spinner-border spinner-border-sm me-6" />Submitting...</>
+                    <>
+                      <span className="spinner-border spinner-border-sm me-6" />
+                      Submitting...
+                    </>
                   ) : (
-                    <><i className="ph ph-paper-plane-tilt" />Submit</>
+                    <>
+                      <i className="ph ph-paper-plane-tilt" />
+                      Submit
+                    </>
                   )}
                 </button>
               ) : (
@@ -174,7 +235,7 @@ function PracticeQuestion({
                   className="btn btn-main rounded-pill py-10 px-32 flex-align gap-8"
                   onClick={onNext}
                 >
-                  Next Question <i className="ph ph-arrow-right" />
+                  Select Options <i className="ph ph-arrow-right" />
                 </button>
               )}
             </div>

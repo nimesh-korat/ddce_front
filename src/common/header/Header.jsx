@@ -72,7 +72,7 @@ function Header({ toggleSidebar }) {
         <div className="flex-align gap-16">
           <div className="flex-align gap-8">
             {/* Notification Start */}
-            <Notification />
+            {/* <Notification /> */}
             {/* Notification Start */}
             {/* Language Start */}
             {/* <div className="dropdown">
