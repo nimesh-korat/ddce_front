@@ -120,7 +120,9 @@ function PracticeQuestion({
           {/* Question text */}
           <div className="mb-20">
             <h6 className="fw-medium text-gray-800 text-16 mb-12 lh-base">
-              <MathJax inline>{question.question_text}</MathJax>
+              <MathJax dynamic inline>
+                {question.question_text}
+              </MathJax>
             </h6>
             {question.question_image && (
               <img
@@ -174,7 +176,11 @@ function PracticeQuestion({
 
                   {/* Option content */}
                   <span className="flex-grow-1 text-14 fw-medium">
-                    {opt.text && <MathJax inline>{opt.text}</MathJax>}
+                    {opt.text && (
+                      <MathJax dynamic inline>
+                        {opt.text}
+                      </MathJax>
+                    )}
                     {opt.image && (
                       <img
                         src={opt.image}
