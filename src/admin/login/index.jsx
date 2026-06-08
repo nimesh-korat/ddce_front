@@ -148,7 +148,7 @@ function AdminLogin() {
               <button
                 type="submit"
                 className="btn btn-main rounded-pill w-100 mt-10"
-                disabled={!captcha}
+                // disabled={!captcha}
               >
                 Sign In
               </button>
