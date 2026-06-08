@@ -209,14 +209,14 @@ function PracticeQuestion({
 
           {/* Action buttons */}
           <div className="flex-between">
-            <div>
+            {/* <div>
               {!answered && (
                 <p className="text-13 text-gray-400 mb-0">
                   <i className="ph ph-info me-4" />
                   Select an option and click Submit
                 </p>
               )}
-            </div>
+            </div> */}
             <div className="flex-align gap-12">
               {!answered ? (
                 <button
