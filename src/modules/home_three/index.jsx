@@ -107,7 +107,6 @@ function Home() {
     // {
     //   title: "🌳 Environmental Sciences Quiz Added",
     // },
-
     // {
     //   title: "👨‍💻 Computer Practice Material Solution Added",
     // },
@@ -132,33 +131,33 @@ function Home() {
     //{
     //   title: "📖 Classical Mechanics Material Solution Added",
     // },
-    {
-      title: "⚖️ Classical Mechanics Quiz Added",
-    },
-    {
-      title: "⚡ Classical Mechanics Material Added",
-    },
-    {
-      title: "⚖️ Trigonometry Material Solution Added",
-    },
-    {
-      title: "🟰 Trigonometry Quiz Added",
-    },
-    {
-      title: "⚡ Trigonometry Material Added",
-    },
-    {
-      title: "😎 Soft Skill Grammer Material Solution Added",
-    },
-    {
-      title: "🧑‍🎓 Soft Skill Material Solution Added",
-    },
-    {
-      title: "🛠️ Electric Current Practice Set Solution Added",
-    },
-    {
-      title: "⚡ Electric Current Practice Set Added",
-    },
+    // {
+    //   title: "⚖️ Classical Mechanics Quiz Added",
+    // },
+    // {
+    //   title: "⚡ Classical Mechanics Material Added",
+    // },
+    // {
+    //   title: "⚖️ Trigonometry Material Solution Added",
+    // },
+    // {
+    //   title: "🟰 Trigonometry Quiz Added",
+    // },
+    // {
+    //   title: "⚡ Trigonometry Material Added",
+    // },
+    // {
+    //   title: "😎 Soft Skill Grammer Material Solution Added",
+    // },
+    // {
+    //   title: "🧑‍🎓 Soft Skill Material Solution Added",
+    // },
+    // {
+    //   title: "🛠️ Electric Current Practice Set Solution Added",
+    // },
+    // {
+    //   title: "⚡ Electric Current Practice Set Added",
+    // },
     // {
     //   title: "🔌 Electric Current Quiz Added",
     // },
@@ -237,21 +236,23 @@ function Home() {
                     bgColor={"bg-main-two-600 "}
                     img="ph-fill ph-graduation-cap"
                     title="Offline Students"
-                    count="200"
+                    count="48"
                     isLocked={false}
                   />
                   <HomeWidgets
                     bgColor={"bg-purple-600"}
                     img="ph-fill ph-users-four"
                     title="Online Students"
-                    count={data?.data?.total_users || 0}
+                    // count={data?.data?.total_users || 0}
+                    count={0}
                     isLocked={false}
                   />
                   <HomeWidgets
                     bgColor="bg-warning-600 "
                     img="ph-fill ph-certificate"
                     title="Quiz Completed"
-                    count={data?.data?.total_completed_quizzes || 0}
+                    // count={data?.data?.total_completed_quizzes || 0}
+                    count={0}
                     isLocked={false}
                   />
                 </div>
