@@ -75,7 +75,7 @@ function WrongAnswers({
             {data.length !== 1 ? "s" : ""}
           </p>
           {/* Subject filter within wrong answers */}
-          <select
+          {/* <select
             className="form-control form-control-sm rounded-pill "
             style={{ minWidth: "160px" }}
             value={subjectFilter}
@@ -87,7 +87,7 @@ function WrongAnswers({
                 {s.Sub_Name}
               </option>
             ))}
-          </select>
+          </select> */}
         </div>
 
         {data.map((q, i) => (
