@@ -144,48 +144,20 @@ function Sidebar({ isActive, closeSidebar }) {
               >
                 <Link
                   to="/schedule"
-                  className="sidebar-menu__link d-flex align-items-center"
+                  className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-calendar-dots" />
                   </span>
                   <span className="text">Schedule</span>
+                  <i
+                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
+                    style={{
+                      fontSize: "18px",
+                      color: "#B0B0B0",
+                    }}
+                  />
                 </Link>
-
-                {/* Submenu start */}
-                <ul
-                  className="sidebar-submenu"
-                  id="courses"
-                  style={{ display: openMenu === "menu2" ? "block" : "none" }}
-                >
-                  <li
-                    className={`sidebar-submenu__item ${
-                      activeItem === "student_course" ? "activePage" : ""
-                    }`}
-                  >
-                    <p to="/student_course" className="sidebar-submenu__link">
-                      Student Courses
-                    </p>
-                  </li>
-                  <li
-                    className={`sidebar-submenu__item ${
-                      activeItem === "mentor_course" ? "activePage" : ""
-                    }`}
-                  >
-                    <p to="/mentor_course" className="sidebar-submenu__link">
-                      Mentor Courses
-                    </p>
-                  </li>
-                  <li className="sidebar-submenu__item">
-                    <p
-                      to="/create-course.html"
-                      className="sidebar-submenu__link"
-                    >
-                      Create Course
-                    </p>
-                  </li>
-                </ul>
-                {/* Submenu End */}
               </li>
               <li
                 className={`sidebar-menu__item has-dropdown  ${
@@ -299,12 +271,19 @@ function Sidebar({ isActive, closeSidebar }) {
               <li className="sidebar-menu__item">
                 <Link
                   to="/solutions"
-                  className="sidebar-menu__link d-flex align-items-center"
+                  className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-folder-open" />
                   </span>
                   <span className="text">Materials & Solutions</span>
+                  <i
+                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
+                    style={{
+                      fontSize: "18px",
+                      color: "#B0B0B0",
+                    }}
+                  />
                 </Link>
               </li>
               <li className="sidebar-menu__item">
