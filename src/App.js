@@ -31,12 +31,12 @@ import MasteryMatrix from "./modules/accuracy_matrix";
 import ViewQuizQuestions from "./admin/ViewQuizQuestion";
 // import Pricing from "./modules/pricing";
 import Doubts from "./modules/doubt";
-import Schedule from "./modules/schedule";
+// import Schedule from "./modules/schedule";
 import AssignBatchToTest from "./admin/AssignBatchToTest";
 import AddSession from "./admin/AddSessions";
 import ShowSession from "./admin/ShowSession";
 import AssignSessionToBatch from "./admin/AssignSessionToBatch";
-import Solutions from "./modules/solutions";
+// import Solutions from "./modules/solutions";
 import ViewGivenExamData from "./admin/ViewGivenExamData";
 import StudentWiseExamData from "./admin/StudentWiseExamData";
 import CollgePredication from "./modules/college_predication";
@@ -67,7 +67,7 @@ function App() {
           />
           {/* <Route path="/home2" element={<HomeTwo />} />
           <Route path="/home3" element={<Home />} />*/}
-          <Route path="/schedule" element={<Schedule />} />
+          {/* <Route path="/schedule" element={<Schedule />} /> */}
           {/* <Route path="/mentor_course" element={<StudentCourse />} />  */}
           {/* <Route
             path="/students"
@@ -142,14 +142,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/solutions"
             element={
               <ProtectedRoute>
                 <Solutions />
               </ProtectedRoute>
             }
-          />
+          /> */}
           {/* <Route path="/mentors" element={<Mentor />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/messages" element={<Messages />} />

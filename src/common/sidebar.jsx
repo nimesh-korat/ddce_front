@@ -142,7 +142,7 @@ function Sidebar({ isActive, closeSidebar }) {
                 }`}
                 // onClick={() => toggleMenu("menu2")}
               >
-                <Link
+                <p
                   to="/schedule"
                   className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
@@ -157,7 +157,7 @@ function Sidebar({ isActive, closeSidebar }) {
                       color: "#B0B0B0",
                     }}
                   />
-                </Link>
+                </p>
               </li>
               <li
                 className={`sidebar-menu__item has-dropdown  ${
@@ -269,7 +269,7 @@ function Sidebar({ isActive, closeSidebar }) {
                 </p>
               </li>
               <li className="sidebar-menu__item">
-                <Link
+                <p
                   to="/solutions"
                   className="sidebar-menu__link d-flex align-items-center position-relative"
                 >
@@ -284,7 +284,7 @@ function Sidebar({ isActive, closeSidebar }) {
                       color: "#B0B0B0",
                     }}
                   />
-                </Link>
+                </p>
               </li>
               <li className="sidebar-menu__item">
                 <Link
