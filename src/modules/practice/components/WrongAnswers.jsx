@@ -116,7 +116,9 @@ function WrongAnswers({
               {/* Question text */}
               <div className="mb-16">
                 <p className="fw-medium text-15 text-gray-800 mb-8 lh-base">
-                  <MathJax inline>{q.question_text}</MathJax>
+                  <MathJax dynamic inline>
+                    {q.question_text}
+                  </MathJax>
                 </p>
                 {q.question_image && (
                   <img
@@ -159,7 +161,11 @@ function WrongAnswers({
                         {opt.label}
                       </span>
                       <span className="flex-grow-1 text-14">
-                        {opt.text && <MathJax inline>{opt.text}</MathJax>}
+                        {opt.text && (
+                          <MathJax dynamic inline>
+                            {opt.text}
+                          </MathJax>
+                        )}
                         {opt.image && (
                           <img
                             src={opt.image}
@@ -193,7 +199,10 @@ function WrongAnswers({
               <div className="p-10 bg-success-50 rounded-8 border border-success-200">
                 <span className="text-13 fw-semibold text-success-700">
                   <i className="ph ph-check-circle me-6" />
-                  Correct Answer: <MathJax inline>{q.correct_answer}</MathJax>
+                  Correct Answer:{" "}
+                  <MathJax dynamic inline>
+                    {q.correct_answer}
+                  </MathJax>
                 </span>
               </div>
             </div>

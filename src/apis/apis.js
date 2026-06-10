@@ -492,7 +492,6 @@ export async function addTestQuestions(data) {
 export async function getAllBatch() {
   try {
     const response = await axiosInstance.get(`/admin/getAllBatch`);
-
     return response.data.data;
   } catch (error) {
     console.error("getAllBatch() error", error);
@@ -1028,9 +1027,21 @@ export async function getMentorsList() {
 }
 
 //?==================== PRACTICE — STUDENT SIDE ====================
-export async function getNextPracticeQuestion(params) {
+export async function getStudentPracticeSets() {
   try {
-    const response = await axiosInstance.get(`/practice/next`, { params });
+    const response = await axiosInstance.get(`/practice/sets`);
+    return response.data;
+  } catch (error) {
+    console.error("getStudentPracticeSets() error", error);
+    throw error;
+  }
+}
+
+export async function getNextPracticeQuestion(practice_assigned_id) {
+  try {
+    const response = await axiosInstance.get(`/practice/next`, {
+      params: { practice_assigned_id },
+    });
     return response.data;
   } catch (error) {
     console.error("getNextPracticeQuestion() error", error);
@@ -1048,9 +1059,11 @@ export async function submitPracticeAnswer(data) {
   }
 }
 
-export async function getWrongPracticeAnswers(params) {
+export async function getWrongPracticeAnswers(practice_assigned_id) {
   try {
-    const response = await axiosInstance.get(`/practice/wrong`, { params });
+    const response = await axiosInstance.get(`/practice/wrong`, {
+      params: { practice_assigned_id },
+    });
     return response.data;
   } catch (error) {
     console.error("getWrongPracticeAnswers() error", error);
@@ -1076,6 +1089,52 @@ export async function getPracticeAccuracy(mode = "merged") {
     return response.data;
   } catch (error) {
     console.error("getPracticeAccuracy() error", error);
+    throw error;
+  }
+}
+
+//?==================== PRACTICE — BATCH ASSIGNMENTS ====================
+export async function assignPracticeToBatch(data) {
+  try {
+    const response = await axiosInstance.post(`/practice/batch-assign`, data);
+    return response.data;
+  } catch (error) {
+    console.error("assignPracticeToBatch() error", error);
+    throw error;
+  }
+}
+
+export async function editPracticeBatchAssignment(id, data) {
+  try {
+    const response = await axiosInstance.put(
+      `/practice/batch-assign/${id}`,
+      data,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("editPracticeBatchAssignment() error", error);
+    throw error;
+  }
+}
+
+export async function togglePracticeVisibility(id) {
+  try {
+    const response = await axiosInstance.put(
+      `/practice/batch-assign/${id}/toggle`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("togglePracticeVisibility() error", error);
+    throw error;
+  }
+}
+
+export async function deletePracticeBatchAssignment(id) {
+  try {
+    const response = await axiosInstance.delete(`/practice/batch-assign/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("deletePracticeBatchAssignment() error", error);
     throw error;
   }
 }
