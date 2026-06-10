@@ -196,7 +196,7 @@ function WrongAnswers({
               </div>
 
               {/* Correct answer summary */}
-              <div className="p-10 bg-success-50 rounded-8 border border-success-200">
+              {/* <div className="p-10 bg-success-50 rounded-8 border border-success-200">
                 <span className="text-13 fw-semibold text-success-700">
                   <i className="ph ph-check-circle me-6" />
                   Correct Answer:{" "}
@@ -204,7 +204,7 @@ function WrongAnswers({
                     {q.correct_answer}
                   </MathJax>
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
         ))}
