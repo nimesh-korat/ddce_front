@@ -1120,7 +1120,7 @@ export async function editPracticeBatchAssignment(id, data) {
 export async function togglePracticeVisibility(id) {
   try {
     const response = await axiosInstance.put(
-      `/practice/batch-assign/${id}/toggle`,
+      `/practice/batch-assign/${id}/toggle-visible`,
     );
     return response.data;
   } catch (error) {
@@ -1135,6 +1135,84 @@ export async function deletePracticeBatchAssignment(id) {
     return response.data;
   } catch (error) {
     console.error("deletePracticeBatchAssignment() error", error);
+    throw error;
+  }
+}
+
+//?==================== PRACTICE MASTER — CRUD ====================
+export async function createPractice(data) {
+  try {
+    const response = await axiosInstance.post(`/practice`, data);
+    return response.data;
+  } catch (error) {
+    console.error("createPractice() error", error);
+    throw error;
+  }
+}
+
+export async function getPractices() {
+  try {
+    const response = await axiosInstance.get(`/practice/list`);
+    return response.data;
+  } catch (error) {
+    console.error("getPractices() error", error);
+    throw error;
+  }
+}
+
+export async function updatePractice(id, data) {
+  try {
+    const response = await axiosInstance.put(`/practice/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("updatePractice() error", error);
+    throw error;
+  }
+}
+
+export async function deletePractice(id) {
+  try {
+    const response = await axiosInstance.delete(`/practice/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("deletePractice() error", error);
+    throw error;
+  }
+}
+
+export async function addQuestionsToPractice(id, data) {
+  try {
+    const response = await axiosInstance.post(
+      `/practice/${id}/questions`,
+      data,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("addQuestionsToPractice() error", error);
+    throw error;
+  }
+}
+
+export async function removeQuestionFromPractice(practiceId, questionId) {
+  try {
+    const response = await axiosInstance.delete(
+      `/practice/${practiceId}/questions/${questionId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("removeQuestionFromPractice() error", error);
+    throw error;
+  }
+}
+
+export async function togglePracticeFeatured(id) {
+  try {
+    const response = await axiosInstance.put(
+      `/practice/batch-assign/${id}/toggle-featured`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("togglePracticeFeatured() error", error);
     throw error;
   }
 }

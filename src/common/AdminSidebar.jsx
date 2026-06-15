@@ -224,11 +224,14 @@ function AdminSidebar({ isActive, closeSidebar }) {
                   activeItem === "Assign Practice" ? "activePage" : ""
                 } `}
               >
-                <Link to="/admin/assignPractice" className="sidebar-menu__link ">
+                <Link
+                  to="/admin/assignPractice"
+                  className="sidebar-menu__link "
+                >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-barbell" />
                   </span>
-                  <span className="text">Assign Practice</span>
+                  <span className="text">Manage Practice</span>
                 </Link>
               </li>
               <li
@@ -236,7 +239,10 @@ function AdminSidebar({ isActive, closeSidebar }) {
                   activeItem === "Practice Assignments" ? "activePage" : ""
                 } `}
               >
-                <Link to="/admin/practiceAssignments" className="sidebar-menu__link ">
+                <Link
+                  to="/admin/practiceAssignments"
+                  className="sidebar-menu__link "
+                >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-clipboard-text" />
                   </span>

@@ -45,18 +45,18 @@ function Practice() {
     isLoading: questionLoading,
     refetch: refetchQuestion,
   } = useQuery({
-    queryKey: ["nextPracticeQuestion", activeSet?.id],
-    queryFn: () => getNextPracticeQuestion(activeSet?.id),
-    enabled: view === "attempt" && !!activeSet?.id,
+    queryKey: ["nextPracticeQuestion", activeSet?.batch_assignment_id],
+    queryFn: () => getNextPracticeQuestion(activeSet?.batch_assignment_id),
+    enabled: view === "attempt" && !!activeSet?.batch_assignment_id,
     staleTime: 0,
     refetchOnWindowFocus: false,
   });
 
   // ── Wrong answers (only active when in wrong view) ──────────
   const { data: wrongData, isLoading: wrongLoading } = useQuery({
-    queryKey: ["wrongPracticeAnswers", activeSet?.id],
-    queryFn: () => getWrongPracticeAnswers(activeSet?.id),
-    enabled: view === "wrong" && !!activeSet?.id,
+    queryKey: ["wrongPracticeAnswers", activeSet?.batch_assignment_id],
+    queryFn: () => getWrongPracticeAnswers(activeSet?.batch_assignment_id),
+    enabled: view === "wrong" && !!activeSet?.batch_assignment_id,
     staleTime: 30 * 1000,
   });
 
