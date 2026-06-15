@@ -236,7 +236,7 @@ function Home() {
                     bgColor={"bg-main-two-600 "}
                     img="ph-fill ph-graduation-cap"
                     title="Offline Students"
-                    count="48"
+                    count="68"
                     isLocked={false}
                   />
                   <HomeWidgets
