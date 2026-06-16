@@ -85,12 +85,12 @@ function PracticeSetCard({ set, onAttempt, onViewWrong }) {
             >
               {title}
             </h6>
-            {assigned_by_name && (
+            {/* {assigned_by_name && (
               <p className="text-12 text-gray-400 mb-0 flex-align gap-4">
                 <i className="ph ph-user-circle text-14" />
                 {assigned_by_name}
               </p>
-            )}
+            )} */}
           </div>
           {/* Status badge */}
           <span
