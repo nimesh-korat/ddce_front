@@ -70,8 +70,8 @@ function WrongAnswers({
           <div key={q.answer_id} className="card border border-danger-100">
             <div className="card-body p-24">
               {/* ── Number + question text on same line ── */}
-              <div className="d-flex align-items-start gap-12 mb-16">
-                <span className="w-28 h-28 rounded-circle bg-danger-600 text-white d-flex align-items-center justify-content-center text-13 fw-semibold flex-shrink-0 mt-2">
+              <div className="d-flex align-items-center gap-12 mb-16">
+                <span className="w-28 h-28 rounded-circle bg-danger-600 text-white d-flex align-items-center justify-content-center text-13 fw-semibold flex-shrink-0">
                   {i + 1}
                 </span>
                 <div className="flex-grow-1">
