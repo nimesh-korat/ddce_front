@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer";
@@ -65,12 +65,23 @@ function Practice() {
     mutationFn: (data) => submitPracticeAnswer(data),
     onSuccess: (res) => {
       setAnswerResult(res.data);
-      queryClient.invalidateQueries(["studentPracticeSets"]);
     },
     onError: (err) => {
       toast.error(err?.response?.data?.message || "Failed to submit answer");
     },
   });
+
+  // ── After answerResult is cleared, fetch the next question ──
+  useEffect(() => {
+    if (
+      answerResult === null &&
+      view === "attempt" &&
+      activeSet?.batch_assignment_id
+    ) {
+      refetchQuestion();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answerResult]);
 
   // ── Handlers ────────────────────────────────────────────────
   const handleAttempt = (set) => {
@@ -110,7 +121,7 @@ function Practice() {
   const handleNext = () => {
     setSelectedAnswer(null);
     setAnswerResult(null);
-    refetchQuestion();
+    // refetchQuestion fires via useEffect once answerResult becomes null
   };
 
   const sets = setsData?.data.reverse() || [];

@@ -241,7 +241,7 @@ function PracticeQuestion({
                   className="btn btn-main rounded-pill py-10 px-32 flex-align gap-8"
                   onClick={onNext}
                 >
-                  Select Options <i className="ph ph-arrow-right" />
+                  Next Question <i className="ph ph-arrow-right" />
                 </button>
               )}
             </div>
