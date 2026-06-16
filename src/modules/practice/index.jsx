@@ -331,7 +331,7 @@ function Practice() {
                 </div>
                 {viewingSet?.wrong > 0 && (
                   <button
-                    className="btn btn-sm btn-outline-danger rounded-pill flex-align gap-6"
+                    className="btn btn-sm btn-danger rounded-pill flex-align gap-6"
                     onClick={() => handleViewWrong(viewingSet)}
                   >
                     <i className="ph ph-x-circle text-14" />
