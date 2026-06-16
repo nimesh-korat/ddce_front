@@ -56,16 +56,6 @@ function WrongAnswers({
     return "border-gray-100 bg-gray-50";
   };
 
-  const diffBadge = (d) => {
-    const map = {
-      Easy: "bg-success-50 text-success-600",
-      Medium: "bg-info-50 text-info-600",
-      Hard: "bg-warning-50 text-warning-600",
-      "Time Consuming": "bg-danger-50 text-danger-600",
-    };
-    return map[d] || "bg-gray-50 text-gray-500";
-  };
-
   return (
     <MathJaxContext config={mathConfig}>
       <div className="d-flex flex-column gap-16">
@@ -74,66 +64,37 @@ function WrongAnswers({
             <strong>{data.length}</strong> wrong answer
             {data.length !== 1 ? "s" : ""}
           </p>
-          {/* Subject filter within wrong answers */}
-          {/* <select
-            className="form-control form-control-sm rounded-pill "
-            style={{ minWidth: "160px" }}
-            value={subjectFilter}
-            onChange={(e) => setSubjectFilter(e.target.value)}
-          >
-            <option value="">All Subjects</option>
-            {subjects.map((s) => (
-              <option key={s.Id} value={s.Id}>
-                {s.Sub_Name}
-              </option>
-            ))}
-          </select> */}
         </div>
 
         {data.map((q, i) => (
           <div key={q.answer_id} className="card border border-danger-100">
             <div className="card-body p-24">
-              {/* Header */}
-              <div className="flex-between mb-14">
-                <div className="flex-align gap-8">
-                  <span className="w-28 h-28 rounded-circle bg-danger-600 text-white d-flex align-items-center justify-content-center text-13 fw-semibold flex-shrink-0">
-                    {i + 1}
-                  </span>
-                  {/* {q.subject_name && (
-                    <span className="text-12 bg-main-50 text-main-600 py-2 px-10 rounded-pill fw-medium">
-                      {q.subject_name}
-                    </span>
-                  )} */}
-                  {/* {q.question_difficulty && (
-                    <span className={`text-12 py-2 px-10 rounded-pill fw-medium ${diffBadge(q.question_difficulty)}`}>
-                      {q.question_difficulty}
-                    </span>
-                  )} */}
+              {/* ── Number + question text on same line ── */}
+              <div className="d-flex align-items-start gap-12 mb-16">
+                <span className="w-28 h-28 rounded-circle bg-danger-600 text-white d-flex align-items-center justify-content-center text-13 fw-semibold flex-shrink-0 mt-2">
+                  {i + 1}
+                </span>
+                <div className="flex-grow-1">
+                  <p className="fw-medium text-15 text-gray-800 mb-8 lh-base">
+                    <MathJax dynamic inline>
+                      {q.question_text}
+                    </MathJax>
+                  </p>
+                  {q.question_image && (
+                    <img
+                      src={q.question_image}
+                      alt="question"
+                      style={{
+                        maxHeight: "180px",
+                        objectFit: "contain",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  )}
                 </div>
-                {/* <span className="text-12 text-gray-400">{q.assignment_title}</span> */}
               </div>
 
-              {/* Question text */}
-              <div className="mb-16">
-                <p className="fw-medium text-15 text-gray-800 mb-8 lh-base">
-                  <MathJax dynamic inline>
-                    {q.question_text}
-                  </MathJax>
-                </p>
-                {q.question_image && (
-                  <img
-                    src={q.question_image}
-                    alt="question"
-                    style={{
-                      maxHeight: "180px",
-                      objectFit: "contain",
-                      borderRadius: "8px",
-                    }}
-                  />
-                )}
-              </div>
-
-              {/* Options with highlights */}
+              {/* ── Options with highlights ── */}
               <div className="d-flex flex-column gap-8 mb-14">
                 {options(q).map((opt) => {
                   const value = opt.text || opt.image;
@@ -194,17 +155,6 @@ function WrongAnswers({
                   );
                 })}
               </div>
-
-              {/* Correct answer summary */}
-              {/* <div className="p-10 bg-success-50 rounded-8 border border-success-200">
-                <span className="text-13 fw-semibold text-success-700">
-                  <i className="ph ph-check-circle me-6" />
-                  Correct Answer:{" "}
-                  <MathJax dynamic inline>
-                    {q.correct_answer}
-                  </MathJax>
-                </span>
-              </div> */}
             </div>
           </div>
         ))}
