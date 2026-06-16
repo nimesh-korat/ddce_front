@@ -110,9 +110,7 @@ function PracticeQuestion({
               <span
                 className={`fw-semibold text-15 ${isCorrect ? "text-success-700" : "text-danger-700"}`}
               >
-                {isCorrect
-                  ? "Correct! Well done."
-                  : "Incorrect. Don't worry, review the correct answer."}
+                {isCorrect ? "Correct! Well done." : "Incorrect."}
               </span>
             </div>
           )}
