@@ -221,7 +221,7 @@ function Home() {
 
             <div className="row gy-4">
               <div className="col-xxl-8">
-                <Greetings />
+                <Greetings dashboardData={data?.data} />
               </div>
               <div className="col-xxl-4">
                 {/* Widgets Start */}
@@ -236,7 +236,7 @@ function Home() {
                     bgColor={"bg-main-two-600 "}
                     img="ph-fill ph-graduation-cap"
                     title="Offline Students"
-                    count="102"
+                    count="68"
                     isLocked={false}
                   />
                   <HomeWidgets

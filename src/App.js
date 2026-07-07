@@ -11,6 +11,7 @@ import PrivateRoute from "./utils/PrivateRoutes";
 import ProtectedRoute from "./utils/ProtectedRoutes";
 import AccessGuard from "./utils/AccessGuard";
 import BatchAccess from "./admin/BatchAccess";
+import StudentAnswers from "./admin/StudentAnswers";
 import Error404 from "./errorPages/Error404";
 import TestTopicListing from "./modules/testTopicListing";
 import AdminLogin from "./admin/login";
@@ -319,6 +320,14 @@ function App() {
             element={
               <AdminRoutes>
                 <BatchAccess />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/studentAnswers"
+            element={
+              <AdminRoutes>
+                <StudentAnswers />
               </AdminRoutes>
             }
           />
