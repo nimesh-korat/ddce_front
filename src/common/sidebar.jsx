@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-
-// remove position-relative from parent class when unlocks
+import { useBatchAccess } from "../utils/BatchAccessContext";
 
 function Sidebar({ isActive, closeSidebar }) {
   const location = useLocation();
-  // eslint-disable-next-line
   const [openMenu, setOpenMenu] = useState(null);
   const [activeItem, setActiveItem] = useState("");
+  const { isEnabled, isLocked, isHidden, accessMap } = useBatchAccess();
 
   useEffect(() => {
     switch (location.pathname) {
@@ -16,9 +15,6 @@ function Sidebar({ isActive, closeSidebar }) {
         break;
       case "/exams":
         setActiveItem("Exam");
-        break;
-      case "/home3":
-        setActiveItem("Home3");
         break;
       case "/schedule":
         setActiveItem("schedule");
@@ -44,13 +40,12 @@ function Sidebar({ isActive, closeSidebar }) {
       case "/accuracyMatrix":
         setActiveItem("accuracyMatrix");
         break;
-      case "/pricing":
-        setActiveItem("pricing");
-        break;
       case "/doubts":
         setActiveItem("doubts");
         break;
-
+      case "/practice":
+        setActiveItem("practice");
+        break;
       default:
         setActiveItem("");
         break;
@@ -58,7 +53,83 @@ function Sidebar({ isActive, closeSidebar }) {
   }, [location.pathname]);
 
   const toggleMenu = (menuId) => {
-    setOpenMenu((prevMenu) => (prevMenu === menuId ? null : menuId));
+    setOpenMenu((prev) => (prev === menuId ? null : menuId));
+  };
+
+  // Lock icon style
+  const lockIcon = (
+    <i
+      className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
+      style={{ fontSize: "18px", color: "#B0B0B0" }}
+    />
+  );
+
+  // Renders a sidebar item in one of 3 states:
+  //  enabled → clickable <Link>
+  //  locked  → <p> with lock icon (visible but not navigable)
+  //  hidden  → null (completely removed)
+  const SidebarItem = ({
+    featureKey,
+    activeKey,
+    icon,
+    label,
+    to,
+    children,
+  }) => {
+    // While accessMap not loaded, show locked
+    const vis =
+      accessMap !== null
+        ? isEnabled(featureKey)
+          ? "enabled"
+          : isHidden(featureKey)
+            ? "hidden"
+            : "locked"
+        : "locked";
+
+    if (vis === "hidden") return null;
+
+    const isActive = activeItem === activeKey;
+
+    if (vis === "locked") {
+      return (
+        <li className={`sidebar-menu__item ${isActive ? "activePage" : ""}`}>
+          <p
+            className="sidebar-menu__link d-flex align-items-center position-relative"
+            style={{ cursor: "default" }}
+          >
+            <span className="icon d-flex align-items-center">
+              <i className={`ph ${icon}`} />
+            </span>
+            <span className="text">{label}</span>
+            {lockIcon}
+          </p>
+        </li>
+      );
+    }
+
+    // enabled
+    if (children) {
+      // For dropdown items (Exam)
+      return (
+        <li
+          className={`sidebar-menu__item has-dropdown ${isActive ? "activePage" : ""}`}
+          onClick={() => toggleMenu(featureKey + "Menu")}
+        >
+          {children}
+        </li>
+      );
+    }
+
+    return (
+      <li className={`sidebar-menu__item ${isActive ? "activePage" : ""}`}>
+        <Link to={to} className="sidebar-menu__link d-flex align-items-center">
+          <span className="icon d-flex align-items-center">
+            <i className={`ph ${icon}`} />
+          </span>
+          <span className="text">{label}</span>
+        </Link>
+      </li>
+    );
   };
 
   return (
@@ -68,34 +139,26 @@ function Sidebar({ isActive, closeSidebar }) {
         onClick={closeSidebar}
       />
       <aside className={`sidebar ${isActive ? "active" : ""}`}>
-        {/* sidebar close btn */}
         <button
           type="button"
           className="sidebar-close-btn text-gray-500 hover-text-white hover-bg-main-600 text-md w-24 h-24 border border-gray-100 hover-border-main-600 d-xl-none d-flex flex-center rounded-circle position-absolute"
         >
           <i className="ph ph-x" />
         </button>
-        {/* sidebar close btn */}
+
         <Link
           to="/"
           className="sidebar__logo text-center p-10 position-sticky inset-block-start-0 bg-white w-100 z-1 pb-5"
         >
-          {/* <img src="assets/images/logo/logo.png" alt="Logo" /> */}
-          {/* <img
-            className="w-100 text-center"
-            src="./assets/images/logo/logo6.png"
-            alt=""
-            style={{ width: "100px", height: "80px", objectFit: "cover" }}
-          /> */}
           <h2>AIM4RANK</h2>
         </Link>
+
         <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
           <div className="p-20 pt-10">
             <ul className="sidebar-menu">
+              {/* ── Dashboard — always accessible ── */}
               <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "Home" ? "activePage" : ""
-                }`}
+                className={`sidebar-menu__item ${activeItem === "Home" ? "activePage" : ""}`}
               >
                 <Link to="/" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
@@ -104,306 +167,163 @@ function Sidebar({ isActive, closeSidebar }) {
                   <span className="text">Dashboard</span>
                 </Link>
               </li>
-              <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "Syllabus" ? "activePage" : ""
-                }`}
-              >
-                <Link
-                  to="/syllabus"
-                  className="sidebar-menu__link d-flex align-items-center"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-books" />
-                  </span>
-                  <span className="text">Syllabus</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "weightage" ? "activePage" : ""
-                }`}
-              >
-                <Link
-                  to="/weightage"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-chart-pie-slice" />
-                  </span>
-                  <span className="text">Topic & Weightage</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "mentor_course" || activeItem === "schedule"
-                    ? "activePage"
-                    : ""
-                }`}
-                // onClick={() => toggleMenu("menu2")}
-              >
-                <p
-                  to="/schedule"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-calendar-dots" />
-                  </span>
-                  <span className="text">Schedule</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
-              </li>
-              <li
-                className={`sidebar-menu__item has-dropdown  ${
-                  activeItem === "Exam" ? "activePage" : ""
-                }`}
-                onClick={() => toggleMenu("examMenu")}
-              >
-                <p className="sidebar-menu__link">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-clipboard-text" />
-                  </span>
-                  <span className="text">Exam / Quiz</span>
-                </p>
-                <ul
-                  className="sidebar-submenu"
-                  id="examMenu"
-                  style={{
-                    display:
-                      openMenu === "examMenu" || activeItem === "Exam"
-                        ? "block "
-                        : "none",
-                  }}
-                >
-                  <li
-                    className={`sidebar-submenu__item ${
-                      window.location.hash === "#current" ? "activePage" : ""
-                    }`}
-                  >
-                    <Link to="/exams#current" className="sidebar-submenu__link">
-                      Current Exam / Quiz
-                    </Link>
-                  </li>
-                  <li
-                    className={`sidebar-submenu__item ${
-                      window.location.hash === "#completed" ? "activePage" : ""
-                    }`}
-                  >
-                    <Link
-                      to="/exams#completed"
-                      className="sidebar-submenu__link"
-                    >
-                      Completed Exam / Quiz
-                    </Link>
-                  </li>
-                  <li
-                    className={`sidebar-submenu__item ${
-                      window.location.hash === "#upcoming" ? "activePage" : ""
-                    }`}
-                  >
-                    <Link
-                      to="/exams#upcoming"
-                      className="sidebar-submenu__link"
-                    >
-                      Upcoming Exam / Quiz
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "accuracyMatrix" ? "activePage" : ""
-                }`}
-              >
-                <Link
-                  to="/accuracyMatrix"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-trophy" />
-                  </span>
-                  <span className="text">Accuracy Matrix</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "analytics" ? "activePage" : ""
-                }`}
-              >
-                <p className="sidebar-menu__link d-flex align-items-center position-relative">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-chart-bar" />
-                  </span>
-                  <span className="text">Analytics</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
-              </li>
-              <li className="sidebar-menu__item">
-                <p
-                  to="/mentors"
-                  className="sidebar-menu__link  d-flex align-items-center position-relative"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-users" />
-                  </span>
-                  <span className="text">Training</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
-              </li>
-              <li className="sidebar-menu__item">
-                <p
-                  to="/solutions"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-folder-open" />
-                  </span>
-                  <span className="text">Materials & Solutions</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
-              </li>
-              <li className="sidebar-menu__item">
-                <Link
-                  to="/practice"
-                  className="sidebar-menu__link d-flex align-items-center"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-barbell" />
-                  </span>
-                  <span className="text">Practice</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "doubts" ? "activePage" : ""
-                }`}
-              >
-                <Link
-                  to="/doubts"
-                  className="sidebar-menu__link d-flex align-items-center"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-seal-question" />
-                  </span>
-                  <span className="text">Doubts</span>
-                </Link>
-              </li>
-              {/* <li className="sidebar-menu__item">
-                <p
-                  to="/events"
-                  className="sidebar-menu__link  d-flex align-items-center position-relative"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-chat-teardrop-dots" />
-                  </span>
-                  <span className="text">Messages</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
-              </li> */}
-              <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "Student" ? "activePage" : ""
-                }`}
-              >
-                <p
-                  to="/students"
-                  className="sidebar-menu__link position-relative "
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-users-three" />
-                  </span>
-                  <span className="text">Students</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
-              </li>
 
-              <li className="sidebar-menu__item ">
-                <p
-                  to="/pricing"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-flag-checkered" />
-                  </span>
-                  <span className="text">Tournaments</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
-              </li>
+              {/* ── Syllabus ── */}
+              <SidebarItem
+                featureKey="syllabus"
+                activeKey="Syllabus"
+                icon="ph-books"
+                label="Syllabus"
+                to="/syllabus"
+              />
 
-              <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "pricing" ? "activePage" : ""
-                }`}
-              >
-                <p
-                  to="/pricing"
-                  className="sidebar-menu__link d-flex align-items-center position-relative"
+              {/* ── Topic & Weightage ── */}
+              <SidebarItem
+                featureKey="weightage"
+                activeKey="weightage"
+                icon="ph-chart-pie-slice"
+                label="Topic & Weightage"
+                to="/weightage"
+              />
+
+              {/* ── Schedule ── */}
+              <SidebarItem
+                featureKey="schedule"
+                activeKey="schedule"
+                icon="ph-calendar-dots"
+                label="Schedule"
+                to="/schedule"
+              />
+
+              {/* ── Exam / Quiz (dropdown) ── */}
+              {!isHidden("exams") && (
+                <li
+                  className={`sidebar-menu__item ${isEnabled("exams") ? "has-dropdown" : ""} ${activeItem === "Exam" ? "activePage" : ""}`}
+                  onClick={
+                    isEnabled("exams")
+                      ? () => toggleMenu("examMenu")
+                      : undefined
+                  }
                 >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-tag" />
-                  </span>
-                  <span className="text">Pricing</span>
-                  <i
-                    className="ph ph-lock position-absolute top-50 end-0 translate-middle-y"
-                    style={{
-                      fontSize: "18px",
-                      color: "#B0B0B0",
-                    }}
-                  />
-                </p>
-              </li>
-              <li className="sidebar-menu__item ">
+                  <p
+                    className="sidebar-menu__link d-flex align-items-center position-relative"
+                    style={isLocked("exams") ? { cursor: "default" } : {}}
+                  >
+                    <span className="icon d-flex align-items-center">
+                      <i className="ph ph-clipboard-text" />
+                    </span>
+                    <span className="text">Exam / Quiz</span>
+                    {isLocked("exams") && lockIcon}
+                  </p>
+                  {isEnabled("exams") && (
+                    <ul
+                      className="sidebar-submenu"
+                      style={{
+                        display:
+                          openMenu === "examMenu" || activeItem === "Exam"
+                            ? "block"
+                            : "none",
+                      }}
+                    >
+                      <li
+                        className={`sidebar-submenu__item ${window.location.hash === "#current" ? "activePage" : ""}`}
+                      >
+                        <Link
+                          to="/exams#current"
+                          className="sidebar-submenu__link"
+                        >
+                          Current Exam / Quiz
+                        </Link>
+                      </li>
+                      <li
+                        className={`sidebar-submenu__item ${window.location.hash === "#completed" ? "activePage" : ""}`}
+                      >
+                        <Link
+                          to="/exams#completed"
+                          className="sidebar-submenu__link"
+                        >
+                          Completed Exam / Quiz
+                        </Link>
+                      </li>
+                      <li
+                        className={`sidebar-submenu__item ${window.location.hash === "#upcoming" ? "activePage" : ""}`}
+                      >
+                        <Link
+                          to="/exams#upcoming"
+                          className="sidebar-submenu__link"
+                        >
+                          Upcoming Exam / Quiz
+                        </Link>
+                      </li>
+                    </ul>
+                  )}
+                </li>
+              )}
+
+              {/* ── Accuracy Matrix ── */}
+              <SidebarItem
+                featureKey="accuracy_matrix"
+                activeKey="accuracyMatrix"
+                icon="ph-trophy"
+                label="Accuracy Matrix"
+                to="/accuracyMatrix"
+              />
+
+              {/* ── Analytics ── */}
+              <SidebarItem
+                featureKey="analytics"
+                activeKey="analytics"
+                icon="ph-chart-bar"
+                label="Analytics"
+                to="/analytics"
+              />
+
+              {/* ── Training ── */}
+              <SidebarItem
+                featureKey="training"
+                activeKey="training"
+                icon="ph-users"
+                label="Training"
+                to="/mentors"
+              />
+
+              {/* ── Materials & Solutions ── */}
+              <SidebarItem
+                featureKey="solutions"
+                activeKey="solutions"
+                icon="ph-folder-open"
+                label="Materials & Solutions"
+                to="/solutions"
+              />
+
+              {/* ── Practice ── */}
+              <SidebarItem
+                featureKey="practice"
+                activeKey="practice"
+                icon="ph-barbell"
+                label="Practice"
+                to="/practice"
+              />
+
+              {/* ── Doubts ── */}
+              <SidebarItem
+                featureKey="doubts"
+                activeKey="doubts"
+                icon="ph-seal-question"
+                label="Doubts"
+                to="/doubts"
+              />
+
+              {/* ── Settings divider ── */}
+              <li className="sidebar-menu__item">
                 <span className="text-gray-300 text-sm px-20 pt-20 fw-semibold border-top border-gray-100 d-block text-uppercase">
                   Settings
                 </span>
               </li>
 
+              {/* ── Profile — always accessible ── */}
               <li
-                className={`sidebar-menu__item  ${
-                  activeItem === "profile" ? "activePage" : ""
-                } mb-18`}
+                className={`sidebar-menu__item ${activeItem === "profile" ? "activePage" : ""} mb-18`}
               >
                 <Link
                   to="/profile"
@@ -417,31 +337,6 @@ function Sidebar({ isActive, closeSidebar }) {
               </li>
             </ul>
           </div>
-          {/* <div className="p-20 pt-80">
-            <div className="bg-main-50 p-20 pt-0 rounded-16 text-center mt-74">
-              <span className="border border-5 bg-white mx-auto border-primary-50 w-114 h-114 rounded-circle flex-center text-success-600 text-2xl translate-n74">
-                <img
-                  src="assets/images/icons/certificate.png"
-                  alt=""
-                  className="centerised-img"
-                />
-              </span>
-              <div className="mt-n74 position-relative">
-              
-                <h5 className="mb-4 mt-22">Get Pro Certificate</h5>
-                <p>Explore 400+ courses with lifetime members</p>
-                <div>
-                  <p
-                  to="pricing-plan.html"
-                  className="btn btn-main mt-16 rounded-pill"
-                >
-                  Get Access
-                </p>
-                </div>
-                
-              </div>
-            </div>
-          </div> */}
         </div>
       </aside>
     </>

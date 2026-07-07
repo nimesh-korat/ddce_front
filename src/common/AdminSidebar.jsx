@@ -47,6 +47,9 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/practiceAssignments":
         setActiveItem("Practice Assignments");
         break;
+      case "/admin/batchAccess":
+        setActiveItem("Batch Access");
+        break;
 
       default:
         setActiveItem("");
@@ -247,6 +250,18 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-clipboard-text" />
                   </span>
                   <span className="text">Practice Assignments</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Batch Access" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/batchAccess" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-shield-check" />
+                  </span>
+                  <span className="text">Batch Access</span>
                 </Link>
               </li>
               {/* <li

@@ -9,6 +9,8 @@ import ResetPassword from "./modules/reset_password";
 import { ToastContainer } from "react-toastify";
 import PrivateRoute from "./utils/PrivateRoutes";
 import ProtectedRoute from "./utils/ProtectedRoutes";
+import AccessGuard from "./utils/AccessGuard";
+import BatchAccess from "./admin/BatchAccess";
 import Error404 from "./errorPages/Error404";
 import TestTopicListing from "./modules/testTopicListing";
 import AdminLogin from "./admin/login";
@@ -81,7 +83,9 @@ function App() {
             path="/exams"
             element={
               <ProtectedRoute>
-                <Exam />
+                <AccessGuard feature="exams">
+                  <Exam />
+                </AccessGuard>
               </ProtectedRoute>
             }
           />
@@ -106,7 +110,9 @@ function App() {
             path="/syllabus"
             element={
               <ProtectedRoute>
-                <Syllabus />
+                <AccessGuard feature="syllabus">
+                  <Syllabus />
+                </AccessGuard>
               </ProtectedRoute>
             }
           />
@@ -114,7 +120,9 @@ function App() {
             path="/weightage"
             element={
               <ProtectedRoute>
-                <Weightage />
+                <AccessGuard feature="weightage">
+                  <Weightage />
+                </AccessGuard>
               </ProtectedRoute>
             }
           />
@@ -122,7 +130,9 @@ function App() {
             path="/analytics"
             element={
               <ProtectedRoute>
-                <Analytics />
+                <AccessGuard feature="analytics">
+                  <Analytics />
+                </AccessGuard>
               </ProtectedRoute>
             }
           />
@@ -130,7 +140,9 @@ function App() {
             path="/accuracyMatrix"
             element={
               <ProtectedRoute>
-                <MasteryMatrix />
+                <AccessGuard feature="accuracy_matrix">
+                  <MasteryMatrix />
+                </AccessGuard>
               </ProtectedRoute>
             }
           />
@@ -138,7 +150,9 @@ function App() {
             path="/doubts"
             element={
               <ProtectedRoute>
-                <Doubts />
+                <AccessGuard feature="doubts">
+                  <Doubts />
+                </AccessGuard>
               </ProtectedRoute>
             }
           />
@@ -300,12 +314,22 @@ function App() {
               </AdminRoutes>
             }
           />
+          <Route
+            path="/admin/batchAccess"
+            element={
+              <AdminRoutes>
+                <BatchAccess />
+              </AdminRoutes>
+            }
+          />
           {/* ── Student Practice Route ── */}
           <Route
             path="/practice"
             element={
               <ProtectedRoute>
-                <Practice />
+                <AccessGuard feature="practice">
+                  <Practice />
+                </AccessGuard>
               </ProtectedRoute>
             }
           />

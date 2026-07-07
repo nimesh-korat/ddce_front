@@ -5,6 +5,7 @@ import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { UserProvider } from "./utils/UserContex";
+import { BatchAccessProvider } from "./utils/BatchAccessContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const queryClient = new QueryClient();
@@ -13,8 +14,10 @@ root.render(
     <QueryClientProvider client={queryClient}>
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       <UserProvider>
-        <App />
+        <BatchAccessProvider>
+          <App />
+        </BatchAccessProvider>
       </UserProvider>
     </QueryClientProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
