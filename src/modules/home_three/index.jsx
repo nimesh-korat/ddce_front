@@ -24,9 +24,10 @@ function Home() {
     setIsSidebarActive(false);
   };
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["dashboardCounts"],
     queryFn: getDashboardCounts,
+    staleTime: 60000, // cache for 60 seconds
   });
 
   if (isError) {
@@ -221,7 +222,7 @@ function Home() {
 
             <div className="row gy-4">
               <div className="col-xxl-8">
-                <Greetings dashboardData={data?.data} />
+                <Greetings dashboardData={data?.data} refetch={refetch} />
               </div>
               <div className="col-xxl-4">
                 {/* Widgets Start */}
@@ -236,7 +237,7 @@ function Home() {
                     bgColor={"bg-main-two-600 "}
                     img="ph-fill ph-graduation-cap"
                     title="Offline Students"
-                    count="68"
+                    count="102"
                     isLocked={false}
                   />
                   <HomeWidgets
