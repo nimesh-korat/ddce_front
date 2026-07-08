@@ -87,7 +87,7 @@ function BatchAccess() {
   const { data: phaseData } = useQuery({
     queryKey: ["allPhase"],
     queryFn: async () => {
-      const res = await axios.get(`${api}/api/admin/getAllPhase`, {
+      const res = await axios.get(`${api}/api/admin/getPhase`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       return res.data;
@@ -96,7 +96,7 @@ function BatchAccess() {
   });
 
   const batches = batchData?.data || [];
-  const phases = phaseData?.data || phaseData || [];
+  const phases = phaseData?.data || [];
 
   // Get access config for selected batch + phase
   const {
