@@ -22,6 +22,7 @@ const FEATURE_LABELS = {
   solutions: "Materials & Solutions",
   practice: "Practice",
   doubts: "Doubts",
+  flip_card: "Live Stats Flip Card",
 };
 
 const FEATURE_ICONS = {
@@ -36,6 +37,7 @@ const FEATURE_ICONS = {
   solutions: "ph-folder-open",
   practice: "ph-barbell",
   doubts: "ph-seal-question",
+  flip_card: "ph-cards",
 };
 
 const VIS_OPTIONS = [

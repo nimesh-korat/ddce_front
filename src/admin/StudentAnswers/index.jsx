@@ -429,7 +429,7 @@ function StudentAnswers() {
                               className="text-13 text-gray-400 py-12 px-16 fw-medium"
                               style={{ whiteSpace: "nowrap" }}
                             >
-                              {(page - 1) * limit + i + 1}
+                              {total - ((page - 1) * limit + i)}
                             </td>
                             <td className="text-13 fw-medium text-gray-800 py-12">
                               {row.student_name}
