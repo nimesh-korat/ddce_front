@@ -859,10 +859,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                     End
                                   </th>
                                   <th className="text-12 text-gray-500 fw-medium py-10 text-center">
-                                    Visible
-                                  </th>
-                                  <th className="text-12 text-gray-500 fw-medium py-10 text-center">
-                                    Featured
+                                    Show to Students
                                   </th>
                                   <th className="text-12 text-gray-500 fw-medium py-10 text-center">
                                     Status
@@ -991,36 +988,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                         <td className="text-12 text-gray-500 py-10">
                                           {fmtDate(ba.end_date)}
                                         </td>
-                                        {/* Visible toggle */}
-                                        <td className="py-10 text-center">
-                                          <div className="form-check form-switch mb-0 d-flex justify-content-center">
-                                            <input
-                                              className="form-check-input"
-                                              type="checkbox"
-                                              role="switch"
-                                              checked={ba.is_visible === 1}
-                                              onChange={() =>
-                                                toggleVisibilityMutation.mutate(
-                                                  ba.batch_assignment_id,
-                                                )
-                                              }
-                                              disabled={
-                                                toggleVisibilityMutation.isPending
-                                              }
-                                              title={
-                                                ba.is_visible === 1
-                                                  ? "Hide card"
-                                                  : "Show card"
-                                              }
-                                            />
-                                          </div>
-                                          <span
-                                            className={`text-10 fw-medium ${ba.is_visible === 1 ? "text-success-600" : "text-gray-400"}`}
-                                          >
-                                            {ba.is_visible === 1 ? "On" : "Off"}
-                                          </span>
-                                        </td>
-                                        {/* Featured toggle */}
+                                        {/* Show to Students toggle */}
                                         <td className="py-10 text-center">
                                           <div className="form-check form-switch mb-0 d-flex justify-content-center">
                                             <input

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import MentorSidebar from "../../common/MentorSidebar";
 import Header from "../../common/header/Header";
 import Footer from "../../common/footer";
 import { Link } from "react-router-dom";
@@ -16,7 +15,7 @@ import Swal from "sweetalert2";
 import Preloader from "../../utils/preloader/Preloader";
 import { format } from "date-fns";
 
-function MyAssignments() {
+function MyAssignments({ Sidebar }) {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
   const queryClient = useQueryClient();
@@ -108,7 +107,7 @@ function MyAssignments() {
 
   return (
     <>
-      <MentorSidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
+      <Sidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
       <div className="dashboard-main-wrapper">
         <Header toggleSidebar={toggleSidebar} />
         {isLoading ? (

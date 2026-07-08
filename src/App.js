@@ -290,7 +290,9 @@ function App() {
             path="/mentor/myAssignments"
             element={
               <MentorRoutes>
-                <MyAssignments />
+                <MyAssignments
+                  Sidebar={require("./common/MentorSidebar").default}
+                />
               </MentorRoutes>
             }
           />
@@ -311,7 +313,9 @@ function App() {
             path="/admin/practiceAssignments"
             element={
               <AdminRoutes>
-                <MyAssignments />
+                <MyAssignments
+                  Sidebar={require("./common/AdminSidebar").default}
+                />
               </AdminRoutes>
             }
           />
