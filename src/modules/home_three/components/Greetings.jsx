@@ -61,7 +61,7 @@ function Greetings({ dashboardData, refetch }) {
       <style>{`
         .greet-scene {
           width: 100%;
-          height: 390px;
+          height: 360px;
           perspective: 1400px;
           cursor: pointer;
         }
