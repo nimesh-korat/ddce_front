@@ -87,8 +87,8 @@ function BatchAccess() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const batches = batchData?.data || [];
-  const phases = phaseData?.data || [];
+  const batches = batchData || [];
+  const phases = phaseData || [];
 
   // Get access config for selected batch + phase
   const {
