@@ -5,10 +5,12 @@ import Footer from "../../common/footer";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import axios from "axios";
-
-const api = process.env.REACT_APP_API_URL;
-const getToken = () => localStorage.getItem("token");
+import {
+  getBatchAccess,
+  updateBatchAccess,
+  getAllBatch,
+  getAllPhase,
+} from "../../apis/apis";
 
 const FEATURE_LABELS = {
   dashboard: "Dashboard",
@@ -74,24 +76,14 @@ function BatchAccess() {
   // Get all batches
   const { data: batchData } = useQuery({
     queryKey: ["allBatch"],
-    queryFn: async () => {
-      const res = await axios.get(`${api}/api/admin/getAllBatch`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
-      return res.data;
-    },
+    queryFn: () => getAllBatch(),
     staleTime: 5 * 60 * 1000,
   });
 
   // Get all phases
   const { data: phaseData } = useQuery({
     queryKey: ["allPhase"],
-    queryFn: async () => {
-      const res = await axios.get(`${api}/api/admin/getPhase`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
-      return res.data;
-    },
+    queryFn: () => getAllPhase(),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -105,13 +97,7 @@ function BatchAccess() {
     refetch,
   } = useQuery({
     queryKey: ["batchAccess", selectedBatch, selectedPhase],
-    queryFn: async () => {
-      const res = await axios.get(
-        `${api}/api/admin/batchAccess/${selectedBatch}?phase_id=${selectedPhase}`,
-        { headers: { Authorization: `Bearer ${getToken()}` } },
-      );
-      return res.data;
-    },
+    queryFn: () => getBatchAccess(selectedBatch, selectedPhase),
     enabled: !!selectedBatch && !!selectedPhase,
     staleTime: 0,
   });
@@ -125,14 +111,8 @@ function BatchAccess() {
 
   // Save mutation
   const saveMutation = useMutation({
-    mutationFn: async (payload) => {
-      const res = await axios.put(
-        `${api}/api/admin/batchAccess/${selectedBatch}?phase_id=${selectedPhase}`,
-        { features: payload, phase_id: selectedPhase },
-        { headers: { Authorization: `Bearer ${getToken()}` } },
-      );
-      return res.data;
-    },
+    mutationFn: (payload) =>
+      updateBatchAccess(selectedBatch, selectedPhase, payload),
     onSuccess: () => {
       toast.success("Access settings saved!");
       setDirty(false);

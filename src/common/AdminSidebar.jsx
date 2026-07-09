@@ -119,6 +119,23 @@ function AdminSidebar({ isActive, closeSidebar }) {
               </li>
               <li
                 className={`sidebar-menu__item ${
+                  activeItem === "Student Wise Given Exam Data"
+                    ? "activePage"
+                    : ""
+                } `}
+              >
+                <Link
+                  to="/admin/viewStudentWiseGivenExamData"
+                  className="sidebar-menu__link "
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-blueprint" />
+                  </span>
+                  <span className="text">Student Wise Given Exam Data</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
                   activeItem === "Materials" ? "activePage" : ""
                 } `}
               >
@@ -214,23 +231,6 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-blueprint" />
                   </span>
                   <span className="text">Given Exam Data</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Student Wise Given Exam Data"
-                    ? "activePage"
-                    : ""
-                } `}
-              >
-                <Link
-                  to="/admin/viewStudentWiseGivenExamData"
-                  className="sidebar-menu__link "
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-blueprint" />
-                  </span>
-                  <span className="text">Student Wise Given Exam Data</span>
                 </Link>
               </li>
 

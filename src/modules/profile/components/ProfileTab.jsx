@@ -21,9 +21,12 @@ function ProfileTab({ data }) {
   const { data: profilePic, isLoading: isProfilePicLoading } = useQuery({
     queryKey: ["profilePic", user?.Id],
     queryFn: getProfileImage,
-    enabled: !!user?.Id,
-    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    enabled: !!user?.Id && !!user?.User_DP,
+    staleTime: 24 * 60 * 60 * 1000,
     refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: false,
   });
 
   // Handle file selection
@@ -120,7 +123,7 @@ function ProfileTab({ data }) {
                     className="w-120 h-120 rounded-circle border border-white"
                     onError={(e) => {
                       e.target.onerror = null; // Prevent infinite loop if fallback fails
-                      e.target.src = "../assets/images/icons/nodp.webp";
+                      e.target.src = "assets/images/icons/nodp.webp";
                     }}
                   />
                   <div

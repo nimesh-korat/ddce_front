@@ -1216,3 +1216,80 @@ export async function togglePracticeFeatured(id) {
     throw error;
   }
 }
+
+//?==================== BATCH ACCESS ====================
+export async function getBatchAccess(batch_id, phase_id = 1) {
+  try {
+    const response = await axiosInstance.get(
+      `/admin/batchAccess/${batch_id}?phase_id=${phase_id}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("getBatchAccess() error", error);
+    throw error;
+  }
+}
+
+export async function updateBatchAccess(batch_id, phase_id = 1, features) {
+  try {
+    const response = await axiosInstance.put(
+      `/admin/batchAccess/${batch_id}?phase_id=${phase_id}`,
+      { features, phase_id },
+    );
+    return response.data;
+  } catch (error) {
+    console.error("updateBatchAccess() error", error);
+    throw error;
+  }
+}
+
+//?==================== STUDENT WISE EXAM DATA ====================
+export async function getStudentWiseExamData(params) {
+  try {
+    const query = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const response = await axiosInstance.get(
+      `/admin/getStudentWiseExamData?${query}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("getStudentWiseExamData() error", error);
+    throw error;
+  }
+}
+
+//?==================== STUDENT PROFILE ====================
+export async function getStudentProfile(student_id) {
+  try {
+    const response = await axiosInstance.get(
+      `/admin/studentProfile/${student_id}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("getStudentProfile() error", error);
+    throw error;
+  }
+}
+
+//?==================== STUDENT ANSWERS ====================
+export async function getStudentAnswers(params) {
+  try {
+    const query = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const response = await axiosInstance.get(`/admin/studentAnswers?${query}`);
+    return response.data;
+  } catch (error) {
+    console.error("getStudentAnswers() error", error);
+    throw error;
+  }
+}

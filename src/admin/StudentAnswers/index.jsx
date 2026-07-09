@@ -4,8 +4,8 @@ import Header from "../../common/header/Header";
 import Footer from "../../common/footer";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
+import { getStudentAnswers } from "../../apis/apis";
 
 const mathConfig = {
   tex2jax: {
@@ -20,9 +20,6 @@ const mathConfig = {
   },
   messageStyle: "none",
 };
-
-const api = process.env.REACT_APP_API_URL;
-const getToken = () => localStorage.getItem("token");
 
 // Debounce hook
 function useDebounce(value, delay = 500) {
@@ -108,10 +105,16 @@ function StudentAnswers() {
         ...(dCollege && { college: dCollege }),
         ...(dDepartment && { department: dDepartment }),
       });
-      const res = await axios.get(`${api}/api/admin/studentAnswers?${params}`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
+      return getStudentAnswers({
+        page,
+        limit,
+        sort,
+        dir,
+        type,
+        ...(dSearch && { search: dSearch }),
+        ...(dCollege && { college: dCollege }),
+        ...(dDepartment && { department: dDepartment }),
       });
-      return res.data;
     },
     keepPreviousData: true,
     staleTime: 30 * 1000,

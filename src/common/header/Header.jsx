@@ -10,13 +10,15 @@ function Header({ toggleSidebar }) {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   // Fetch Profile Picture
-  //eslint-disable-next-line
-  const { data: profilePic, isLoading: isProfilePicLoading } = useQuery({
+  const { data: profilePic } = useQuery({
     queryKey: ["profilePic", user?.Id],
     queryFn: getProfileImage,
-    enabled: !!user?.Id,
-    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    enabled: !!user?.Id && !!user?.User_DP, // only fetch if user has a profile pic
+    staleTime: 24 * 60 * 60 * 1000, // cache for 24 hours (signed URL validity)
     refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: false, // don't retry on 404
   });
 
   const logoutQuery = useMutation({
@@ -200,13 +202,13 @@ function Header({ toggleSidebar }) {
                   src={
                     user?.User_DP
                       ? `${profilePic?.data}`
-                      : "../assets/images/icons/nodp.webp"
+                      : "../../assets/images/icons/nodp.webp"
                   }
                   alt="User Profile"
                   className="h-32 w-32 rounded-circle"
                   onError={(e) => {
-                    e.target.onerror = null; // Prevent infinite loop if fallback fails
-                    e.target.src = "../assets/images/icons/nodp.webp";
+                    e.target.onerror = null;
+                    e.target.src = "../../assets/images/icons/nodp.webp";
                   }}
                 />
                 <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0" />
@@ -220,13 +222,13 @@ function Header({ toggleSidebar }) {
                       src={
                         user?.User_DP
                           ? `${profilePic?.data}`
-                          : "../assets/images/icons/nodp.webp"
+                          : "../../assets/images/icons/nodp.webp"
                       }
                       alt=""
                       className="w-54 h-54 rounded-circle"
                       onError={(e) => {
                         e.target.onerror = null; // Prevent infinite loop if fallback fails
-                        e.target.src = "../assets/images/icons/nodp.webp";
+                        e.target.src = "../../../assets/images/icons/nodp.webp";
                       }}
                     />
                     <div>
