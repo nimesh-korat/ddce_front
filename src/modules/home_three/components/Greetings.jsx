@@ -45,10 +45,19 @@ function Greetings({ dashboardData, refetch }) {
   // canFlip = student has batch+phase AND admin enabled flip_card for their batch+phase
   const canFlip = !!(user?.Batch && user?.Phase && isEnabled("flip_card"));
 
+  // Refetch every 3 seconds only while card is flipped
+  useEffect(() => {
+    if (!flipped || !refetch || !canFlip) return;
+    refetch(); // immediate fetch on flip
+    const interval = setInterval(() => {
+      refetch();
+    }, 3000);
+    return () => clearInterval(interval); // clear when unflipped or unmounted
+  }, [flipped]); // eslint-disable-line
+
   const handleMouseEnter = () => {
     if (!canFlip) return;
     setFlipped(true);
-    if (refetch) refetch();
   };
 
   const handleMouseLeave = () => {

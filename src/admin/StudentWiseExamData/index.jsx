@@ -8,6 +8,7 @@ import {
   getStudentWiseExamData,
   getAllBatch,
   getAllPhase,
+  getStudentSubjectAccuracy,
 } from "../../apis/apis";
 
 function useDebounce(value, delay = 500) {
@@ -43,6 +44,7 @@ function StudentWiseExamData() {
   const [accVal, setAccVal] = useState("");
   const [limit, setLimit] = useState(50);
   const [page, setPage] = useState(1);
+  const [showSubjects, setShowSubjects] = useState(false);
   const [sort, setSort] = useState("accuracy");
   const [dir, setDir] = useState("desc");
 
@@ -58,14 +60,14 @@ function StudentWiseExamData() {
     queryFn: () => getAllBatch(),
     staleTime: 5 * 60 * 1000,
   });
-  const batches = batchData?.data || [];
+  const batches = batchData || [];
 
   const { data: phaseData } = useQuery({
     queryKey: ["allPhase"],
     queryFn: () => getAllPhase(),
     staleTime: 5 * 60 * 1000,
   });
-  const phases = phaseData?.data || [];
+  const phases = phaseData || [];
 
   // Main data query
   const { data, isLoading, isFetching, isError } = useQuery({
@@ -118,6 +120,55 @@ function StudentWiseExamData() {
   const rows = data?.data || [];
   const pagination = data?.pagination || {};
   const { total = 0, totalPages = 1 } = pagination;
+
+  // Subject accuracy — fetched only when showSubjects is toggled on
+  const { data: subjectData, isLoading: subjectLoading } = useQuery({
+    queryKey: [
+      "studentSubjectAccuracy",
+      dSearch,
+      dCollege,
+      dDepartment,
+      batchId,
+      phaseId,
+      type,
+      dateFrom,
+      dateTo,
+      page,
+      limit,
+      sort,
+      dir,
+    ],
+    queryFn: () =>
+      getStudentSubjectAccuracy({
+        page,
+        limit,
+        sort,
+        dir,
+        type,
+        ...(dSearch && { search: dSearch }),
+        ...(dCollege && { college: dCollege }),
+        ...(dDepartment && { department: dDepartment }),
+        ...(batchId && { batch_id: batchId }),
+        ...(phaseId && { phase_id: phaseId }),
+        ...(dateFrom && { date_from: dateFrom }),
+        ...(dateTo && { date_to: dateTo }),
+      }),
+    enabled: showSubjects,
+    staleTime: 30 * 1000,
+  });
+  const subjects = subjectData?.subjects || [];
+  // Normalize keys to strings for reliable lookup
+  const subjectMap = React.useMemo(() => {
+    const raw = subjectData?.data || {};
+    const out = {};
+    Object.keys(raw).forEach((sid) => {
+      out[String(sid)] = {};
+      Object.keys(raw[sid]).forEach((subid) => {
+        out[String(sid)][String(subid)] = raw[sid][subid];
+      });
+    });
+    return out;
+  }, [subjectData]);
 
   const handleSort = (col) => {
     if (sort === col) setDir((d) => (d === "asc" ? "desc" : "asc"));
@@ -364,7 +415,7 @@ function StudentWiseExamData() {
                 {hasFilters && (
                   <div className="col-md-1">
                     <button
-                      className="btn btn-sm btn-outline-secondary rounded-pill w-100"
+                      className="btn btn-sm btn-secondary rounded-pill w-100"
                       onClick={clearFilters}
                       title="Clear filters"
                     >
@@ -542,15 +593,32 @@ function StudentWiseExamData() {
 
           {/* Stats bar */}
           <div className="flex-between flex-wrap gap-8 mb-12">
-            <p className="text-14 text-gray-600 mb-0">
-              {isFetching && !isLoading ? (
-                <span className="text-gray-400">Updating...</span>
-              ) : (
-                <>
-                  <strong>{total.toLocaleString()}</strong> students
-                </>
-              )}
-            </p>
+            <div className="flex-align gap-12">
+              <p className="text-14 text-gray-600 mb-0">
+                {isFetching && !isLoading ? (
+                  <span className="text-gray-400">Updating...</span>
+                ) : (
+                  <>
+                    <strong>{total.toLocaleString()}</strong> students
+                  </>
+                )}
+              </p>
+              <button
+                className={`btn btn-sm rounded-pill px-14 flex-align gap-6 ${showSubjects ? "btn-main" : "btn-secondary"}`}
+                onClick={() => setShowSubjects((p) => !p)}
+              >
+                <i
+                  className={`ph ${showSubjects ? "ph-x" : "ph-chart-bar"} text-12`}
+                />
+                {showSubjects ? "Hide Subjects" : "Show Subject Accuracy"}
+                {showSubjects && subjectLoading && (
+                  <span
+                    className="spinner-border spinner-border-sm ms-4"
+                    style={{ width: "12px", height: "12px" }}
+                  />
+                )}
+              </button>
+            </div>
             <p className="text-13 text-gray-400 mb-0">
               Page {page} of {totalPages}
             </p>
@@ -620,6 +688,16 @@ function StudentWiseExamData() {
                       >
                         Accuracy {sortIcon("accuracy")}
                       </th>
+                      {showSubjects &&
+                        subjects.map((s) => (
+                          <th
+                            key={s.Id}
+                            className="text-12 text-gray-500 fw-medium py-12 text-center"
+                            style={{ minWidth: "110px" }}
+                          >
+                            {s.Sub_Name}
+                          </th>
+                        ))}
                     </tr>
                   </thead>
                   <tbody>
@@ -719,6 +797,40 @@ function StudentWiseExamData() {
                               />
                             </div>
                           </td>
+                          {showSubjects &&
+                            subjects.map((s) => {
+                              const sub =
+                                subjectMap[String(row.student_id)]?.[
+                                  String(s.Id)
+                                ];
+                              const acc = sub?.accuracy;
+                              return (
+                                <td key={s.Id} className="py-12 text-center">
+                                  {acc !== null && acc !== undefined ? (
+                                    <>
+                                      <span
+                                        className={`text-12 fw-bold ${accuracyColor(acc)}`}
+                                      >
+                                        {acc}%
+                                      </span>
+                                      <div
+                                        className="progress mt-4"
+                                        style={{ height: "3px" }}
+                                      >
+                                        <div
+                                          className={`progress-bar ${acc >= 75 ? "bg-success" : acc >= 50 ? "bg-warning" : "bg-danger"}`}
+                                          style={{ width: `${acc}%` }}
+                                        />
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <span className="text-12 text-gray-300">
+                                      —
+                                    </span>
+                                  )}
+                                </td>
+                              );
+                            })}
                         </tr>
                       ))}
                   </tbody>
@@ -735,14 +847,14 @@ function StudentWiseExamData() {
                   </p>
                   <div className="flex-align gap-4">
                     <button
-                      className="btn btn-sm btn-outline-secondary rounded-pill px-10 py-4"
+                      className="btn btn-sm btn-secondary rounded-pill px-10 py-4"
                       onClick={() => setPage(1)}
                       disabled={page === 1}
                     >
                       <i className="ph ph-caret-double-left text-12" />
                     </button>
                     <button
-                      className="btn btn-sm btn-outline-secondary rounded-pill px-10 py-4"
+                      className="btn btn-sm btn-secondary rounded-pill px-10 py-4"
                       onClick={() => setPage((p) => p - 1)}
                       disabled={page === 1}
                     >
@@ -751,21 +863,21 @@ function StudentWiseExamData() {
                     {pageNumbers().map((n) => (
                       <button
                         key={n}
-                        className={`btn btn-sm rounded-pill px-12 py-4 ${n === page ? "btn-main" : "btn-outline-secondary"}`}
+                        className={`btn btn-sm rounded-pill px-12 py-4 ${n === page ? "btn-main" : "btn-secondary"}`}
                         onClick={() => setPage(n)}
                       >
                         {n}
                       </button>
                     ))}
                     <button
-                      className="btn btn-sm btn-outline-secondary rounded-pill px-10 py-4"
+                      className="btn btn-sm btn-secondary rounded-pill px-10 py-4"
                       onClick={() => setPage((p) => p + 1)}
                       disabled={page === totalPages}
                     >
                       <i className="ph ph-caret-right text-12" />
                     </button>
                     <button
-                      className="btn btn-sm btn-outline-secondary rounded-pill px-10 py-4"
+                      className="btn btn-sm btn-secondary rounded-pill px-10 py-4"
                       onClick={() => setPage(totalPages)}
                       disabled={page === totalPages}
                     >

@@ -7,19 +7,15 @@ import "filepond/dist/filepond.min.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import Sidebar from "../../common/sidebar";
 import Swal from "sweetalert2";
-import { getSubjects } from "../../apis/apis";
+import { getSubjects, sendDoubtOtp } from "../../apis/apis";
 import { useQuery } from "@tanstack/react-query";
 
 function Doubts() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
+  const [charCount, setCharCount] = useState(0);
 
-  const toggleSidebar = () => {
-    setIsSidebarActive((prevState) => !prevState);
-  };
-
-  const closeSidebar = () => {
-    setIsSidebarActive(false);
-  };
+  const toggleSidebar = () => setIsSidebarActive((p) => !p);
+  const closeSidebar = () => setIsSidebarActive(false);
 
   // eslint-disable-next-line
   const { data: subjects, isLoading: isLoadingSubjects } = useQuery({
@@ -27,51 +23,35 @@ function Doubts() {
     queryFn: getSubjects,
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Show SweetAlert2 popup asking for membership ID
-    Swal.fire({
-      title: "Enter membership ID",
-      input: "text",
-      inputAttributes: {
-        autocapitalize: "off",
-      },
-      showCancelButton: true,
-      confirmButtonText: "Submit",
-      showLoaderOnConfirm: true,
-      preConfirm: async (unityId) => {
-        if (!unityId || unityId.trim() === "") {
-          Swal.showValidationMessage("Please enter a UNITY ID."); // Error below Submit button
-          return false; // Stops submission
-        }
+    try {
+      Swal.fire({
+        title: "Submitting...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
 
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            if (unityId === "validUnityID") {
-              resolve(true); // Proceed with submission
-            } else {
-              Swal.fire({
-                title: "Error!",
-                text: "Invalid membership ID or ID is not associated with any paid membership.",
-                icon: "error",
-                confirmButtonText: "OK",
-              });
-              resolve(false); // Prevents submission but still allows Swal to close
-            }
-          }, 1000);
-        });
-      },
-      allowOutsideClick: () => !Swal.isLoading(),
-    }).then((result) => {
-      if (result.isConfirmed && result.value) {
-        Swal.fire({
-          title: "Doubt Submitted!",
-          text: "Your doubt has been successfully submitted.",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-      }
+      await sendDoubtOtp();
+      Swal.close();
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Submission Failed",
+        text:
+          err?.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      });
+      return;
+    }
+
+    Swal.fire({
+      icon: "success",
+      title: "Doubt Submitted!",
+      text: "Your doubt has been successfully submitted. Our team will get back to you soon.",
+      confirmButtonColor: "#6366f1",
+      confirmButtonText: "OK",
     });
   };
 
@@ -86,7 +66,7 @@ function Doubts() {
               <ul className="flex-align gap-4">
                 <li>
                   <Link
-                    to={"/admin"}
+                    to={"/"}
                     className="text-gray-200 fw-normal text-15 hover-text-main-600"
                   >
                     Home
@@ -105,6 +85,7 @@ function Doubts() {
               </ul>
             </div>
           </div>
+
           <div className="card">
             <div className="card-body">
               <form onSubmit={handleSubmit}>
@@ -125,6 +106,7 @@ function Doubts() {
                       acceptedFileTypes={["image/*"]}
                     />
                   </div>
+
                   <div className="col-xxl-9 col-md-8 col-sm-7">
                     <div className="row g-20">
                       <div className="col-sm-12">
@@ -133,33 +115,33 @@ function Doubts() {
                         </label>
                         <select className="form-select py-9" required>
                           <option value="">Select Subject</option>
-                          <option value="Maths">Physics</option>
-                          <option value="Physics">Chemistry</option>
-                          <option value="Chemistry">Computer Practice</option>
-                          <option value="Environmenal_Science">
-                            Environmental Sciences
-                          </option>
-                          <option value="Computer">Mathematics</option>
-                          <option value="Computer">Soft Skills</option>
+                          {subjects?.data?.map((s) => (
+                            <option key={s.Id} value={s.Id}>
+                              {s.Sub_Name}
+                            </option>
+                          ))}
                         </select>
                       </div>
+
                       <div className="col-sm-12">
                         <label className="h5 mb-8 fw-semibold font-heading">
                           Detailed Description
                         </label>
                         <textarea
                           className="form-control py-11"
-                          placeholder="Test Description"
+                          placeholder="Describe your doubt in detail..."
                           rows={4}
                           maxLength={500}
                           required
+                          onChange={(e) => setCharCount(e.target.value.length)}
                         />
                         <div className="text-gray-500 text-13 mt-1">
-                          0/500 characters
+                          {charCount}/500 characters
                         </div>
                       </div>
                     </div>
                   </div>
+
                   <div className="flex-align justify-content-end gap-8">
                     <button
                       type="submit"

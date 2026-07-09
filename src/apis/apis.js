@@ -1293,3 +1293,43 @@ export async function getStudentAnswers(params) {
     throw error;
   }
 }
+
+export async function getStudentSubjectAccuracy(params) {
+  try {
+    const query = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const response = await axiosInstance.get(
+      `/admin/studentSubjectAccuracy?${query}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("getStudentSubjectAccuracy() error", error);
+    throw error;
+  }
+}
+
+//?==================== DOUBT OTP ====================
+export async function sendDoubtOtp() {
+  try {
+    const response = await axiosInstance.post(`/doubt/sendOtp`);
+    return response.data;
+  } catch (error) {
+    console.error("sendDoubtOtp() error", error);
+    throw error;
+  }
+}
+
+export async function verifyDoubtOtp(data) {
+  try {
+    const response = await axiosInstance.post(`/doubt/verifyOtp`, data);
+    return response.data;
+  } catch (error) {
+    console.error("verifyDoubtOtp() error", error);
+    throw error;
+  }
+}
