@@ -95,10 +95,8 @@ function MyAnswersModal({ onClose }) {
         {/* Header */}
         <div className="flex-between p-20 border-bottom border-gray-100">
           <div>
-            <h5 className="fw-bold mb-2 text-gray-800">My Answers</h5>
-            <p className="text-13 text-gray-400 mb-0">
-              {total.toLocaleString()} total answers
-            </p>
+            <h5 className="fw-bold mb-2 text-gray-800">Student Answers</h5>
+           
           </div>
           <div className="flex-align gap-10">
             {/* Type filter */}
