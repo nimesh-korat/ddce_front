@@ -117,7 +117,7 @@ function MyAnswersModal({ onClose }) {
             </select>
             {/* Sort */}
             <button
-              className="btn btn-sm btn-outline-secondary rounded-pill px-12"
+              className="btn btn-sm btn-secondary rounded-pill px-12"
               onClick={() => {
                 setDir((d) => (d === "desc" ? "asc" : "desc"));
                 setPage(1);
@@ -129,7 +129,7 @@ function MyAnswersModal({ onClose }) {
               {dir === "desc" ? "Newest" : "Oldest"}
             </button>
             <button
-              className="btn btn-sm btn-outline-secondary rounded-circle"
+              className="btn btn-sm btn-secondary rounded-circle"
               style={{ width: "34px", height: "34px" }}
               onClick={onClose}
             >
@@ -281,14 +281,14 @@ function MyAnswersModal({ onClose }) {
             </p>
             <div className="flex-align gap-4">
               <button
-                className="btn btn-sm btn-outline-secondary rounded-pill px-10 py-4"
+                className="btn btn-sm btn-secondary rounded-pill px-10 py-4"
                 onClick={() => setPage(1)}
                 disabled={page === 1}
               >
                 <i className="ph ph-caret-double-left text-12" />
               </button>
               <button
-                className="btn btn-sm btn-outline-secondary rounded-pill px-10 py-4"
+                className="btn btn-sm btn-secondary rounded-pill px-10 py-4"
                 onClick={() => setPage((p) => p - 1)}
                 disabled={page === 1}
               >
@@ -297,21 +297,21 @@ function MyAnswersModal({ onClose }) {
               {pageNums().map((n) => (
                 <button
                   key={n}
-                  className={`btn btn-sm rounded-pill px-12 py-4 ${n === page ? "btn-main" : "btn-outline-secondary"}`}
+                  className={`btn btn-sm rounded-pill px-12 py-4 ${n === page ? "btn-main" : "btn-secondary"}`}
                   onClick={() => setPage(n)}
                 >
                   {n}
                 </button>
               ))}
               <button
-                className="btn btn-sm btn-outline-secondary rounded-pill px-10 py-4"
+                className="btn btn-sm btn-secondary rounded-pill px-10 py-4"
                 onClick={() => setPage((p) => p + 1)}
                 disabled={page === totalPages}
               >
                 <i className="ph ph-caret-right text-12" />
               </button>
               <button
-                className="btn btn-sm btn-outline-secondary rounded-pill px-10 py-4"
+                className="btn btn-sm btn-secondary rounded-pill px-10 py-4"
                 onClick={() => setPage(totalPages)}
                 disabled={page === totalPages}
               >
