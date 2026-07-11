@@ -1,6 +1,23 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
 import { UserContext } from "../../../utils/UserContex";
 import { useBatchAccess } from "../../../utils/BatchAccessContext";
+import { useQuery } from "@tanstack/react-query";
+import { getStudentAnswers } from "../../../apis/apis";
+import { MathJax, MathJaxContext } from "better-react-mathjax";
+
+const mathConfig = {
+  tex2jax: {
+    inlineMath: [
+      ["$", "$"],
+      ["\\(", "\\)"],
+    ],
+    displayMath: [
+      ["$$", "$$"],
+      ["\\[", "\\]"],
+    ],
+  },
+  messageStyle: "none",
+};
 
 function AnimatedCounter({ target, active, duration = 2000 }) {
   const [display, setDisplay] = useState(0);
@@ -8,17 +25,13 @@ function AnimatedCounter({ target, active, duration = 2000 }) {
   const rafRef = useRef(null);
 
   useEffect(() => {
-    if (!active) return; // only animate when back face is visible
-
+    if (!active) return;
     const from = prevRef.current;
     const to = target || 0;
     prevRef.current = to;
-
     if (from === to && display === to) return;
-
     cancelAnimationFrame(rafRef.current);
     const startTime = performance.now();
-
     const tick = (now) => {
       const progress = Math.min((now - startTime) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
@@ -26,40 +39,42 @@ function AnimatedCounter({ target, active, duration = 2000 }) {
       if (progress < 1) rafRef.current = requestAnimationFrame(tick);
       else setDisplay(to);
     };
-
     rafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [active, target]); // re-run when flipped or target changes
+  }, [active, target]);
 
   return <span>{display.toLocaleString()}</span>;
 }
 
-function Greetings({ dashboardData, refetch }) {
+// ── Main Greetings Component ─────────────────────────────────
+function Greetings({ dashboardData, refetch, onViewAnswers }) {
   const { user } = useContext(UserContext);
   const { isEnabled } = useBatchAccess();
   const [flipped, setFlipped] = useState(false);
-
   const d = dashboardData || {};
   const total_answers = d.total_answers || 0;
 
-  // canFlip = student has batch+phase AND admin enabled flip_card for their batch+phase
   const canFlip = !!(user?.Batch && user?.Phase && isEnabled("flip_card"));
+  const canViewAnswers = !!(
+    user?.Batch &&
+    user?.Phase &&
+    isEnabled("view_answers")
+  );
 
   // Refetch every 3 seconds only while card is flipped
   useEffect(() => {
     if (!flipped || !refetch || !canFlip) return;
-    refetch(); // immediate fetch on flip
+    refetch();
     const interval = setInterval(() => {
       refetch();
     }, 3000);
-    return () => clearInterval(interval); // clear when unflipped or unmounted
+    return () => clearInterval(interval);
   }, [flipped]); // eslint-disable-line
 
   const handleMouseEnter = () => {
     if (!canFlip) return;
     setFlipped(true);
   };
-
   const handleMouseLeave = () => {
     if (!canFlip) return;
     setFlipped(false);
@@ -73,6 +88,7 @@ function Greetings({ dashboardData, refetch }) {
           height: 360px;
           perspective: 1400px;
           cursor: pointer;
+          overflow: visible;
         }
         .greet-inner {
           width: 100%;
@@ -81,22 +97,20 @@ function Greetings({ dashboardData, refetch }) {
           transform-style: preserve-3d;
           transition: transform 0.75s cubic-bezier(0.4, 0.2, 0.2, 1);
           border-radius: 16px;
+          overflow: visible;
         }
-        .greet-inner.flipped {
-          transform: rotateY(-180deg);
-        }
-        .greet-front,
-        .greet-back {
+        .greet-inner.flipped { transform: rotateY(-180deg); }
+        .greet-front, .greet-back {
           position: absolute;
           inset: 0;
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
           border-radius: 16px;
-          overflow: hidden;
         }
         .greet-front {
           background: #ffffff;
           box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+          overflow: hidden;
         }
         .greet-back {
           transform: rotateY(180deg);
@@ -107,29 +121,25 @@ function Greetings({ dashboardData, refetch }) {
           justify-content: center;
           gap: 20px;
           padding: 32px;
+          overflow: visible;
         }
         @keyframes greet_pulse {
           0%, 100% { box-shadow: 0 0 0 4px rgba(52,211,153,0.2); }
           50%       { box-shadow: 0 0 0 12px rgba(52,211,153,0.04); }
         }
-        /* Responsive height */
-        @media (max-width: 1399px) {
-          .greet-scene { height: 400px; }
-        }
-        @media (max-width: 991px) {
-          .greet-scene { height: 420px; }
-        }
-        @media (max-width: 575px) {
-          .greet-scene { height: 380px; }
-          .greet-back { padding: 24px 20px; gap: 16px; }
-        }
+        @media (max-width: 1399px) { .greet-scene { height: 400px; } }
+        @media (max-width: 991px)  { .greet-scene { height: 420px; } }
+        @media (max-width: 575px)  { .greet-scene { height: 380px; } .greet-back { padding: 24px 20px; gap: 16px; } }
       `}</style>
 
       <div
         className="w-100"
+        style={{
+          position: "relative",
+          cursor: canFlip ? "pointer" : "default",
+        }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        style={{ cursor: canFlip ? "pointer" : "default" }}
       >
         <div className="greet-scene">
           <div className={`greet-inner${flipped ? " flipped" : ""}`}>
@@ -167,6 +177,7 @@ function Greetings({ dashboardData, refetch }) {
 
             {/* ── BACK ── */}
             <div className="greet-back">
+              {/* Live dot */}
               <div
                 style={{ display: "flex", alignItems: "center", gap: "8px" }}
               >
@@ -192,6 +203,7 @@ function Greetings({ dashboardData, refetch }) {
                 </span>
               </div>
 
+              {/* Counter */}
               <div style={{ textAlign: "center" }}>
                 <div
                   style={{
@@ -214,7 +226,7 @@ function Greetings({ dashboardData, refetch }) {
                 <div
                   style={{
                     color: "rgba(255,255,255,0.6)",
-                    fontSize: "clamp(13px, 2vw, 16px)",
+                    fontSize: "clamp(13px,2vw,16px)",
                     marginTop: "10px",
                     fontWeight: 500,
                   }}
@@ -231,7 +243,47 @@ function Greetings({ dashboardData, refetch }) {
             </div>
           </div>
         </div>
+
+        {/* View Answers button — outside 3D context, rendered as overlay */}
+        {flipped && (canViewAnswers || true) && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: "24px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 10,
+            }}
+          >
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onViewAnswers) onViewAnswers();
+              }}
+              style={{
+                background: "rgba(255,255,255,0.15)",
+                border: "1px solid rgba(255,255,255,0.35)",
+                borderRadius: "50px",
+                color: "#fff",
+                padding: "10px 24px",
+                fontSize: "13px",
+                fontWeight: 600,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                backdropFilter: "blur(8px)",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <i className="ph ph-list-checks" style={{ fontSize: "16px" }} />
+              View Answers
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Answers Modal */}
     </>
   );
 }

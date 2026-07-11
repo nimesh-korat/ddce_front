@@ -25,6 +25,7 @@ const FEATURE_LABELS = {
   practice: "Practice",
   doubts: "Doubts",
   flip_card: "Live Stats Flip Card",
+  view_answers: "View All Answers (Flip Card)",
 };
 
 const FEATURE_ICONS = {
@@ -40,6 +41,7 @@ const FEATURE_ICONS = {
   practice: "ph-barbell",
   doubts: "ph-seal-question",
   flip_card: "ph-cards",
+  view_answers: "ph-list-checks",
 };
 
 const VIS_OPTIONS = [

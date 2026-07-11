@@ -1333,3 +1333,21 @@ export async function verifyDoubtOtp(data) {
     throw error;
   }
 }
+
+//?==================== MY ANSWERS (Student) ====================
+export async function getMyAnswers(params) {
+  try {
+    const query = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const response = await axiosInstance.get(`/myAnswers?${query}`);
+    return response.data;
+  } catch (error) {
+    console.error("getMyAnswers() error", error);
+    throw error;
+  }
+}
