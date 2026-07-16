@@ -228,7 +228,7 @@ function ProfileTab({ data }) {
                 aria-controls="pills-password"
                 aria-selected="false"
               >
-                Password Settings
+                Change Password
               </button>
             </li>
           </ul>
