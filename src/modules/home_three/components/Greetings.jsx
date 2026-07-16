@@ -114,10 +114,19 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
         }
         @media (max-width: 767px) {
           .greet-front {
-            background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(253, 253, 253, 0.12) 100%), url("assets/images/bg/rathyatra_vidhyal.png");
+            background-image: linear-gradient(135deg, rgba(250, 250, 250, 0.08) 0%, rgba(255, 255, 255, 0.12) 100%), url("assets/images/bg/rathyatra_vidhyal.png");
             background-repeat: no-repeat;
             background-position: center center;
-            background-size: cover;
+            background-size: contain;
+          }
+          .greet-scene {
+            height: auto !important;
+            min-height: unset !important;
+            aspect-ratio: 4 / 3;
+          }
+          .greet-inner {
+            height: 100% !important;
+            min-height: unset !important;
           }
           .greet-front .grettings-box-two__content {
             display: none !important;
