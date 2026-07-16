@@ -24,6 +24,8 @@ function Practice() {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [answerResult, setAnswerResult] = useState(null);
   const queryClient = useQueryClient();
+  const [search, setSearch] = useState("");
+  const [subjectFilter, setSubjectFilter] = useState("");
 
   const toggleSidebar = () => setIsSidebarActive((p) => !p);
   const closeSidebar = () => setIsSidebarActive(false);
@@ -124,7 +126,22 @@ function Practice() {
     // refetchQuestion fires via useEffect once answerResult becomes null
   };
 
-  const sets = setsData?.data.reverse() || [];
+  const allSets = setsData?.data || [];
+
+  // Extract unique subjects from all sets' titles (since sets don't have subject field)
+  // Filter sets by search (title) and subject match
+  // Extract unique subjects across all practice sets
+  const allSubjects = [
+    ...new Set(allSets.flatMap((s) => s.subjects || [])),
+  ].sort();
+
+  const sets = allSets.filter((s) => {
+    const matchSearch =
+      !search || s.title?.toLowerCase().includes(search.toLowerCase());
+    const matchSubject =
+      !subjectFilter || (s.subjects || []).includes(subjectFilter);
+    return matchSearch && matchSubject;
+  });
   const question = questionData?.data;
   const setCompleted =
     questionData?.message === "all_completed" && !questionLoading;
@@ -216,6 +233,166 @@ function Practice() {
                   </div>
                 </div>
               )}
+
+              {/* ── Filter Bar ── */}
+              {/* {!setsLoading && allSets.length > 0 && (
+                <div className="card border border-gray-100 mb-24 shadow-sm">
+                  <div className="card-body p-16">
+                    <div className="row g-12 align-items-center">
+                   
+                      <div className="col-lg-5 col-md-6">
+                        <label
+                          className="text-12 fw-semibold text-gray-500 text-uppercase mb-6 d-block"
+                          style={{ letterSpacing: "0.5px" }}
+                        >
+                          Search
+                        </label>
+                        <div className="position-relative">
+                          <i
+                            className="ph ph-magnifying-glass position-absolute text-gray-400"
+                            style={{
+                              top: "50%",
+                              left: "14px",
+                              transform: "translateY(-50%)",
+                              fontSize: "15px",
+                              pointerEvents: "none",
+                            }}
+                          />
+                          <input
+                            type="text"
+                            className="form-control rounded-8"
+                            style={{
+                              paddingLeft: "38px",
+                              height: "40px",
+                              fontSize: "14px",
+                              border: "1.5px solid #e2e8f0",
+                              background: "#f8fafc",
+                            }}
+                            placeholder="Search by practice title..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                          />
+                          {search && (
+                            <button
+                              onClick={() => setSearch("")}
+                              style={{
+                                position: "absolute",
+                                right: "10px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                background: "none",
+                                border: "none",
+                                cursor: "pointer",
+                                color: "#94a3b8",
+                                padding: "2px",
+                              }}
+                            >
+                              <i className="ph ph-x text-14" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="col-lg-4 col-md-6">
+                        <label
+                          className="text-12 fw-semibold text-gray-500 text-uppercase mb-6 d-block"
+                          style={{ letterSpacing: "0.5px" }}
+                        >
+                          Subject
+                        </label>
+                        <div className="position-relative">
+                          <i
+                            className="ph ph-books position-absolute text-gray-400"
+                            style={{
+                              top: "50%",
+                              left: "12px",
+                              transform: "translateY(-50%)",
+                              fontSize: "15px",
+                              pointerEvents: "none",
+                            }}
+                          />
+                          <select
+                            className="form-select rounded-8"
+                            style={{
+                              paddingLeft: "34px",
+                              height: "40px",
+                              fontSize: "14px",
+                              border: "1.5px solid #e2e8f0",
+                              background: "#f8fafc",
+                              appearance: "auto",
+                            }}
+                            value={subjectFilter}
+                            onChange={(e) => setSubjectFilter(e.target.value)}
+                          >
+                            <option value="">All Subjects</option>
+                            {allSubjects.map((s) => (
+                              <option key={s} value={s}>
+                                {s}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div
+                        className="col-lg-3 col-md-12 d-flex align-items-end gap-10 justify-content-lg-end"
+                        style={{ paddingTop: "24px" }}
+                      >
+                        {search || subjectFilter ? (
+                          <>
+                            <span className="text-13 text-main-600 fw-semibold bg-main-50 py-6 px-12 rounded-pill">
+                              {sets.length} of {allSets.length} sets
+                            </span>
+                            <button
+                              className="btn btn-sm rounded-8 flex-align gap-6 fw-medium"
+                              style={{
+                                background: "#eb6f6f",
+                                color: "#dc2626",
+                                border: "none",
+                                height: "34px",
+                                padding: "0 14px",
+                                fontSize: "13px",
+                              }}
+                              onClick={() => {
+                                setSearch("");
+                                setSubjectFilter("");
+                              }}
+                            >
+                              <i className="ph ph-x text-12" /> Clear
+                            </button>
+                          </>
+                        ) : (
+                          <span className="text-13 text-main-600 fw-semibold bg-main-50 py-6 px-12 rounded-pill">
+                            {sets.length} of {allSets.length} sets
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )} */}
+
+              {!setsLoading &&
+                sets.length === 0 &&
+                (search || subjectFilter) && (
+                  <div className="card">
+                    <div className="card-body text-center py-32">
+                      <i className="ph ph-magnifying-glass text-48 text-gray-300 d-block mb-12" />
+                      <p className="text-gray-500 mb-8">
+                        No practice sets match your filters.
+                      </p>
+                      <button
+                        className="btn btn-outline-secondary rounded-pill py-8 px-20"
+                        onClick={() => {
+                          setSearch("");
+                          setSubjectFilter("");
+                        }}
+                      >
+                        Clear Filters
+                      </button>
+                    </div>
+                  </div>
+                )}
 
               {!setsLoading && sets.length > 0 && (
                 <>
@@ -341,7 +518,54 @@ function Practice() {
               </div>
 
               {/* Question or completed state */}
-              {questionLoading && <Preloader />}
+              {/* Loading next question — progress circle */}
+              {questionLoading && (
+                <div className="card">
+                  <div className="card-body d-flex flex-column align-items-center justify-content-center py-56 gap-16">
+                    <div className="position-relative d-inline-flex align-items-center justify-content-center">
+                      {/* Outer ring */}
+                      <svg
+                        width="80"
+                        height="80"
+                        style={{ transform: "rotate(-90deg)" }}
+                      >
+                        <circle
+                          cx="40"
+                          cy="40"
+                          r="34"
+                          fill="none"
+                          stroke="#f1f5f9"
+                          strokeWidth="6"
+                        />
+                        <circle
+                          cx="40"
+                          cy="40"
+                          r="34"
+                          fill="none"
+                          stroke="#6366f1"
+                          strokeWidth="6"
+                          strokeDasharray="213.6"
+                          strokeLinecap="round"
+                          style={{
+                            animation: "practiceSpinner 1.2s linear infinite",
+                            strokeDashoffset: "53",
+                          }}
+                        />
+                      </svg>
+                      <i className="ph ph-arrow-right text-main-600 text-20 position-absolute" />
+                    </div>
+                    <p className="text-14 text-gray-400 fw-medium mb-0">
+                      Loading next question...
+                    </p>
+                    <style>{`
+                      @keyframes practiceSpinner {
+                        0%   { stroke-dashoffset: 213.6; }
+                        100% { stroke-dashoffset: -213.6; }
+                      }
+                    `}</style>
+                  </div>
+                </div>
+              )}
 
               {!questionLoading && setCompleted && (
                 <div className="card">
