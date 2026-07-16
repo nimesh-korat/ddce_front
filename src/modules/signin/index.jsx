@@ -67,8 +67,11 @@ function SignIn() {
     <>
       {loginQuery.isLoading && <Preloader />}
       <section className="auth d-flex">
-        <div className="auth-left bg-main-50 flex-center p-24">
+        {/* <div className="auth-left bg-main-50 flex-center p-24">
           <img src="assets/images/thumbs/auth-img1.png" alt="" />
+        </div> */}
+        <div className="auth-left bg-main-50 flex-center">
+          <img src="assets/images/bg/rathyatra_vidhyal.png"  alt="" />
         </div>
         <div className="auth-right py-40 px-24 flex-center flex-column">
           <div className="auth-right__inner mx-auto w-100">
