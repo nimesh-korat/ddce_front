@@ -112,6 +112,17 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
           box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
           overflow: hidden;
         }
+        @media (max-width: 767px) {
+          .greet-front {
+            background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(253, 253, 253, 0.12) 100%), url("assets/images/bg/rathyatra_vidhyal.png");
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+          }
+          .greet-front .grettings-box-two__content {
+            display: none !important;
+          }
+        }
         .greet-back {
           transform: rotateY(180deg);
           background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1a3a5c 100%);
@@ -137,6 +148,7 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
         style={{
           position: "relative",
           cursor: canFlip ? "pointer" : "default",
+          position: "relative",
         }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
