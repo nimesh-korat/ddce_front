@@ -112,28 +112,18 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
           box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
           overflow: hidden;
         }
-        /* ── DOODLE / OCCASION MODE (uncomment to enable) ──────
+        /* ── DOODLE / OCCASION MODE ── */
         @media (max-width: 767px) {
           .greet-front {
-            background-image: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(139,92,246,0.12) 100%), url("assets/images/bg/star-shape.png");
+            background-image: url("assets/images/doodles/SPAIN_FIFA.png");
             background-repeat: no-repeat;
             background-position: center center;
-            background-size: contain;
-          }
-          .greet-scene {
-            height: auto !important;
-            min-height: unset !important;
-            aspect-ratio: 4 / 3;
-          }
-          .greet-inner {
-            height: 100% !important;
-            min-height: unset !important;
+            background-size: 100% 100%;
           }
           .greet-front .grettings-box-two__content {
             display: none !important;
           }
         }
-        ── END DOODLE MODE ── */
         .greet-back {
           transform: rotateY(180deg);
           background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1a3a5c 100%);
@@ -159,7 +149,6 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
         style={{
           position: "relative",
           cursor: canFlip ? "pointer" : "default",
-          position: "relative",
         }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
