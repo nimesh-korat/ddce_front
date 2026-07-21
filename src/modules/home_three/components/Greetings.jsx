@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState, useEffect } from "react";
 import { UserContext } from "../../../utils/UserContex";
 import { useBatchAccess } from "../../../utils/BatchAccessContext";
 import { useQuery } from "@tanstack/react-query";
-import { getStudentAnswers } from "../../../apis/apis";
+import { getActiveDoodle, getStudentAnswers } from "../../../apis/apis";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
 
 const mathConfig = {
@@ -41,7 +41,7 @@ function AnimatedCounter({ target, active, duration = 2000 }) {
     };
     rafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [active, target]);
+  }, [active, target]); // eslint-disable-line
 
   return <span>{display.toLocaleString()}</span>;
 }
@@ -51,6 +51,7 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
   const { user } = useContext(UserContext);
   const { isEnabled } = useBatchAccess();
   const [flipped, setFlipped] = useState(false);
+
   const d = dashboardData || {};
   const total_answers = d.total_answers || 0;
 
@@ -61,7 +62,50 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
     isEnabled("view_answers")
   );
 
-  // Refetch every 3 seconds only while card is flipped
+  // Fetch active doodle — use localStorage as instant cache to prevent flash
+  const getCachedDoodle = () => {
+    try {
+      const cached = localStorage.getItem("activeDoodle");
+      if (!cached) return null;
+      const { data, expiry } = JSON.parse(cached);
+      if (Date.now() > expiry) {
+        localStorage.removeItem("activeDoodle");
+        return null;
+      }
+      return data;
+    } catch {
+      return null;
+    }
+  };
+
+  const [activeDoodle, setActiveDoodle] = useState(() => getCachedDoodle());
+
+  const { data: doodleRes } = useQuery({
+    queryKey: ["activeDoodle"],
+    queryFn: getActiveDoodle,
+    staleTime: 5 * 60 * 1000,
+    retry: false,
+  });
+
+  useEffect(() => {
+    const fresh = doodleRes?.data || null;
+    setActiveDoodle(fresh);
+    try {
+      if (fresh) {
+        localStorage.setItem(
+          "activeDoodle",
+          JSON.stringify({
+            data: fresh,
+            expiry: Date.now() + 5 * 60 * 1000, // 5 min cache
+          }),
+        );
+      } else {
+        localStorage.removeItem("activeDoodle");
+      }
+    } catch {}
+  }, [doodleRes]);
+
+  // Refetch every 3 seconds only while flipped
   useEffect(() => {
     if (!flipped || !refetch || !canFlip) return;
     refetch();
@@ -83,6 +127,7 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
   return (
     <>
       <style>{`
+        /* ── Base card ── */
         .greet-scene {
           width: 100%;
           height: 360px;
@@ -112,26 +157,6 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
           box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
           overflow: hidden;
         }
-        @media (max-width: 767px) {
-          .greet-front {
-            background-image: linear-gradient(135deg, rgba(250, 250, 250, 0.08) 0%, rgba(255, 255, 255, 0.12) 100%), url("assets/images/doodles/SPAIN_FIFA.png");
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: contain;
-          }
-          .greet-scene {
-            height: auto !important;
-            min-height: unset !important;
-            aspect-ratio: 4 / 3;
-          }
-          .greet-inner {
-            height: 100% !important;
-            min-height: unset !important;
-          }
-          .greet-front .grettings-box-two__content {
-            display: none !important;
-          }
-        }
         .greet-back {
           transform: rotateY(180deg);
           background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1a3a5c 100%);
@@ -147,9 +172,43 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
           0%, 100% { box-shadow: 0 0 0 4px rgba(52,211,153,0.2); }
           50%       { box-shadow: 0 0 0 12px rgba(52,211,153,0.04); }
         }
+
+        /* ── Desktop responsive heights ── */
         @media (max-width: 1399px) { .greet-scene { height: 400px; } }
         @media (max-width: 991px)  { .greet-scene { height: 420px; } }
-        @media (max-width: 575px)  { .greet-scene { height: 380px; } .greet-back { padding: 24px 20px; gap: 16px; } }
+        @media (max-width: 575px)  {
+          .greet-scene { height: 380px; }
+          .greet-back  { padding: 24px 20px; gap: 16px; }
+        }
+
+        /* ── DOODLE mobile view ── */
+        ${
+          activeDoodle
+            ? `
+          @media (max-width: 767px) {
+            .greet-scene {
+              height: auto !important;
+              min-height: unset !important;
+              aspect-ratio: 4 / 3;
+            }
+            .greet-inner {
+              height: 100% !important;
+              min-height: unset !important;
+            }
+            .greet-front {
+              background-image: url("${activeDoodle.image_url}");
+              background-repeat: no-repeat;
+              background-position: center center;
+              background-size: cover;
+              overflow: hidden;
+            }
+            .greet-front .grettings-box-two__content {
+              display: none !important;
+            }
+          }
+        `
+            : ""
+        }
       `}</style>
 
       <div
@@ -157,7 +216,6 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
         style={{
           position: "relative",
           cursor: canFlip ? "pointer" : "default",
-          position: "relative",
         }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -198,7 +256,6 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
 
             {/* ── BACK ── */}
             <div className="greet-back">
-              {/* Live dot */}
               <div
                 style={{ display: "flex", alignItems: "center", gap: "8px" }}
               >
@@ -224,7 +281,6 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
                 </span>
               </div>
 
-              {/* Counter */}
               <div style={{ textAlign: "center" }}>
                 <div
                   style={{
@@ -265,7 +321,7 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
           </div>
         </div>
 
-        {/* View Answers button — outside 3D context, rendered as overlay */}
+        {/* View Answers button — outside 3D context */}
         {flipped && (canViewAnswers || true) && (
           <div
             style={{
@@ -303,8 +359,6 @@ function Greetings({ dashboardData, refetch, onViewAnswers }) {
           </div>
         )}
       </div>
-
-      {/* Answers Modal */}
     </>
   );
 }

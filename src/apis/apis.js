@@ -1351,3 +1351,68 @@ export async function getMyAnswers(params) {
     throw error;
   }
 }
+
+//?==================== DOODLE / OCCASION ====================
+export async function createDoodle(data) {
+  try {
+    const response = await axiosInstance.post(`/admin/doodle`, data);
+    return response.data;
+  } catch (error) {
+    console.error("createDoodle() error", error);
+    throw error;
+  }
+}
+export async function getDoodles() {
+  try {
+    const response = await axiosInstance.get(`/admin/doodle`);
+    return response.data;
+  } catch (error) {
+    console.error("getDoodles() error", error);
+    throw error;
+  }
+}
+export async function updateDoodle(id, data) {
+  try {
+    const response = await axiosInstance.put(`/admin/doodle/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("updateDoodle() error", error);
+    throw error;
+  }
+}
+export async function deleteDoodle(id) {
+  try {
+    const response = await axiosInstance.delete(`/admin/doodle/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("deleteDoodle() error", error);
+    throw error;
+  }
+}
+export async function assignDoodle(data) {
+  try {
+    const response = await axiosInstance.post(`/admin/doodle/assign`, data);
+    return response.data;
+  } catch (error) {
+    console.error("assignDoodle() error", error);
+    throw error;
+  }
+}
+export async function removeAssignment(id) {
+  try {
+    const response = await axiosInstance.delete(`/admin/doodle/assign/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("removeAssignment() error", error);
+    throw error;
+  }
+}
+export async function getActiveDoodle() {
+  try {
+    const response = await axiosInstance.get(`/activeDoodle`);
+    return response.data;
+  } catch (error) {
+    console.error("getActiveDoodle() error", error);
+    throw error;
+  }
+}

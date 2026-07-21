@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import Preloader from "../../utils/preloader/Preloader";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { login } from "../../apis/apis";
+import { login, getActiveDoodle } from "../../apis/apis";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../utils/UserContex";
 import UnityLogo from "../../utils/UnityLogo";
@@ -15,6 +15,51 @@ function SignIn() {
   const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
   const navigate = useNavigate(); // To navigate to another page
   const { setUser } = useContext(UserContext); // Access setUser from the context
+
+  // Use window.__doodleImageUrl set by index.html script (runs before React)
+  // This gives us the URL synchronously with zero delay
+  const getCachedDoodle = () => {
+    try {
+      // First check the global set by index.html inline script
+      if (window.__doodleImageUrl) {
+        const cached = localStorage.getItem("activeDoodle");
+        if (cached) {
+          const { data, expiry } = JSON.parse(cached);
+          if (Date.now() < expiry && data) return data;
+        }
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  const [activeDoodle, setActiveDoodle] = useState(() => getCachedDoodle());
+
+  const { data: doodleData } = useQuery({
+    queryKey: ["activeDoodle"],
+    queryFn: getActiveDoodle,
+    staleTime: 5 * 60 * 1000,
+    retry: false,
+  });
+
+  useEffect(() => {
+    const fresh = doodleData?.data || null;
+    setActiveDoodle(fresh);
+    try {
+      if (fresh) {
+        localStorage.setItem(
+          "activeDoodle",
+          JSON.stringify({
+            data: fresh,
+            expiry: Date.now() + 5 * 60 * 1000,
+          }),
+        );
+      } else {
+        localStorage.removeItem("activeDoodle");
+      }
+    } catch {}
+  }, [doodleData]);
 
   useEffect(() => {
     // Check if the user is already logged in (by checking for a token)
@@ -67,11 +112,21 @@ function SignIn() {
     <>
       {loginQuery.isLoading && <Preloader />}
       <section className="auth d-flex">
-        {/* <div className="auth-left bg-main-50 flex-center p-24">
-          <img src="assets/images/thumbs/auth-img1.png" alt="" />
-        </div> */}
-        <div className="auth-left bg-main-50 flex-center">
-          <img src="assets/images/doodles/SPAIN_FIFA.png" alt="" />
+        <div className="auth-left bg-main-50 flex-center p-24">
+          <img
+            src={
+              activeDoodle?.image_url ||
+              window.__doodleImageUrl ||
+              "assets/images/thumbs/auth-img1.png"
+            }
+            alt={activeDoodle?.title || ""}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100%",
+              objectFit: "contain",
+              transition: "opacity 0.3s ease",
+            }}
+          />
         </div>
         <div className="auth-right py-40 px-24 flex-center flex-column">
           <div className="auth-right__inner mx-auto w-100">

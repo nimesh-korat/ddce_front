@@ -50,6 +50,9 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/batchAccess":
         setActiveItem("Batch Access");
         break;
+      case "/admin/doodle":
+        setActiveItem("Doodle / Occasions");
+        break;
       case "/admin/studentAnswers":
         setActiveItem("Student Answers");
         break;
@@ -104,21 +107,6 @@ function AdminSidebar({ isActive, closeSidebar }) {
               </li>
               <li
                 className={`sidebar-menu__item ${
-                  activeItem === "Students" ? "activePage" : ""
-                } `}
-              >
-                <Link
-                  to="/admin/viewStudentWiseGivenExamData"
-                  className="sidebar-menu__link "
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-blueprint" />
-                  </span>
-                  <span className="text">Students</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
                   activeItem === "Student Answers" ? "activePage" : ""
                 } `}
               >
@@ -130,6 +118,18 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-table" />
                   </span>
                   <span className="text">Student Answers</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Doodle / Occasions" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/doodle" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-paint-brush" />
+                  </span>
+                  <span className="text">Doodle / Occasions</span>
                 </Link>
               </li>
               <li
@@ -229,6 +229,21 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-blueprint" />
                   </span>
                   <span className="text">Given Exam Data</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Students" ? "activePage" : ""
+                } `}
+              >
+                <Link
+                  to="/admin/viewStudentWiseGivenExamData"
+                  className="sidebar-menu__link "
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-blueprint" />
+                  </span>
+                  <span className="text">Students</span>
                 </Link>
               </li>
 

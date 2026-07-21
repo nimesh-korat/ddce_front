@@ -54,6 +54,7 @@ import AssignPractice from "./mentor/AssignPractice";
 import MyAssignments from "./mentor/MyAssignments";
 import Practice from "./modules/practice";
 import StudentProfile from "./admin/StudentProfile";
+import DoodleAdmin from "./admin/Doodle";
 
 function App() {
   return (
@@ -472,6 +473,14 @@ function App() {
             element={
               <AdminRoutes>
                 <ShowTests />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/doodle"
+            element={
+              <AdminRoutes>
+                <DoodleAdmin />
               </AdminRoutes>
             }
           />

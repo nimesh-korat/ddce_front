@@ -8,6 +8,41 @@
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="A Portal For Giving Online Exams" />
   <link rel="apple-touch-icon" href="./assets/images/logo/aim4rank_logo.png" />
+
+  <!-- Doodle: inject CSS before React renders to prevent flash -->
+  <script>
+    (function() {
+      try {
+        var raw = localStorage.getItem('activeDoodle');
+        if (!raw) return;
+        var parsed = JSON.parse(raw);
+        if (!parsed || !parsed.data || !parsed.data.image_url) return;
+        if (Date.now() > parsed.expiry) { localStorage.removeItem('activeDoodle'); return; }
+        var url = parsed.data.image_url;
+        // Preload image into browser cache immediately
+        var preload = document.createElement('link');
+        preload.rel  = 'preload';
+        preload.as   = 'image';
+        preload.href = url;
+        document.head.appendChild(preload);
+
+        // Also set auth-left img src directly before React mounts
+        window.__doodleImageUrl = url;
+
+        var style = document.createElement('style');
+        style.id = 'doodle-style';
+        style.textContent = [
+          '@media (max-width: 767px) {',
+          '  .greet-scene { height: auto !important; min-height: unset !important; aspect-ratio: 4/3; }',
+          '  .greet-inner { height: 100% !important; min-height: unset !important; }',
+          '  .greet-front { background-image: url("' + url + '") !important; background-repeat: no-repeat !important; background-position: center center !important; background-size: cover !important; overflow: hidden !important; }',
+          '  .greet-front .grettings-box-two__content { display: none !important; }',
+          '}'
+        ].join('\n');
+        document.head.appendChild(style);
+      } catch(e) {}
+    })();
+  </script>
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <title>AIM4RANK</title>
 
@@ -200,29 +235,29 @@
   <!-- Favicon -->
   <link rel="shortcut icon" href="./assets/images/logo/logo2.png">
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
   <!-- file upload -->
-  <!-- <link rel="stylesheet" href="../../assets/css/file-upload.css"> -->
+  <!-- <link rel="stylesheet" href="../assets/css/file-upload.css"> -->
   <!-- file upload -->
-  <!-- <link rel="stylesheet" href="../../assets/css/plyr.css"> -->
+  <!-- <link rel="stylesheet" href="../assets/css/plyr.css"> -->
   <!-- DataTables -->
   <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
   <!-- full calendar -->
-  <!-- <link rel="stylesheet" href="../../assets/css/full-calendar.css"> -->
+  <!-- <link rel="stylesheet" href="../assets/css/full-calendar.css"> -->
   <!-- jquery Ui -->
-  <link rel="stylesheet" href="../../assets/css/jquery-ui.css">
+  <link rel="stylesheet" href="../assets/css/jquery-ui.css">
   <!-- editor quill Ui -->
-  <!-- <link rel="stylesheet" href="../../assets/css/editor-quill.css"> -->
+  <!-- <link rel="stylesheet" href="../assets/css/editor-quill.css"> -->
   <!-- apex charts Css -->
-  <!-- <link rel="stylesheet" href="../../assets/css/apexcharts.css"> -->
+  <!-- <link rel="stylesheet" href="../assets/css/apexcharts.css"> -->
   <!-- calendar Css -->
-  <!-- <link rel="stylesheet" href="../../assets/css/calendar.css"> -->
+  <!-- <link rel="stylesheet" href="../assets/css/calendar.css"> -->
   <!-- jvector map Css -->
-  <!-- <link rel="stylesheet" href="../../assets/css/jquery-jvectormap-2.0.5.css"> -->
+  <!-- <link rel="stylesheet" href="../assets/css/jquery-jvectormap-2.0.5.css"> -->
   <!-- Add jQuery and DataTables JS/CSS -->
   <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"> -->
   <!-- Main css -->
-  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/main.css">
 
 
   <style>
@@ -444,30 +479,30 @@
   <div id="root"></div>
 
   <!-- Jquery js -->
-  <!-- <script src="../../assets/js/jquery-3.7.1.min.js"></script> -->
+  <!-- <script src="../assets/js/jquery-3.7.1.min.js"></script> -->
   <!-- Bootstrap Bundle Js -->
-  <script src="../../assets/js/boostrap.bundle.min.js"></script>
+  <script src="../assets/js/boostrap.bundle.min.js"></script>
   <!-- Phosphor Js -->
-  <script src="../../assets/js/phosphor-icon.js"></script>
+  <script src="../assets/js/phosphor-icon.js"></script>
   <!-- file upload -->
-  <!-- <script src="../../assets/js/file-upload.js"></script> -->
+  <!-- <script src="../assets/js/file-upload.js"></script> -->
   <!-- file upload -->
-  <!-- <script src="../../assets/js/plyr.js"></script> -->
+  <!-- <script src="../assets/js/plyr.js"></script> -->
   <!-- dataTables -->
   <!-- <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script> -->
   <!-- full calendar -->
-  <!-- <script src="../../assets/js/full-calendar.js"></script> -->
+  <!-- <script src="../assets/js/full-calendar.js"></script> -->
   <!-- jQuery UI -->
-  <!-- <script src="../../assets/js/jquery-ui.js"></script> -->
+  <!-- <script src="../assets/js/jquery-ui.js"></script> -->
   <!-- jQuery UI -->
-  <!-- <script src="../../assets/js/editor-quill.js"></script> -->
+  <!-- <script src="../assets/js/editor-quill.js"></script> -->
   <!-- apex charts -->
-  <!-- <script src="../../assets/js/apexcharts.min.js"></script> -->
+  <!-- <script src="../assets/js/apexcharts.min.js"></script> -->
   <!-- Calendar Js -->
-  <!-- <script src="../../assets/js/calendar.js"></script> -->
+  <!-- <script src="../assets/js/calendar.js"></script> -->
 
   <!-- main js -->
-  <script src="../../assets/js/main.js"></script>
+  <script src="../assets/js/main.js"></script>
   <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript" charset="utf8"
     src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
