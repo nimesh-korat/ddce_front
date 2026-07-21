@@ -336,7 +336,7 @@ function DoodleAdmin() {
                       {editId && (
                         <button
                           type="button"
-                          className="btn btn-outline-secondary rounded-pill py-9 px-16"
+                          className="btn btn-secondary rounded-pill py-9 px-16"
                           onClick={resetForm}
                         >
                           Cancel
@@ -418,14 +418,14 @@ function DoodleAdmin() {
                                 </span>
                               )}
                               <button
-                                className="btn btn-sm btn-outline-info-600 rounded-pill"
+                                className="btn btn-sm btn-info rounded-pill"
                                 onClick={() => handleEdit(d)}
                                 title="Edit"
                               >
                                 <i className="ph ph-pencil text-12" />
                               </button>
                               <button
-                                className="btn btn-sm btn-outline-danger rounded-pill"
+                                className="btn btn-sm btn-danger rounded-pill"
                                 onClick={() => handleDelete(d)}
                                 title="Delete"
                               >
@@ -454,7 +454,7 @@ function DoodleAdmin() {
                                 </span>
                               </span>
                               <button
-                                className="btn btn-sm btn-outline-main rounded-pill flex-align gap-4 text-12"
+                                className="btn btn-sm btn-main rounded-pill flex-align gap-4 text-12"
                                 onClick={() =>
                                   setAssignForm(
                                     assignForm?.doodle_id === d.id
@@ -531,7 +531,7 @@ function DoodleAdmin() {
                                       <i className="ph ph-floppy-disk" />
                                     </button>
                                     <button
-                                      className="btn btn-sm btn-outline-secondary rounded-pill"
+                                      className="btn btn-sm btn-secondary rounded-pill"
                                       onClick={() => setAssignForm(null)}
                                     >
                                       <i className="ph ph-x" />
