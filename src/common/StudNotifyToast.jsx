@@ -4,12 +4,11 @@ import { getActiveStudNotify } from "../apis/apis";
 import { useLocation } from "react-router-dom";
 
 function timeAgo(dateStr) {
-  // MySQL returns datetime without timezone — treat as IST (UTC+5:30)
-  // by appending +05:30 offset so JS parses it correctly
-  const normalized =
-    dateStr && !dateStr.includes("T")
-      ? dateStr.replace(" ", "T") + "+05:30"
-      : dateStr;
+  // DB stores whatever you typed (IST) without timezone info.
+  // "2026-07-22 10:30:00" — parse as LOCAL time (no offset append)
+  // Replace space with T so all browsers parse it consistently as local
+  const normalized = dateStr ? dateStr.replace(" ", "T") : null;
+  if (!normalized) return "";
   const diff = Math.floor((Date.now() - new Date(normalized).getTime()) / 1000);
   if (diff < 0) return "just now";
   if (diff < 60) return `${diff} second${diff !== 1 ? "s" : ""} ago`;
