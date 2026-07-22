@@ -1416,3 +1416,50 @@ export async function getActiveDoodle() {
     throw error;
   }
 }
+
+//?==================== STUDENT NOTIFICATIONS ====================
+export async function createStudNotify(data) {
+  try {
+    const r = await axiosInstance.post(`/admin/studNotify`, data);
+    return r.data;
+  } catch (e) {
+    console.error("createStudNotify error", e);
+    throw e;
+  }
+}
+export async function getStudNotifies() {
+  try {
+    const r = await axiosInstance.get(`/admin/studNotify`);
+    return r.data;
+  } catch (e) {
+    console.error("getStudNotifies error", e);
+    throw e;
+  }
+}
+export async function updateStudNotify(id, data) {
+  try {
+    const r = await axiosInstance.put(`/admin/studNotify/${id}`, data);
+    return r.data;
+  } catch (e) {
+    console.error("updateStudNotify error", e);
+    throw e;
+  }
+}
+export async function deleteStudNotify(id) {
+  try {
+    const r = await axiosInstance.delete(`/admin/studNotify/${id}`);
+    return r.data;
+  } catch (e) {
+    console.error("deleteStudNotify error", e);
+    throw e;
+  }
+}
+export async function getActiveStudNotify() {
+  try {
+    const r = await axiosInstance.get(`/studNotify`);
+    return r.data;
+  } catch (e) {
+    console.error("getActiveStudNotify error", e);
+    throw e;
+  }
+}

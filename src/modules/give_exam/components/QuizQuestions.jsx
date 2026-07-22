@@ -1,6 +1,88 @@
 import { MathJax, MathJaxContext } from "better-react-mathjax";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import Lottie from "lottie-react";
+import confettiAnim from "./confetti.json";
 import Preloader from "../../../utils/preloader/Preloader";
+
+// ── Lottie Cracker Animation ────────────────────────────────
+const SEEN_KEY = "ddcet_seen_prevyear";
+const getSeen = () => {
+  try {
+    return JSON.parse(sessionStorage.getItem(SEEN_KEY) || "{}");
+  } catch {
+    return {};
+  }
+};
+const markSeen = (id) => {
+  try {
+    const s = getSeen();
+    s[id] = 1;
+    sessionStorage.setItem(SEEN_KEY, JSON.stringify(s));
+  } catch {}
+};
+
+function CardCracker({ trigger }) {
+  const [show, setShow] = useState(false);
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    if (!trigger) return;
+    if (getSeen()[trigger]) return; // already shown this attempt
+    markSeen(trigger);
+    setShow(true);
+    setKey((k) => k + 1);
+    const t = setTimeout(() => setShow(false), 5200);
+    return () => clearTimeout(t);
+  }, [trigger]);
+
+  if (!show) return null;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 20,
+        pointerEvents: "none",
+        borderRadius: "inherit",
+        overflow: "hidden",
+      }}
+    >
+      <Lottie
+        key={key}
+        animationData={confettiAnim}
+        loop={false}
+        autoplay={true}
+        rendererSettings={{ preserveAspectRatio: "xMidYMid slice" }}
+        style={{ width: "100%", height: "100%" }}
+      />
+    </div>
+  );
+}
+
+function PrevYearBadge({ year }) {
+  return (
+    <div
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "6px",
+        background: "linear-gradient(135deg, #fef3c7, #fde68a)",
+        border: "1.5px solid #f59e0b",
+        borderRadius: "20px",
+        padding: "4px 12px",
+        fontSize: "12px",
+        fontWeight: 700,
+        color: "#92400e",
+        marginBottom: "10px",
+        boxShadow: "0 2px 8px rgba(245,158,11,0.25)",
+      }}
+    >
+      <span style={{ fontSize: "14px" }}>🎯</span>
+      Asked in DDCET {year}
+    </div>
+  );
+}
 
 const QuizQuestion = React.memo(
   ({
@@ -49,21 +131,50 @@ const QuizQuestion = React.memo(
 
     useEffect(() => {
       setLoading(true);
-      setTimeout(() => {
-        if (window.MathJax && window.MathJax.typesetPromise) {
-          window.MathJax.typesetPromise().catch((err) =>
-            console.error("MathJax re-render failed:", err)
-          );
+      let cancelled = false;
+      const timer = setTimeout(() => {
+        if (cancelled) return;
+        try {
+          if (window.MathJax && window.MathJax.typesetPromise) {
+            const container = document.querySelector(".quiz-question-card");
+            if (!container) {
+              setLoading(false);
+              return;
+            }
+            if (window.MathJax.typesetClear)
+              window.MathJax.typesetClear([container]);
+            window.MathJax.typesetPromise([container])
+              .then(() => {
+                if (!cancelled) setLoading(false);
+              })
+              .catch(() => {
+                if (!cancelled) setLoading(false);
+              });
+          } else {
+            setLoading(false);
+          }
+        } catch {
+          setLoading(false);
         }
-        setLoading(false);
-      }, 10);
+      }, 100);
+      return () => {
+        cancelled = true;
+        clearTimeout(timer);
+      };
     }, [currentQuestion]);
 
     return (
       <>
         <MathJaxContext config={config}>
           <div className="col-md-8 order-md-1 order-2">
-            <div className="card shadow-sm border-0">
+            <div
+              className="card shadow-sm border-0 quiz-question-card"
+              style={{ position: "relative", overflow: "visible" }}
+            >
+              {/* Pop burst from both bottom corners covering whole card */}
+              {currentQuestion?.prevAskedYear && (
+                <CardCracker trigger={currentQuestion.question_id} />
+              )}
               <div className="card-header border-bottom border-gray-100">
                 <h5 className="mb-0">Quiz Questions</h5>
               </div>
@@ -91,6 +202,9 @@ const QuizQuestion = React.memo(
                       </>
                     )}
                     <div className="mb-20">
+                      {currentQuestion.prevAskedYear && (
+                        <PrevYearBadge year={currentQuestion.prevAskedYear} />
+                      )}
                       <label
                         className="h5 mb-8 fw-semibold"
                         style={{ userSelect: "none" }}
@@ -137,7 +251,7 @@ const QuizQuestion = React.memo(
                               </div>
                             </div>
                           );
-                        }
+                        },
                       )}
                     </div>
                   </form>
@@ -182,7 +296,7 @@ const QuizQuestion = React.memo(
         </MathJaxContext>
       </>
     );
-  }
+  },
 );
 
 export default QuizQuestion;

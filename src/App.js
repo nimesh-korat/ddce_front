@@ -55,6 +55,8 @@ import MyAssignments from "./mentor/MyAssignments";
 import Practice from "./modules/practice";
 import StudentProfile from "./admin/StudentProfile";
 import DoodleAdmin from "./admin/Doodle";
+import StudNotifyAdmin from "./admin/StudNotify";
+import StudNotifyToast from "./common/StudNotifyToast";
 
 function App() {
   return (
@@ -477,6 +479,14 @@ function App() {
             }
           />
           <Route
+            path="/admin/studNotify"
+            element={
+              <AdminRoutes>
+                <StudNotifyAdmin />
+              </AdminRoutes>
+            }
+          />
+          <Route
             path="/admin/doodle"
             element={
               <AdminRoutes>
@@ -495,6 +505,7 @@ function App() {
           <Route path="/college-prediction" element={<CollgePredication />} />
           <Route path="*" element={<Error404 />} />
         </Routes>
+        <StudNotifyToast />
       </BrowserRouter>
     </>
   );

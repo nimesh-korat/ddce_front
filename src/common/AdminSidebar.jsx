@@ -50,6 +50,9 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/batchAccess":
         setActiveItem("Batch Access");
         break;
+      case "/admin/studNotify":
+        setActiveItem("Student Notifications");
+        break;
       case "/admin/doodle":
         setActiveItem("Doodle / Occasions");
         break;
@@ -130,6 +133,18 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-paint-brush" />
                   </span>
                   <span className="text">Doodle / Occasions</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Student Notifications" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/studNotify" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-bell-ringing" />
+                  </span>
+                  <span className="text">Student Notifications</span>
                 </Link>
               </li>
               <li

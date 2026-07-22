@@ -47,12 +47,16 @@ function GiveExam() {
     onSuccess: (data) => {
       const shuffledQuestions = shuffleArray(data.data);
       setQuestions(shuffledQuestions);
+      // Clear seen confetti so it shows fresh for this quiz attempt
+      try {
+        sessionStorage.removeItem("ddcet_seen_prevyear");
+      } catch {}
       // Initialize questionStatus
       setQuestionStatus(
         shuffledQuestions.map(() => ({
           std_answer: "",
           attempt_status: "1",
-        }))
+        })),
       );
     },
     onError: (error) => {
@@ -131,7 +135,7 @@ function GiveExam() {
   const validateAllQuestionsAttempted = () => {
     const isAllAttempted = questionStatus.every(
       (status) =>
-        status.attempt_status === "0" || status.attempt_status === "skipped"
+        status.attempt_status === "0" || status.attempt_status === "skipped",
     );
 
     if (!isAllAttempted) {
@@ -242,7 +246,7 @@ function GiveExam() {
     setSelectedOption(
       questionStatus[index]?.std_answer
         ? { key: "", text: questionStatus[index].std_answer }
-        : null
+        : null,
     );
 
     // Reset showSubmitButton if the navigated question is not the last one
