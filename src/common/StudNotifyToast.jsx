@@ -4,12 +4,17 @@ import { getActiveStudNotify } from "../apis/apis";
 import { useLocation } from "react-router-dom";
 
 function timeAgo(dateStr) {
-  // DB stores whatever you typed (IST) without timezone info.
-  // "2026-07-22 10:30:00" — parse as LOCAL time (no offset append)
-  // Replace space with T so all browsers parse it consistently as local
-  const normalized = dateStr ? dateStr.replace(" ", "T") : null;
-  if (!normalized) return "";
-  const diff = Math.floor((Date.now() - new Date(normalized).getTime()) / 1000);
+  // DB stores IST time as plain string "2026-07-22 10:30:00"
+  // Manually parse parts to avoid browser timezone interpretation differences
+  // Then add IST offset (+5:30) to get UTC ms for comparison with Date.now()
+  if (!dateStr) return "";
+  const s = dateStr.replace("T", " ").split(/[- :]/);
+  // s = [year, month, day, hour, min, sec]
+  const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000; // +05:30 in ms
+  const utcMs =
+    Date.UTC(+s[0], +s[1] - 1, +s[2], +s[3] || 0, +s[4] || 0, +s[5] || 0) -
+    IST_OFFSET_MS; // convert IST→UTC
+  const diff = Math.floor((Date.now() - utcMs) / 1000);
   if (diff < 0) return "just now";
   if (diff < 60) return `${diff} second${diff !== 1 ? "s" : ""} ago`;
   const mins = Math.floor(diff / 60);
