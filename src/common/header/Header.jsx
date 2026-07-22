@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useContext, useEffect, useRef } from "react";
-import { useNetworkState, useVibrate } from "react-use";
+import { useNetworkState } from "react-use";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getProfileImage, logout } from "../../apis/apis";
@@ -15,12 +15,9 @@ function Header({ toggleSidebar }) {
   const [showOnline, setShowOnline] = React.useState(false);
   const wasOfflineRef = useRef(false);
 
-  // Vibrate on network type change and online/offline change using react-use
+  // Vibrate on network changes
   const prevTypeRef = useRef(network.type);
   const prevOnlineRef = useRef(network.online);
-  const [vibrateOn, setVibrateOn] = React.useState(false);
-  const [vibratePattern, setVibratePattern] = React.useState([100, 50, 100]);
-  useVibrate(vibrateOn, vibratePattern, false);
 
   useEffect(() => {
     const prevType = prevTypeRef.current;
@@ -28,14 +25,10 @@ function Header({ toggleSidebar }) {
     prevTypeRef.current = network.type;
     prevOnlineRef.current = network.online;
 
-    const trigger = (pattern) => {
-      setVibratePattern(pattern);
-      setVibrateOn(true);
-      setTimeout(() => setVibrateOn(false), 500);
-    };
+    if (!("vibrate" in navigator)) return;
 
     if (prevOnline !== network.online) {
-      trigger(network.online ? [100, 50, 100] : [300]);
+      navigator.vibrate(network.online ? [100, 50, 100] : [300]);
       return;
     }
     if (
@@ -46,7 +39,7 @@ function Header({ toggleSidebar }) {
       (prevType === "wifi" || prevType === "cellular") &&
       (network.type === "wifi" || network.type === "cellular")
     ) {
-      trigger([100, 50, 100]);
+      navigator.vibrate([100, 50, 100]);
     }
   }, [network.type, network.online]); // eslint-disable-line
 
