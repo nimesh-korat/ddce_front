@@ -15,10 +15,23 @@ import {
   getAllPhase,
 } from "../../apis/apis";
 
-const toLocal = (dt) => (dt ? new Date(dt).toISOString().slice(0, 16) : "");
-const fmtDate = (dt) =>
-  dt
-    ? new Date(dt).toLocaleString("en-IN", {
+const toLocal = (dt) => (dt ? dt.replace(" ", "T").slice(0, 16) : "");
+
+// Parse as IST explicitly — same fix as toast timeAgo
+function parseIST(dateStr) {
+  if (!dateStr) return null;
+  const s = dateStr.replace("T", " ").split(/[- :]/);
+  const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000;
+  return new Date(
+    Date.UTC(+s[0], +s[1] - 1, +s[2], +s[3] || 0, +s[4] || 0, +s[5] || 0) -
+      IST_OFFSET_MS,
+  );
+}
+
+const fmtDate = (dt) => {
+  const d = parseIST(dt);
+  return d
+    ? d.toLocaleString("en-IN", {
         day: "2-digit",
         month: "short",
         year: "numeric",
@@ -27,6 +40,7 @@ const fmtDate = (dt) =>
         hour12: true,
       })
     : "—";
+};
 
 function StudNotifyAdmin() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
