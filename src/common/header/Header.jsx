@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useContext, useEffect, useRef } from "react";
-import { useNetworkState } from "react-use";
+import { useNetworkState, useVibrate } from "react-use";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getProfileImage, logout } from "../../apis/apis";
@@ -14,6 +14,28 @@ function Header({ toggleSidebar }) {
   const network = useNetworkState();
   const [showOnline, setShowOnline] = React.useState(false);
   const wasOfflineRef = useRef(false);
+
+  // Vibrate when switching between wifi and cellular
+  const prevTypeRef = useRef(network.type);
+  const [shouldVibrate, setShouldVibrate] = React.useState(false);
+  useVibrate(shouldVibrate, [100, 50, 100], false);
+
+  useEffect(() => {
+    const prev = prevTypeRef.current;
+    const curr = network.type;
+    prevTypeRef.current = curr;
+    if (
+      network.online &&
+      prev &&
+      curr &&
+      prev !== curr &&
+      (prev === "wifi" || prev === "cellular") &&
+      (curr === "wifi" || curr === "cellular")
+    ) {
+      setShouldVibrate(true);
+      setTimeout(() => setShouldVibrate(false), 300);
+    }
+  }, [network.type]); // eslint-disable-line
 
   useEffect(() => {
     if (!network.online) {
@@ -34,7 +56,7 @@ function Header({ toggleSidebar }) {
       : network.type === "cellular"
         ? {
             icon: "ph-sim-card",
-            color: "#6366f1",
+            color: "#22c55e",
             label: "Connected to Mobile Data",
           }
         : {
