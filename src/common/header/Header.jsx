@@ -30,10 +30,18 @@ function Header({ toggleSidebar }) {
   const netIcon = !network.online
     ? { icon: "ph-wifi-x", color: "#ef4444", label: "You are offline" }
     : network.type === "wifi"
-      ? { icon: "ph-wifi-high", color: "#22c55e", label: "WiFi" }
+      ? { icon: "ph-wifi-high", color: "#22c55e", label: "Connected to WiFi" }
       : network.type === "cellular"
-        ? { icon: "ph-sim-card", color: "#6366f1", label: "Mobile data" }
-        : { icon: "ph-wifi-high", color: "#22c55e", label: "Online" };
+        ? {
+            icon: "ph-sim-card",
+            color: "#6366f1",
+            label: "Connected to Mobile Data",
+          }
+        : {
+            icon: "ph-wifi-high",
+            color: "#22c55e",
+            label: "Connected to WiFi",
+          };
   const navigate = useNavigate();
   // Fetch Profile Picture
   const { data: profilePic } = useQuery({
@@ -220,13 +228,40 @@ function Header({ toggleSidebar }) {
           {/* User Profile Start */}
           {/* Network status indicator */}
           <div
-            className="d-inline-flex align-items-center me-8"
+            className="d-inline-flex align-items-center me-8 position-relative net-icon-wrap"
             style={{ alignSelf: "center" }}
           >
             <i
               className={`ph ${netIcon.icon}`}
-              style={{ fontSize: "20px", color: netIcon.color }}
+              style={{
+                fontSize: "20px",
+                color: netIcon.color,
+                cursor: "default",
+              }}
             />
+            <span
+              style={{
+                position: "absolute",
+                bottom: "-32px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                background: "#1e293b",
+                color: "#fff",
+                fontSize: "11px",
+                fontWeight: 500,
+                padding: "4px 10px",
+                borderRadius: "8px",
+                whiteSpace: "nowrap",
+                pointerEvents: "none",
+                zIndex: 9999,
+                opacity: 0,
+                transition: "opacity 0.2s ease",
+              }}
+              className="net-tooltip"
+            >
+              {netIcon.label}
+            </span>
+            <style>{`.net-icon-wrap:hover .net-tooltip { opacity: 1 !important; }`}</style>
           </div>
 
           {/* Offline toast */}
