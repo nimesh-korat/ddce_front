@@ -96,7 +96,7 @@ function SignIn() {
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("token", data.auth.token);
           localStorage.setItem("session", data.auth.session);
-          navigate("/"); // Redirect to the home page after successful login
+          navigate("/");
         },
       });
     },

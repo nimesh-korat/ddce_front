@@ -25,10 +25,18 @@ function timeAgo(dateStr) {
   return `${days} day${days !== 1 ? "s" : ""} ago`;
 }
 
-const SEEN_KEY = "stud_notify_seen";
+// Per-user localStorage key — persists forever, user-specific
+const getSeenKey = () => {
+  try {
+    const u = JSON.parse(localStorage.getItem("user"));
+    return `stud_notify_seen_${u?.Id || "guest"}`;
+  } catch {
+    return "stud_notify_seen_guest";
+  }
+};
 const getSeenIds = () => {
   try {
-    return JSON.parse(sessionStorage.getItem(SEEN_KEY) || "[]");
+    return JSON.parse(localStorage.getItem(getSeenKey()) || "[]");
   } catch {
     return [];
   }
@@ -38,7 +46,7 @@ const markSeen = (id) => {
     const s = getSeenIds();
     if (!s.includes(id)) {
       s.push(id);
-      sessionStorage.setItem(SEEN_KEY, JSON.stringify(s));
+      localStorage.setItem(getSeenKey(), JSON.stringify(s));
     }
   } catch {}
 };

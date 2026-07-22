@@ -96,7 +96,6 @@ function MyAnswersModal({ onClose }) {
         <div className="flex-between p-20 border-bottom border-gray-100">
           <div>
             <h5 className="fw-bold mb-2 text-gray-800">Student Answers</h5>
-           
           </div>
           <div className="flex-align gap-10">
             {/* Type filter */}
@@ -553,7 +552,7 @@ function Home() {
                     bgColor={"bg-main-two-600 "}
                     img="ph-fill ph-graduation-cap"
                     title="Offline Students"
-                    count="102"
+                    count="104"
                     isLocked={false}
                   />
                   <HomeWidgets

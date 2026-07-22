@@ -56,19 +56,19 @@ function Header({ toggleSidebar }) {
   }, [network.online]);
 
   const netIcon = !network.online
-    ? { icon: "ph-wifi-x", color: "#ef4444", label: "You are offline" }
+    ? { icon: "ph-wifi-x", color: "#ef4444", label: "YOU ARE OFFLINE" }
     : network.type === "wifi"
-      ? { icon: "ph-wifi-high", color: "#22c55e", label: "Connected to WiFi" }
+      ? { icon: "ph-wifi-high", color: "#22c55e", label: "CONNECTED TO WIFI" }
       : network.type === "cellular"
         ? {
             icon: "ph-sim-card",
             color: "#22c55e",
-            label: "Connected to Mobile Data",
+            label: "CONNECTED TO MOBILE DATA",
           }
         : {
             icon: "ph-wifi-high",
             color: "#22c55e",
-            label: "Connected to WiFi",
+            label: "CONNECTED TO WIFI",
           };
   const navigate = useNavigate();
   // Fetch Profile Picture
@@ -89,14 +89,20 @@ function Header({ toggleSidebar }) {
       toast.success("Logged out successfully", {
         autoClose: 1000,
         onClose: () => {
-          localStorage.clear();
+          // Clear only auth keys — preserve stud_notify_seen_* so notifications don't repeat
+          ["user", "token", "session", "activeDoodle"].forEach((k) =>
+            localStorage.removeItem(k),
+          );
           navigate("/signin");
         },
       });
     },
     onError: (error) => {
       toast.error(error.response.data.message, {
-        onClose: () => localStorage.clear(),
+        onClose: () =>
+          ["user", "token", "session", "activeDoodle"].forEach((k) =>
+            localStorage.removeItem(k),
+          ),
       });
     },
   });
