@@ -28,7 +28,7 @@ function timeAgo(dateStr) {
 const SEEN_KEY = "stud_notify_seen";
 const getSeenIds = () => {
   try {
-    return JSON.parse(localStorage.getItem(SEEN_KEY) || "[]");
+    return JSON.parse(sessionStorage.getItem(SEEN_KEY) || "[]");
   } catch {
     return [];
   }
@@ -38,7 +38,7 @@ const markSeen = (id) => {
     const s = getSeenIds();
     if (!s.includes(id)) {
       s.push(id);
-      localStorage.setItem(SEEN_KEY, JSON.stringify(s));
+      sessionStorage.setItem(SEEN_KEY, JSON.stringify(s));
     }
   } catch {}
 };
