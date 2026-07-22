@@ -15,27 +15,40 @@ function Header({ toggleSidebar }) {
   const [showOnline, setShowOnline] = React.useState(false);
   const wasOfflineRef = useRef(false);
 
-  // Vibrate when switching between wifi and cellular
+  // Vibrate on network type change and online/offline change using react-use
   const prevTypeRef = useRef(network.type);
-  const [shouldVibrate, setShouldVibrate] = React.useState(false);
-  useVibrate(shouldVibrate, [100, 50, 100], false);
+  const prevOnlineRef = useRef(network.online);
+  const [vibrateOn, setVibrateOn] = React.useState(false);
+  const [vibratePattern, setVibratePattern] = React.useState([100, 50, 100]);
+  useVibrate(vibrateOn, vibratePattern, false);
 
   useEffect(() => {
-    const prev = prevTypeRef.current;
-    const curr = network.type;
-    prevTypeRef.current = curr;
+    const prevType = prevTypeRef.current;
+    const prevOnline = prevOnlineRef.current;
+    prevTypeRef.current = network.type;
+    prevOnlineRef.current = network.online;
+
+    const trigger = (pattern) => {
+      setVibratePattern(pattern);
+      setVibrateOn(true);
+      setTimeout(() => setVibrateOn(false), 500);
+    };
+
+    if (prevOnline !== network.online) {
+      trigger(network.online ? [100, 50, 100] : [300]);
+      return;
+    }
     if (
       network.online &&
-      prev &&
-      curr &&
-      prev !== curr &&
-      (prev === "wifi" || prev === "cellular") &&
-      (curr === "wifi" || curr === "cellular")
+      prevType &&
+      network.type &&
+      prevType !== network.type &&
+      (prevType === "wifi" || prevType === "cellular") &&
+      (network.type === "wifi" || network.type === "cellular")
     ) {
-      setShouldVibrate(true);
-      setTimeout(() => setShouldVibrate(false), 300);
+      trigger([100, 50, 100]);
     }
-  }, [network.type]); // eslint-disable-line
+  }, [network.type, network.online]); // eslint-disable-line
 
   useEffect(() => {
     if (!network.online) {
