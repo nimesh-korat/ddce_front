@@ -34,6 +34,7 @@ function StudNotifyAdmin() {
   const blank = {
     name: "",
     college_name: "",
+    mode: "Offline",
     join_datetime: "",
     feature_datetime_start: "",
     feature_datetime_end: "",
@@ -118,6 +119,7 @@ function StudNotifyAdmin() {
     setForm({
       name: n.name,
       college_name: n.college_name,
+      mode: n.mode || "Offline",
       join_datetime: toLocal(n.join_datetime),
       feature_datetime_start: toLocal(n.feature_datetime_start),
       feature_datetime_end: toLocal(n.feature_datetime_end),
@@ -218,6 +220,22 @@ function StudNotifyAdmin() {
                         }
                         required
                       />
+                    </div>
+                    <div className="mb-12">
+                      <label className="form-label fw-medium text-13 mb-6">
+                        Mode <span className="text-danger">*</span>
+                      </label>
+                      <select
+                        className="form-control"
+                        value={form.mode}
+                        onChange={(e) =>
+                          setForm((f) => ({ ...f, mode: e.target.value }))
+                        }
+                      >
+                        <option value="Offline">Offline</option>
+                        <option value="Online">Online</option>
+                        <option value="Hybrid">Hybrid</option>
+                      </select>
                     </div>
                     <div className="mb-12">
                       <label className="form-label fw-medium text-13 mb-6">
@@ -331,7 +349,7 @@ function StudNotifyAdmin() {
                       {editId && (
                         <button
                           type="button"
-                          className="btn btn-secondary rounded-pill py-9 px-16"
+                          className="btn btn-outline-secondary rounded-pill py-9 px-16"
                           onClick={() => {
                             setForm(blank);
                             setEditId(null);
@@ -387,13 +405,13 @@ function StudNotifyAdmin() {
                         </div>
                         <div className="flex-align gap-6">
                           <button
-                            className="btn btn-sm btn-info rounded-pill"
+                            className="btn btn-sm btn-outline-info-600 rounded-pill"
                             onClick={() => handleEdit(n)}
                           >
                             <i className="ph ph-pencil text-12" />
                           </button>
                           <button
-                            className="btn btn-sm btn-danger rounded-pill"
+                            className="btn btn-sm btn-outline-danger rounded-pill"
                             onClick={() => handleDelete(n)}
                           >
                             <i className="ph ph-trash text-12" />

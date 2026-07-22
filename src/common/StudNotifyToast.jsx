@@ -4,7 +4,14 @@ import { getActiveStudNotify } from "../apis/apis";
 import { useLocation } from "react-router-dom";
 
 function timeAgo(dateStr) {
-  const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+  // MySQL returns datetime without timezone — treat as IST (UTC+5:30)
+  // by appending +05:30 offset so JS parses it correctly
+  const normalized =
+    dateStr && !dateStr.includes("T")
+      ? dateStr.replace(" ", "T") + "+05:30"
+      : dateStr;
+  const diff = Math.floor((Date.now() - new Date(normalized).getTime()) / 1000);
+  if (diff < 0) return "just now";
   if (diff < 60) return `${diff} second${diff !== 1 ? "s" : ""} ago`;
   const mins = Math.floor(diff / 60);
   if (mins < 60) return `${mins} minute${mins !== 1 ? "s" : ""} ago`;
@@ -83,8 +90,10 @@ export default function StudNotifyToast() {
     // Show for 2s, then 2s gap, then next
     timerRef.current = setTimeout(() => {
       setVisible(false);
-      timerRef.current = setTimeout(processQueue, 2000);
-    }, 5000);
+      // Random gap between 5-50 seconds before next notification
+      const gap = (5 + Math.random() * 45) * 1000;
+      timerRef.current = setTimeout(processQueue, gap);
+    }, 6000);
   };
 
   // Hide immediately when entering quiz page
@@ -170,7 +179,13 @@ export default function StudNotifyToast() {
             <span style={{ color: "#6366f1" }}>{current.name}</span> from{" "}
             <span style={{ color: "#374151" }}>{current.college_name}</span>{" "}
             joined{" "}
-            <span style={{ color: "#6366f1", fontWeight: 700 }}>{timeStr}</span>
+            <span style={{ color: "#6366f1", fontWeight: 700 }}>
+              DDCET {current.mode?.toUpperCase()}{" "}
+            </span>{" "}
+            paid coaching.
+          </p>
+          <p style={{ margin: "4px 0 0", fontSize: "11px", color: "#94a3b8" }}>
+            {timeStr}
           </p>
         </div>
         <button
