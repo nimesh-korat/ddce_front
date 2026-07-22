@@ -372,13 +372,14 @@ function Header({ toggleSidebar }) {
                   src={
                     user?.User_DP
                       ? `${profilePic?.data}`
-                      : "assets/images/icons/nodp.webp"
+                      : "../../../../../assets/images/icons/nodp.webp"
                   }
                   alt="User Profile"
                   className="h-32 w-32 rounded-circle"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "assets/images/icons/nodp.webp";
+                    e.target.src =
+                      "../../../../../assets/images/icons/nodp.webp";
                   }}
                 />
                 <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0" />
@@ -392,13 +393,14 @@ function Header({ toggleSidebar }) {
                       src={
                         user?.User_DP
                           ? `${profilePic?.data}`
-                          : "assets/images/icons/nodp.webp"
+                          : "../../../../../assets/images/icons/nodp.webp"
                       }
                       alt=""
                       className="w-54 h-54 rounded-circle"
                       onError={(e) => {
                         e.target.onerror = null; // Prevent infinite loop if fallback fails
-                        e.target.src = "../assets/images/icons/nodp.webp";
+                        e.target.src =
+                          "../../../../../assets/images/icons/nodp.webp";
                       }}
                     />
                     <div>
