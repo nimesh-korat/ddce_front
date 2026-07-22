@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
+import { useNetworkState } from "react-use";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getProfileImage, logout } from "../../apis/apis";
@@ -8,6 +9,31 @@ import UserContext from "../../utils/UserContex";
 
 function Header({ toggleSidebar }) {
   const { user } = useContext(UserContext);
+
+  // Network status via react-use
+  const network = useNetworkState();
+  const [showOnline, setShowOnline] = React.useState(false);
+  const wasOfflineRef = useRef(false);
+
+  useEffect(() => {
+    if (!network.online) {
+      wasOfflineRef.current = true;
+    } else if (wasOfflineRef.current) {
+      // Just came back online
+      wasOfflineRef.current = false;
+      setShowOnline(true);
+      const t = setTimeout(() => setShowOnline(false), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [network.online]);
+
+  const netIcon = !network.online
+    ? { icon: "ph-wifi-x", color: "#ef4444", label: "You are offline" }
+    : network.type === "wifi"
+      ? { icon: "ph-wifi-high", color: "#22c55e", label: "WiFi" }
+      : network.type === "cellular"
+        ? { icon: "ph-sim-card", color: "#6366f1", label: "Mobile data" }
+        : { icon: "ph-wifi-high", color: "#22c55e", label: "Online" };
   const navigate = useNavigate();
   // Fetch Profile Picture
   const { data: profilePic } = useQuery({
@@ -68,7 +94,9 @@ function Header({ toggleSidebar }) {
               alt="logo"
               style={{ width: "100%", height: "80px", objectFit: "contain" }}
             /> */}
-            <h2>AIM4RANK</h2>
+            <h2 className="mb-0" style={{ lineHeight: 1 }}>
+              AIM4RANK
+            </h2>
           </div>
         </div>
         <div className="flex-align gap-16">
@@ -190,6 +218,85 @@ function Header({ toggleSidebar }) {
             {/* Language Start */}
           </div>
           {/* User Profile Start */}
+          {/* Network status indicator */}
+          <div
+            className="d-inline-flex align-items-center me-8"
+            style={{ alignSelf: "center" }}
+          >
+            <i
+              className={`ph ${netIcon.icon}`}
+              style={{ fontSize: "20px", color: netIcon.color }}
+            />
+          </div>
+
+          {/* Offline toast */}
+          {!network.online && (
+            <div
+              style={{
+                position: "fixed",
+                bottom: "24px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                background: "#ef4444",
+                color: "#fff",
+                padding: "10px 24px",
+                borderRadius: "50px",
+                fontSize: "13px",
+                fontWeight: 600,
+                boxShadow: "0 4px 20px rgba(239,68,68,0.4)",
+                zIndex: 99999,
+                whiteSpace: "nowrap",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                animation:
+                  "toast_in 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards",
+              }}
+            >
+              <i className="ph ph-wifi-x" style={{ fontSize: "16px" }} />
+              You are offline
+            </div>
+          )}
+
+          {/* Back online toast */}
+          {showOnline && (
+            <div
+              style={{
+                position: "fixed",
+                bottom: "24px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                background: "#22c55e",
+                color: "#fff",
+                padding: "10px 24px",
+                borderRadius: "50px",
+                fontSize: "13px",
+                fontWeight: 600,
+                boxShadow: "0 4px 20px rgba(34,197,94,0.4)",
+                zIndex: 99999,
+                whiteSpace: "nowrap",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                animation:
+                  "toast_in 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards, toast_out 0.4s ease-in 1.6s forwards",
+              }}
+            >
+              <i className="ph ph-wifi-high" style={{ fontSize: "16px" }} />
+              You are back online!
+            </div>
+          )}
+
+          <style>{`
+                @keyframes toast_in {
+                  from { opacity: 0; transform: translateX(-50%) translateY(40px); }
+                  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+                }
+                @keyframes toast_out {
+                  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+                  to   { opacity: 0; transform: translateX(-50%) translateY(40px); }
+                }
+              `}</style>
           <div className="dropdown">
             <button
               className="users arrow-down-icon border border-gray-200 rounded-pill p-4 d-inline-block pe-40 position-relative"
@@ -202,13 +309,13 @@ function Header({ toggleSidebar }) {
                   src={
                     user?.User_DP
                       ? `${profilePic?.data}`
-                      : "../../assets/images/icons/nodp.webp"
+                      : "assets/images/icons/nodp.webp"
                   }
                   alt="User Profile"
                   className="h-32 w-32 rounded-circle"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "../../assets/images/icons/nodp.webp";
+                    e.target.src = "assets/images/icons/nodp.webp";
                   }}
                 />
                 <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0" />
@@ -222,13 +329,13 @@ function Header({ toggleSidebar }) {
                       src={
                         user?.User_DP
                           ? `${profilePic?.data}`
-                          : "../../assets/images/icons/nodp.webp"
+                          : "assets/images/icons/nodp.webp"
                       }
                       alt=""
                       className="w-54 h-54 rounded-circle"
                       onError={(e) => {
                         e.target.onerror = null; // Prevent infinite loop if fallback fails
-                        e.target.src = "../../../assets/images/icons/nodp.webp";
+                        e.target.src = "../assets/images/icons/nodp.webp";
                       }}
                     />
                     <div>
