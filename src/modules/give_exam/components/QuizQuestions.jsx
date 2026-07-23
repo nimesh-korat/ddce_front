@@ -31,6 +31,9 @@ function CardCracker({ trigger }) {
     markSeen(trigger);
     setShow(true);
     setKey((k) => k + 1);
+    try {
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+    } catch {}
     const t = setTimeout(() => setShow(false), 5200);
     return () => clearTimeout(t);
   }, [trigger]);

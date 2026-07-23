@@ -90,7 +90,7 @@ function Header({ toggleSidebar }) {
         autoClose: 1000,
         onClose: () => {
           // Clear only auth keys — preserve stud_notify_seen_* so notifications don't repeat
-          ["user", "token", "session", "activeDoodle"].forEach((k) =>
+          ["user", "token", "session", "activeDoodle", "admin", "mentor"].forEach((k) =>
             localStorage.removeItem(k),
           );
           navigate("/signin");
