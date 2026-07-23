@@ -1096,7 +1096,7 @@ export async function getPracticeAccuracy(mode = "merged") {
 //?==================== PRACTICE — BATCH ASSIGNMENTS ====================
 export async function assignPracticeToBatch(data) {
   try {
-    const response = await axiosInstance.post(`/practice/batch-assign`, data);
+    const response = await axiosInstance.post(`/practice/assign`, data);
     return response.data;
   } catch (error) {
     console.error("assignPracticeToBatch() error", error);
@@ -1107,7 +1107,7 @@ export async function assignPracticeToBatch(data) {
 export async function editPracticeBatchAssignment(id, data) {
   try {
     const response = await axiosInstance.put(
-      `/practice/batch-assign/${id}`,
+      `/practice/assignments/${id}`,
       data,
     );
     return response.data;
@@ -1120,7 +1120,7 @@ export async function editPracticeBatchAssignment(id, data) {
 export async function togglePracticeVisibility(id) {
   try {
     const response = await axiosInstance.put(
-      `/practice/batch-assign/${id}/toggle-visible`,
+      `/practice/assignments/${id}/toggle-featured`,
     );
     return response.data;
   } catch (error) {
@@ -1131,7 +1131,7 @@ export async function togglePracticeVisibility(id) {
 
 export async function deletePracticeBatchAssignment(id) {
   try {
-    const response = await axiosInstance.delete(`/practice/batch-assign/${id}`);
+    const response = await axiosInstance.delete(`/practice/assignments/${id}`);
     return response.data;
   } catch (error) {
     console.error("deletePracticeBatchAssignment() error", error);
@@ -1156,6 +1156,16 @@ export async function getPractices() {
     return response.data;
   } catch (error) {
     console.error("getPractices() error", error);
+    throw error;
+  }
+}
+
+export async function getAdminPractices() {
+  try {
+    const response = await axiosInstance.get(`/practice/admin-list`);
+    return response.data;
+  } catch (error) {
+    console.error("getAdminPractices() error", error);
     throw error;
   }
 }
@@ -1208,7 +1218,7 @@ export async function removeQuestionFromPractice(practiceId, questionId) {
 export async function togglePracticeFeatured(id) {
   try {
     const response = await axiosInstance.put(
-      `/practice/batch-assign/${id}/toggle-featured`,
+      `/practice/assignments/${id}/toggle-featured`,
     );
     return response.data;
   } catch (error) {

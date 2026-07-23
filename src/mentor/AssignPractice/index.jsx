@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createPractice,
-  getPractices,
+  getAdminPractices,
   updatePractice,
   deletePractice,
   addQuestionsToPractice,
@@ -38,6 +38,183 @@ const mathConfig = {
   messageStyle: "none",
 };
 
+// ── Searchable dropdown ───────────────────────────────────────
+function SearchableSelect({
+  options,
+  value,
+  onChange,
+  placeholder = "Select...",
+  labelKey = "label",
+  valueKey = "value",
+}) {
+  const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState("");
+  const ref = React.useRef(null);
+
+  const filtered = options.filter((o) =>
+    String(o[labelKey] || "")
+      .toLowerCase()
+      .includes(search.toLowerCase()),
+  );
+
+  const selected = options.find((o) => String(o[valueKey]) === String(value));
+
+  React.useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} style={{ position: "relative", width: "100%" }}>
+      {/* Trigger */}
+      <div
+        onClick={() => {
+          setOpen((o) => !o);
+          setSearch("");
+        }}
+        className="form-control d-flex align-items-center justify-content-between"
+        style={{ cursor: "pointer", userSelect: "none", minHeight: "38px" }}
+      >
+        <span
+          className={selected ? "text-gray-800" : "text-gray-400"}
+          style={{ fontSize: "14px" }}
+        >
+          {selected ? selected[labelKey] : placeholder}
+        </span>
+        <i
+          className={`ph ph-caret-${open ? "up" : "down"} text-gray-400 text-13`}
+        />
+      </div>
+
+      {/* Dropdown */}
+      {open && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 4px)",
+            left: 0,
+            right: 0,
+            background: "#fff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "10px",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+            zIndex: 9999,
+            overflow: "hidden",
+          }}
+        >
+          {/* Search input */}
+          <div style={{ padding: "8px", borderBottom: "1px solid #f1f5f9" }}>
+            <div className="position-relative">
+              <i
+                className="ph ph-magnifying-glass position-absolute text-gray-400"
+                style={{
+                  top: "50%",
+                  left: "8px",
+                  transform: "translateY(-50%)",
+                  fontSize: "13px",
+                  pointerEvents: "none",
+                }}
+              />
+              <input
+                autoFocus
+                type="text"
+                className="form-control form-control-sm"
+                style={{ paddingLeft: "28px", fontSize: "13px" }}
+                placeholder="Search..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </div>
+
+          {/* Options list */}
+          <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+            {/* Clear option */}
+            <div
+              onClick={() => {
+                onChange("");
+                setOpen(false);
+              }}
+              style={{
+                padding: "8px 12px",
+                fontSize: "13px",
+                cursor: "pointer",
+                color: "#94a3b8",
+                fontStyle: "italic",
+                background: !value ? "#f8fafc" : "transparent",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "#f8fafc")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = !value
+                  ? "#f8fafc"
+                  : "transparent")
+              }
+            >
+              {placeholder}
+            </div>
+
+            {filtered.length === 0 && (
+              <div
+                style={{
+                  padding: "12px",
+                  fontSize: "13px",
+                  color: "#94a3b8",
+                  textAlign: "center",
+                }}
+              >
+                No results found
+              </div>
+            )}
+
+            {filtered.map((o) => (
+              <div
+                key={o[valueKey]}
+                onClick={() => {
+                  onChange(String(o[valueKey]));
+                  setOpen(false);
+                  setSearch("");
+                }}
+                style={{
+                  padding: "8px 12px",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                  background:
+                    String(o[valueKey]) === String(value)
+                      ? "#ede9fe"
+                      : "transparent",
+                  color:
+                    String(o[valueKey]) === String(value)
+                      ? "#6366f1"
+                      : "#374151",
+                  fontWeight: String(o[valueKey]) === String(value) ? 600 : 400,
+                }}
+                onMouseEnter={(e) => {
+                  if (String(o[valueKey]) !== String(value))
+                    e.currentTarget.style.background = "#f8fafc";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background =
+                    String(o[valueKey]) === String(value)
+                      ? "#ede9fe"
+                      : "transparent";
+                }}
+              >
+                {o[labelKey]}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AssignPractice({ Sidebar, basePath = "/mentor" }) {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
 
@@ -48,6 +225,8 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
     image: null,
   });
   const [selectedIds, setSelectedIds] = useState(new Set());
+  const [practiceSearch, setPracticeSearch] = useState("");
+
   const [qFilters, setQFilters] = useState({
     subject_id: "",
     mentor_id: "",
@@ -76,7 +255,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
   // ── Queries ──────────────────────────────────────────────────
   const { data: practicesData, isLoading: practicesLoading } = useQuery({
     queryKey: ["practices"],
-    queryFn: getPractices,
+    queryFn: getAdminPractices,
     staleTime: 1 * 60 * 1000,
   });
   const { data: batchData } = useQuery({
@@ -128,9 +307,14 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
     }
   }, [questionsData, qFilters.page]);
 
-  const practices = practicesData?.data || [];
-  const batches = batchData?.data || [];
-  const phases = phaseData?.data || [];
+  const allPractices = practicesData?.data || [];
+  const practices = practiceSearch
+    ? allPractices.filter((p) =>
+        p.title?.toLowerCase().includes(practiceSearch.toLowerCase()),
+      )
+    : allPractices;
+  const batches = batchData || [];
+  const phases = phaseData || [];
   const subjects = subjectsData?.data || [];
   const mentors = mentorsData?.data || [];
 
@@ -604,7 +788,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                         {hasMore && (
                           <button
                             type="button"
-                            className="btn btn-sm btn-outline-main rounded-pill w-100 mb-10"
+                            className="btn btn-sm btn-main rounded-pill w-100 mb-10"
                             onClick={() =>
                               setQFilters((f) => ({ ...f, page: f.page + 1 }))
                             }
@@ -639,10 +823,58 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
             <div className="col-lg-8">
               <div className="card">
                 <div className="card-body">
-                  <h6 className="fw-semibold mb-16 text-main-600">
-                    <i className="ph ph-clipboard-text me-8" />
-                    My Practices
-                  </h6>
+                  <div className="flex-between flex-wrap gap-10 mb-16">
+                    <h6 className="fw-semibold mb-0 text-main-600">
+                      <i className="ph ph-clipboard-text me-8" />
+                      My Practices
+                      {allPractices.length > 0 && (
+                        <span className="text-13 text-gray-400 fw-normal ms-8">
+                          ({practices.length}/{allPractices.length})
+                        </span>
+                      )}
+                    </h6>
+                    <div
+                      className="position-relative"
+                      style={{ minWidth: "220px" }}
+                    >
+                      <i
+                        className="ph ph-magnifying-glass position-absolute text-gray-400"
+                        style={{
+                          top: "50%",
+                          left: "10px",
+                          transform: "translateY(-50%)",
+                          fontSize: "14px",
+                          pointerEvents: "none",
+                        }}
+                      />
+                      <input
+                        type="text"
+                        className="form-control form-control-sm rounded-pill"
+                        style={{ paddingLeft: "32px" }}
+                        placeholder="Search practices..."
+                        value={practiceSearch}
+                        onChange={(e) => setPracticeSearch(e.target.value)}
+                      />
+                      {practiceSearch && (
+                        <button
+                          onClick={() => setPracticeSearch("")}
+                          style={{
+                            position: "absolute",
+                            right: "10px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            color: "#94a3b8",
+                            padding: 0,
+                          }}
+                        >
+                          <i className="ph ph-x text-12" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
 
                   {practicesLoading && (
                     <div className="text-center py-20">
@@ -650,7 +882,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                     </div>
                   )}
 
-                  {!practicesLoading && practices.length === 0 && (
+                  {!practicesLoading && allPractices.length === 0 && (
                     <div className="text-center py-32">
                       <i className="ph ph-barbell text-48 text-gray-300 d-block mb-12" />
                       <p className="text-gray-500 text-14">
@@ -658,6 +890,22 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                       </p>
                     </div>
                   )}
+                  {!practicesLoading &&
+                    allPractices.length > 0 &&
+                    practices.length === 0 && (
+                      <div className="text-center py-32">
+                        <i className="ph ph-magnifying-glass text-48 text-gray-300 d-block mb-12" />
+                        <p className="text-gray-500 text-14">
+                          No practices match "<strong>{practiceSearch}</strong>"
+                        </p>
+                        <button
+                          className="btn btn-sm btn-secondary rounded-pill mt-8"
+                          onClick={() => setPracticeSearch("")}
+                        >
+                          Clear search
+                        </button>
+                      </div>
+                    )}
 
                   <div className="d-flex flex-column gap-20">
                     {practices.map((p) => (
@@ -707,14 +955,14 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                           </div>
                           <div className="flex-align gap-8">
                             <button
-                              className="btn btn-sm btn-outline-info-600 rounded-pill"
+                              className="btn btn-sm btn-info rounded-pill"
                               onClick={() => handleOpenEdit(p)}
                               title="Edit"
                             >
                               <i className="ph ph-pencil text-13" />
                             </button>
                             <button
-                              className="btn btn-sm btn-outline-danger rounded-pill"
+                              className="btn btn-sm btn-danger rounded-pill"
                               onClick={() => handleDeletePractice(p)}
                               title="Delete"
                             >
@@ -743,44 +991,36 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                           <div className="p-14 bg-main-50 border-top border-main-100">
                             <div className="row g-10 mb-10">
                               <div className="col-md-6">
-                                <select
-                                  className="form-select form-select-sm"
+                                <SearchableSelect
+                                  options={batches.map((b) => ({
+                                    label: b.batch_title,
+                                    value: b.id,
+                                  }))}
                                   value={batchForm.tbl_batch}
-                                  onChange={(e) =>
+                                  onChange={(val) =>
                                     setBatchForm((f) => ({
                                       ...f,
-                                      tbl_batch: e.target.value,
+                                      tbl_batch: val,
                                     }))
                                   }
-                                >
-                                  <option value="" disabled>
-                                    Select Batch *
-                                  </option>
-                                  {batches.map((b) => (
-                                    <option key={b.id} value={b.id}>
-                                      {b.batch_title}
-                                    </option>
-                                  ))}
-                                </select>
+                                  placeholder="Select Batch *"
+                                />
                               </div>
                               <div className="col-md-6">
-                                <select
-                                  className="form-select form-select-sm"
+                                <SearchableSelect
+                                  options={phases.map((ph) => ({
+                                    label: ph.title,
+                                    value: ph.Id,
+                                  }))}
                                   value={batchForm.tbl_phase}
-                                  onChange={(e) =>
+                                  onChange={(val) =>
                                     setBatchForm((f) => ({
                                       ...f,
-                                      tbl_phase: e.target.value,
+                                      tbl_phase: val,
                                     }))
                                   }
-                                >
-                                  <option value="">All Phases</option>
-                                  {phases.map((ph) => (
-                                    <option key={ph.Id} value={ph.Id}>
-                                      {ph.title}
-                                    </option>
-                                  ))}
-                                </select>
+                                  placeholder="All Phases"
+                                />
                               </div>
                               <div className="col-md-6">
                                 <label className="text-11 text-gray-500 mb-2 d-block">
@@ -831,7 +1071,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                 )}
                               </button>
                               <button
-                                className="btn btn-sm btn-outline-secondary rounded-pill"
+                                className="btn btn-sm btn-secondary rounded-pill"
                                 onClick={() => setBatchForm(null)}
                               >
                                 <i className="ph ph-x" />
@@ -877,41 +1117,36 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                       /* Edit row */
                                       <>
                                         <td className="px-14">
-                                          <select
-                                            className="form-select form-select-sm"
+                                          <SearchableSelect
+                                            options={batches.map((b) => ({
+                                              label: b.batch_title,
+                                              value: b.id,
+                                            }))}
                                             value={editRow.tbl_batch}
-                                            onChange={(e) =>
+                                            onChange={(val) =>
                                               setEditRow((r) => ({
                                                 ...r,
-                                                tbl_batch: e.target.value,
+                                                tbl_batch: val,
                                               }))
                                             }
-                                          >
-                                            {batches.map((b) => (
-                                              <option key={b.id} value={b.id}>
-                                                {b.batch_title}
-                                              </option>
-                                            ))}
-                                          </select>
+                                            placeholder="Select Batch"
+                                          />
                                         </td>
                                         <td>
-                                          <select
-                                            className="form-select form-select-sm"
+                                          <SearchableSelect
+                                            options={phases.map((ph) => ({
+                                              label: ph.title,
+                                              value: ph.Id,
+                                            }))}
                                             value={editRow.tbl_phase || ""}
-                                            onChange={(e) =>
+                                            onChange={(val) =>
                                               setEditRow((r) => ({
                                                 ...r,
-                                                tbl_phase: e.target.value,
+                                                tbl_phase: val,
                                               }))
                                             }
-                                          >
-                                            <option value="">All Phases</option>
-                                            {phases.map((ph) => (
-                                              <option key={ph.Id} value={ph.Id}>
-                                                {ph.title}
-                                              </option>
-                                            ))}
-                                          </select>
+                                            placeholder="All Phases"
+                                          />
                                         </td>
                                         <td>
                                           <input
@@ -965,7 +1200,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                               )}
                                             </button>
                                             <button
-                                              className="btn btn-sm btn-outline-secondary rounded-pill"
+                                              className="btn btn-sm btn-secondary rounded-pill"
                                               onClick={() => setEditRow(null)}
                                             >
                                               <i className="ph ph-x" />
@@ -1029,7 +1264,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                         <td className="py-10 text-center">
                                           <div className="flex-align gap-6 justify-content-center">
                                             <button
-                                              className="btn btn-sm btn-outline-info-600 rounded-pill"
+                                              className="btn btn-sm btn-info rounded-pill"
                                               onClick={() =>
                                                 setEditRow({
                                                   batch_assignment_id:
@@ -1048,7 +1283,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                               <i className="ph ph-pencil text-12" />
                                             </button>
                                             <button
-                                              className="btn btn-sm btn-outline-danger rounded-pill"
+                                              className="btn btn-sm btn-danger rounded-pill"
                                               onClick={() =>
                                                 handleDeleteBatch(ba, p.title)
                                               }
@@ -1160,7 +1395,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                 <button
                   type="button"
                   onClick={() => setEditingPractice(null)}
-                  className="btn btn-outline-secondary rounded-pill py-9 px-20"
+                  className="btn btn-secondary rounded-pill py-9 px-20"
                   disabled={updateMutation.isPending}
                 >
                   Cancel
