@@ -20,6 +20,7 @@ import AdminRoutes from "./utils/AdminRoutes";
 import ShowQuestions from "./admin/ShowQuestions";
 import CreateTest from "./admin/CreateTest";
 import ShowTests from "./admin/ShowTest";
+import QuizResultsTab from "./admin/QuizResults";
 import AddQuizQuestions from "./admin/AddQuizQuestion";
 import Exam from "./modules/exams";
 import GiveExam from "./modules/give_exam";
@@ -395,6 +396,14 @@ function App() {
             element={
               <AdminRoutes>
                 <ShowTests />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/quizResults"
+            element={
+              <AdminRoutes>
+                <QuizResultsTab />
               </AdminRoutes>
             }
           />

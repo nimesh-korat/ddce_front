@@ -5,12 +5,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminUpdateTest, adminDeleteTest } from "../../../apis/apis";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import QuizResultsModal from "./QuizResultsModal";
 
 function QuizCard({ test }) {
   const queryClient = useQueryClient();
   const [isExpanded, setIsExpanded] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [resultsTest, setResultsTest] = useState(null);
 
   const difficultyLabel = (val) => {
     const map = { 0: "Easy", 1: "Medium", 2: "Hard", 3: "Time Consuming" };
@@ -133,13 +135,20 @@ function QuizCard({ test }) {
                     <i className="ph ph-pencil me-4" />
                     Edit Test
                   </button>
+
                   <button
-                    className="btn btn-sm btn-danger w-100"
+                    className="btn btn-sm btn-danger w-100 mb-4"
                     onClick={handleDelete}
                     disabled={deleteMutation.isPending}
                   >
                     <i className="ph ph-trash me-4" />
                     Delete
+                  </button>
+                  <button
+                    className="btn btn-sm btn-warning w-100 "
+                    onClick={() => setResultsTest(test)}
+                  >
+                    <i className="ph ph-chart-bar" /> Show Results
                   </button>
                 </div>
               )}
@@ -420,6 +429,13 @@ function QuizCard({ test }) {
             </form>
           </div>
         </div>
+      )}
+
+      {resultsTest && (
+        <QuizResultsModal
+          test={resultsTest}
+          onClose={() => setResultsTest(null)}
+        />
       )}
     </>
   );

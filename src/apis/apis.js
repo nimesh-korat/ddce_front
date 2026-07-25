@@ -1473,3 +1473,20 @@ export async function getActiveStudNotify() {
     throw e;
   }
 }
+
+export async function getQuizResults(params) {
+  try {
+    const query = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const response = await axiosInstance.get(`/admin/quizResults?${query}`);
+    return response.data;
+  } catch (error) {
+    console.error("getQuizResults() error", error);
+    throw error;
+  }
+}
