@@ -363,7 +363,7 @@ function StudNotifyAdmin() {
                       {editId && (
                         <button
                           type="button"
-                          className="btn btn-outline-secondary rounded-pill py-9 px-16"
+                          className="btn btn-secondary rounded-pill py-9 px-16"
                           onClick={() => {
                             setForm(blank);
                             setEditId(null);
@@ -419,13 +419,13 @@ function StudNotifyAdmin() {
                         </div>
                         <div className="flex-align gap-6">
                           <button
-                            className="btn btn-sm btn-outline-info-600 rounded-pill"
+                            className="btn btn-sm btn-info rounded-pill"
                             onClick={() => handleEdit(n)}
                           >
                             <i className="ph ph-pencil text-12" />
                           </button>
                           <button
-                            className="btn btn-sm btn-outline-danger rounded-pill"
+                            className="btn btn-sm btn-danger rounded-pill"
                             onClick={() => handleDelete(n)}
                           >
                             <i className="ph ph-trash text-12" />

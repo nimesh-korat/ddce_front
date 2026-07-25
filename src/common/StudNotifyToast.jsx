@@ -25,28 +25,40 @@ function timeAgo(dateStr) {
   return `${days} day${days !== 1 ? "s" : ""} ago`;
 }
 
-// Per-user localStorage key — persists forever, user-specific
-const getSeenKey = () => {
+// PERMANENT key stored separately — survives logout (localStorage.clear removes user/token
+// but we store this in a key that is explicitly preserved)
+// Format: { "62": [1,2,3], "195": [1] }  — per user ID
+const PERM_KEY = "ddcet_notif_seen_v1";
+
+const getUserId = () => {
   try {
-    const u = JSON.parse(localStorage.getItem("user"));
-    return `stud_notify_seen_${u?.Id || "guest"}`;
+    return JSON.parse(localStorage.getItem("user"))?.Id || null;
   } catch {
-    return "stud_notify_seen_guest";
+    return null;
   }
 };
+
 const getSeenIds = () => {
   try {
-    return JSON.parse(localStorage.getItem(getSeenKey()) || "[]");
+    const uid = getUserId();
+    if (!uid) return [];
+    const all = JSON.parse(localStorage.getItem(PERM_KEY) || "{}");
+    return all[uid] || [];
   } catch {
     return [];
   }
 };
+
 const markSeen = (id) => {
   try {
-    const s = getSeenIds();
-    if (!s.includes(id)) {
-      s.push(id);
-      localStorage.setItem(getSeenKey(), JSON.stringify(s));
+    const uid = getUserId();
+    if (!uid) return;
+    // Read from localStorage fresh each time (not captured in closure)
+    const all = JSON.parse(localStorage.getItem(PERM_KEY) || "{}");
+    if (!all[uid]) all[uid] = [];
+    if (!all[uid].includes(id)) {
+      all[uid].push(id);
+      localStorage.setItem(PERM_KEY, JSON.stringify(all));
     }
   } catch {}
 };
