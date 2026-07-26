@@ -27,6 +27,13 @@ function QuizResultsTab() {
   const batches = batchData || [];
   const phases = phaseData || [];
 
+  // Always fetch tests list for dropdown
+  const { data: testsData } = useQuery({
+    queryKey: ["quizResultsTests"],
+    queryFn: () => getQuizResults({}),
+    staleTime: 5 * 60 * 1000,
+  });
+
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["quizResults", testId, batchId, phaseId, page],
     queryFn: () =>
@@ -38,10 +45,11 @@ function QuizResultsTab() {
         limit,
       }),
     staleTime: 30 * 1000,
-    keepPreviousData: true,
+    placeholderData: (prev) => prev,
+    enabled: !!testId,
   });
 
-  const tests = data?.tests || [];
+  const tests = testsData?.tests || [];
   const rows = data?.data || [];
   const { total = 0, totalPages = 1 } = data?.pagination || {};
 

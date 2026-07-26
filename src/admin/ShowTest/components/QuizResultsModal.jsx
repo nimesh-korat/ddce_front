@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getQuizResults, getAllBatch, getAllPhase } from "../../../apis/apis";
@@ -8,6 +8,7 @@ export default function QuizResultsModal({ test, onClose }) {
   const [phaseId, setPhaseId] = useState("");
   const [page, setPage] = useState(1);
   const limit = 25;
+  const tableRef = useRef(null);
 
   const { data: batchData } = useQuery({
     queryKey: ["allBatch"],
@@ -33,7 +34,7 @@ export default function QuizResultsModal({ test, onClose }) {
         limit,
       }),
     staleTime: 30 * 1000,
-    keepPreviousData: true,
+    placeholderData: (prev) => prev,
     enabled: !!test?.test_id,
   });
 
@@ -45,7 +46,7 @@ export default function QuizResultsModal({ test, onClose }) {
   const assignedBatches = [
     ...new Map(
       tests
-        .filter((t) => String(t.test_id) === String(test?.test_id) && t.tbl_batch)
+        .filter((t) => String(t.id) === String(test?.test_id) && t.tbl_batch)
         .map((t) => [
           t.tbl_batch,
           { id: t.tbl_batch, batch_title: t.batch_title },
@@ -55,13 +56,19 @@ export default function QuizResultsModal({ test, onClose }) {
   const assignedPhases = [
     ...new Map(
       tests
-        .filter((t) => String(t.test_id) === String(test?.test_id) && t.tbl_phase)
+        .filter((t) => String(t.id) === String(test?.test_id) && t.tbl_phase)
         .map((t) => [t.tbl_phase, { id: t.tbl_phase, title: t.phase_title }]),
     ).values(),
   ];
 
   const scoreColor = (pct) =>
     pct >= 75 ? "#22c55e" : pct >= 50 ? "#f59e0b" : "#ef4444";
+
+  // Scroll table back to top on page change
+  useEffect(() => {
+    if (tableRef.current)
+      tableRef.current.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
 
   const pageNums = () => {
     const nums = [],
@@ -138,7 +145,7 @@ export default function QuizResultsModal({ test, onClose }) {
             <option value="">All Batches</option>
             {(assignedBatches.length > 0 ? assignedBatches : batches).map(
               (b) => (
-                <option key={b.test_id} value={b.test_id}>
+                <option key={b.id} value={b.id}>
                   {b.batch_title}
                 </option>
               ),
@@ -155,7 +162,7 @@ export default function QuizResultsModal({ test, onClose }) {
           >
             <option value="">All Phases</option>
             {(assignedPhases.length > 0 ? assignedPhases : phases).map((p) => (
-              <option key={p.test_id} value={p.test_id}>
+              <option key={p.id} value={p.id}>
                 {p.title}
               </option>
             ))}
@@ -164,7 +171,7 @@ export default function QuizResultsModal({ test, onClose }) {
             <button
               className="btn btn-sm rounded-pill flex-align gap-4"
               style={{
-                background: "#ef8f8f",
+                background: "#fee2e2",
                 color: "#dc2626",
                 border: "none",
               }}
@@ -180,7 +187,7 @@ export default function QuizResultsModal({ test, onClose }) {
         </div>
 
         {/* Table */}
-        <div style={{ overflowY: "auto", flex: 1 }}>
+        <div ref={tableRef} style={{ overflowY: "auto", flex: 1 }}>
           <table className="table table-hover mb-0">
             <thead
               className="bg-gray-50"
@@ -250,7 +257,7 @@ export default function QuizResultsModal({ test, onClose }) {
 
               {!isLoading &&
                 rows.map((row, i) => (
-                  <tr key={row.test_id} className={isFetching ? "opacity-50" : ""}>
+                  <tr key={row.id} className={isFetching ? "opacity-50" : ""}>
                     <td className="text-13 text-gray-400 fw-medium py-10 px-16">
                       {total - ((page - 1) * limit + i)}
                     </td>
