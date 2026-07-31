@@ -56,6 +56,9 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/doodle":
         setActiveItem("Doodle / Occasions");
         break;
+      case "/admin/questionAnalytics":
+        setActiveItem("Question Analytics");
+        break;
       case "/admin/studentAnswers":
         setActiveItem("Student Answers");
         break;
@@ -106,6 +109,21 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-squares-four" />
                   </span>
                   <span className="text">Dashboard</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Question Analytics" ? "activePage" : ""
+                } `}
+              >
+                <Link
+                  to="/admin/questionAnalytics"
+                  className="sidebar-menu__link "
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-chart-pie" />
+                  </span>
+                  <span className="text">Question Analytics</span>
                 </Link>
               </li>
               <li

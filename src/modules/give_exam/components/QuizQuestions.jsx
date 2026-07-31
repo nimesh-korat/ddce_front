@@ -220,16 +220,36 @@ const QuizQuestion = React.memo(
                           </MathJax>
                         )}
                       </label>
+                      {currentQuestion.question_image && (
+                        <div className="mt-10 mb-4">
+                          <img
+                            src={currentQuestion.question_image}
+                            alt="Question"
+                            style={{
+                              width: "100%",
+                              height: "auto",
+                              borderRadius: "8px",
+                              display: "block",
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                     <div className="row g-20 " style={{ userSelect: "none" }}>
                       {["option_a", "option_b", "option_c", "option_d"].map(
                         (optionKey, index) => {
                           const optionText =
                             currentQuestion[`${optionKey}_text`];
-                          if (!optionText) return null;
+                          if (
+                            !optionText &&
+                            !currentQuestion[`${optionKey}_image`]
+                          )
+                            return null;
 
                           const isSelected =
                             selectedOption?.text === optionText;
+                          const optionImage =
+                            currentQuestion[`${optionKey}_image`];
                           return (
                             <div className="col-sm-6" key={index}>
                               <div
@@ -241,16 +261,42 @@ const QuizQuestion = React.memo(
                                 onClick={() =>
                                   handleOptionSelect(optionKey, optionText)
                                 }
-                                style={{ cursor: "pointer" }}
+                                style={{
+                                  cursor: "pointer",
+                                  flexDirection: optionImage ? "column" : "row",
+                                  alignItems: optionImage
+                                    ? "flex-start"
+                                    : "center",
+                                }}
                               >
-                                <span className="w-24 h-24 bg-white rounded-circle flex-center text-capitalize text-14">
-                                  {String.fromCharCode(65 + index)}
-                                </span>
-                                <MathJax inline>
-                                  <span className="text-gray-500">
-                                    {optionText}
+                                <div className="flex-align gap-8 w-100">
+                                  <span
+                                    className="w-24 h-24 bg-white rounded-circle flex-center text-capitalize text-14"
+                                    style={{ flexShrink: 0 }}
+                                  >
+                                    {String.fromCharCode(65 + index)}
                                   </span>
-                                </MathJax>
+                                  {optionText && (
+                                    <MathJax inline>
+                                      <span className="text-gray-500">
+                                        {optionText}
+                                      </span>
+                                    </MathJax>
+                                  )}
+                                </div>
+                                {optionImage && (
+                                  <img
+                                    src={optionImage}
+                                    alt={`Option ${String.fromCharCode(65 + index)}`}
+                                    style={{
+                                      width: "100%",
+                                      height: "auto",
+                                      borderRadius: "6px",
+                                      display: "block",
+                                      marginTop: "8px",
+                                    }}
+                                  />
+                                )}
                               </div>
                             </div>
                           );
