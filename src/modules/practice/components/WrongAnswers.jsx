@@ -85,9 +85,10 @@ function WrongAnswers({
                       src={q.question_image}
                       alt="question"
                       style={{
-                        maxHeight: "180px",
-                        objectFit: "contain",
+                        width: "100%",
+                        height: "auto",
                         borderRadius: "8px",
+                        display: "block",
                       }}
                     />
                   )}
@@ -132,8 +133,8 @@ function WrongAnswers({
                             src={opt.image}
                             alt={opt.label}
                             style={{
-                              maxHeight: "70px",
-                              objectFit: "contain",
+                              width: "100%",
+                              height: "auto",
                               display: "block",
                             }}
                           />

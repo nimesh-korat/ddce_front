@@ -127,9 +127,10 @@ function PracticeQuestion({
                 src={question.question_image}
                 alt="question"
                 style={{
-                  maxHeight: "220px",
-                  objectFit: "contain",
+                  width: "100%",
+                  height: "auto",
                   borderRadius: "10px",
+                  display: "block",
                   marginTop: "8px",
                 }}
               />
@@ -184,8 +185,8 @@ function PracticeQuestion({
                         src={opt.image}
                         alt={`option-${opt.label}`}
                         style={{
-                          maxHeight: "80px",
-                          objectFit: "contain",
+                          width: "100%",
+                          height: "auto",
                           display: "block",
                           marginTop: "4px",
                         }}
