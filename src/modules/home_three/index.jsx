@@ -552,7 +552,7 @@ function Home() {
                     bgColor={"bg-main-two-600 "}
                     img="ph-fill ph-graduation-cap"
                     title="Offline Students"
-                    count="104"
+                    count="106"
                     isLocked={false}
                   />
                   <HomeWidgets
@@ -560,7 +560,7 @@ function Home() {
                     img="ph-fill ph-users-four"
                     title="Online Students"
                     // count={data?.data?.total_users || 0}
-                    count={0}
+                    count={5}
                     isLocked={false}
                   />
                   <HomeWidgets
