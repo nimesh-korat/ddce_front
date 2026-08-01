@@ -136,7 +136,7 @@ export default function QuestionStudentsModal({
             </div>
             <button
               onClick={onClose}
-              className="btn btn-sm btn-outline-secondary rounded-circle flex-shrink-0"
+              className="btn btn-sm btn-secondary rounded-circle flex-shrink-0"
               style={{ width: "34px", height: "34px" }}
             >
               <i className="ph ph-x" />
@@ -243,6 +243,9 @@ export default function QuestionStudentsModal({
                       Batch
                     </th>
                     <th className="text-12 text-gray-500 fw-medium py-10 text-center">
+                      Source
+                    </th>
+                    <th className="text-12 text-gray-500 fw-medium py-10 text-center">
                       Status
                     </th>
                     <th className="text-12 text-gray-500 fw-medium py-10">
@@ -288,6 +291,19 @@ export default function QuestionStudentsModal({
                             {row.phase_title}
                           </span>
                         )}
+                      </td>
+                      <td className="py-10 text-center">
+                        <span
+                          className="text-11 fw-semibold py-3 px-10 rounded-pill"
+                          style={{
+                            background:
+                              row.source === "practice" ? "#fef9c3" : "#ede9fe",
+                            color:
+                              row.source === "practice" ? "#854d0e" : "#6366f1",
+                          }}
+                        >
+                          {row.source === "practice" ? "Practice" : "Quiz"}
+                        </span>
                       </td>
                       <td className="py-10 text-center">
                         <span
