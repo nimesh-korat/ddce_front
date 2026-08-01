@@ -35,7 +35,14 @@ axiosInstance.interceptors.response.use(
 
         toast.error("Session Expired! Please login again.", {
           onClose: () => {
-            localStorage.clear();
+            [
+              "user",
+              "token",
+              "session",
+              "activeDoodle",
+              "admin",
+              "mentor",
+            ].forEach((k) => localStorage.removeItem(k));
             window.location.href = "/signin";
           },
         });
