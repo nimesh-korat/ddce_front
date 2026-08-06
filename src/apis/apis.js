@@ -35,7 +35,14 @@ axiosInstance.interceptors.response.use(
 
         toast.error("Session Expired! Please login again.", {
           onClose: () => {
-            localStorage.clear();
+            [
+              "user",
+              "token",
+              "session",
+              "activeDoodle",
+              "admin",
+              "mentor",
+            ].forEach((k) => localStorage.removeItem(k));
             window.location.href = "/signin";
           },
         });
@@ -1520,5 +1527,42 @@ export async function getPracticeAttendedList(practice_id, params) {
   } catch (e) {
     console.error("getPracticeAttendedList error", e);
     throw e;
+  }
+}
+//?==================== QUESTION ANALYTICS ====================
+export async function getQuestionAnalytics(params) {
+  try {
+    const query = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const response = await axiosInstance.get(
+      `/admin/questionAnalytics?${query}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("getQuestionAnalytics() error", error);
+    throw error;
+  }
+}
+export async function getQuestionStudentAnswers(question_id, params) {
+  try {
+    const query = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const response = await axiosInstance.get(
+      `/admin/questionStudentAnswers/${question_id}?${query}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("getQuestionStudentAnswers() error", error);
+    throw error;
   }
 }
