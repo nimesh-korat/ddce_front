@@ -110,6 +110,21 @@ function AdminSidebar({ isActive, closeSidebar }) {
               </li>
               <li
                 className={`sidebar-menu__item ${
+                  activeItem === "Question Analytics" ? "activePage" : ""
+                } `}
+              >
+                <Link
+                  to="/admin/questionAnalytics"
+                  className="sidebar-menu__link "
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-chart-pie" />
+                  </span>
+                  <span className="text">Question Analytics</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
                   activeItem === "Student Answers" ? "activePage" : ""
                 } `}
               >
@@ -208,16 +223,6 @@ function AdminSidebar({ isActive, closeSidebar }) {
                 </Link>
               </li>
               <li
-                className={`sidebar-menu__item ${activeItem === "Quiz Results" ? "activePage" : ""} `}
-              >
-                <Link to="/admin/quizResults" className="sidebar-menu__link ">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-chart-bar" />
-                  </span>
-                  <span className="text">Quiz Results</span>
-                </Link>
-              </li>
-              <li
                 className={`sidebar-menu__item ${
                   activeItem === "Add Session" ? "activePage" : ""
                 } `}
@@ -286,21 +291,6 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-barbell" />
                   </span>
                   <span className="text">Manage Practice</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Practice Assignments" ? "activePage" : ""
-                } `}
-              >
-                <Link
-                  to="/admin/practiceAssignments"
-                  className="sidebar-menu__link "
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-clipboard-text" />
-                  </span>
-                  <span className="text">Practice Assignments</span>
                 </Link>
               </li>
               <li
