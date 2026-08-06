@@ -987,24 +987,21 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                               <i className="ph ph-plus text-12" />
                               Assign Batch
                             </button>
-                            {p.batch_assignments?.length > 0 && (
-                              <>
-                                <button
-                                  className="btn btn-sm btn-info rounded-pill flex-align gap-4"
-                                  onClick={() => setViewQuestionsOf(p)}
-                                >
-                                  <i className="ph ph-list-dashes text-11" />{" "}
-                                  View Questions
-                                </button>
-                                <button
-                                  className="btn btn-sm btn-success rounded-pill flex-align gap-4"
-                                  onClick={() => setViewAttendedOf(p)}
-                                >
-                                  <i className="ph ph-users text-11" /> View
-                                  Attended
-                                </button>
-                              </>
-                            )}
+
+                            <button
+                              className="btn btn-sm btn-info rounded-pill flex-align gap-4"
+                              onClick={() => setViewQuestionsOf(p)}
+                            >
+                              <i className="ph ph-list-dashes text-11" /> View
+                              Questions
+                            </button>
+                            <button
+                              className="btn btn-sm btn-success rounded-pill flex-align gap-4"
+                              onClick={() => setViewAttendedOf(p)}
+                            >
+                              <i className="ph ph-users text-11" /> View
+                              Attended
+                            </button>
                           </div>
                         </div>
 
