@@ -35,14 +35,7 @@ axiosInstance.interceptors.response.use(
 
         toast.error("Session Expired! Please login again.", {
           onClose: () => {
-            [
-              "user",
-              "token",
-              "session",
-              "activeDoodle",
-              "admin",
-              "mentor",
-            ].forEach((k) => localStorage.removeItem(k));
+            localStorage.clear();
             window.location.href = "/signin";
           },
         });
@@ -1498,41 +1491,34 @@ export async function getQuizResults(params) {
   }
 }
 
-//?==================== QUESTION ANALYTICS ====================
-export async function getQuestionAnalytics(params) {
+//?==================== PRACTICE ADMIN VIEW ====================
+export async function getPracticeQuestionsAdmin(practice_id) {
   try {
-    const query = new URLSearchParams(
-      Object.fromEntries(
-        Object.entries(params || {}).filter(
-          ([, v]) => v !== "" && v !== null && v !== undefined,
-        ),
-      ),
-    ).toString();
-    const response = await axiosInstance.get(
-      `/admin/questionAnalytics?${query}`,
+    const r = await axiosInstance.get(
+      `/practice/${practice_id}/admin-questions`,
     );
-    return response.data;
-  } catch (error) {
-    console.error("getQuestionAnalytics() error", error);
-    throw error;
+    return r.data;
+  } catch (e) {
+    console.error("getPracticeQuestionsAdmin error", e);
+    throw e;
   }
 }
 
-export async function getQuestionStudentAnswers(question_id, params) {
+export async function getPracticeAttendedList(practice_id, params) {
   try {
-    const query = new URLSearchParams(
+    const q = new URLSearchParams(
       Object.fromEntries(
         Object.entries(params || {}).filter(
           ([, v]) => v !== "" && v !== null && v !== undefined,
         ),
       ),
     ).toString();
-    const response = await axiosInstance.get(
-      `/admin/questionStudentAnswers/${question_id}?${query}`,
+    const r = await axiosInstance.get(
+      `/practice/${practice_id}/admin-attended?${q}`,
     );
-    return response.data;
-  } catch (error) {
-    console.error("getQuestionStudentAnswers() error", error);
-    throw error;
+    return r.data;
+  } catch (e) {
+    console.error("getPracticeAttendedList error", e);
+    throw e;
   }
 }

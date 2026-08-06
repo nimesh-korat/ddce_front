@@ -44,9 +44,6 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/assignPractice":
         setActiveItem("Assign Practice");
         break;
-      case "/admin/practiceAssignments":
-        setActiveItem("Practice Assignments");
-        break;
       case "/admin/batchAccess":
         setActiveItem("Batch Access");
         break;
@@ -109,21 +106,6 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-squares-four" />
                   </span>
                   <span className="text">Dashboard</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Question Analytics" ? "activePage" : ""
-                } `}
-              >
-                <Link
-                  to="/admin/questionAnalytics"
-                  className="sidebar-menu__link "
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-chart-pie" />
-                  </span>
-                  <span className="text">Question Analytics</span>
                 </Link>
               </li>
               <li
@@ -223,6 +205,16 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-blueprint" />
                   </span>
                   <span className="text">Show Quiz</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${activeItem === "Quiz Results" ? "activePage" : ""} `}
+              >
+                <Link to="/admin/quizResults" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-chart-bar" />
+                  </span>
+                  <span className="text">Quiz Results</span>
                 </Link>
               </li>
               <li

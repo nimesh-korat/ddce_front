@@ -23,6 +23,8 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
 import { format } from "date-fns";
+import PracticeQuestionsModal from "./PracticeQuestionsModal";
+import PracticeAttendedModal from "./PracticeAttendedModal";
 
 const mathConfig = {
   tex2jax: {
@@ -245,6 +247,8 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
   });
 
   // ── Batch assignment inline form state ───────────────────────
+  const [viewQuestionsOf, setViewQuestionsOf] = useState(null);
+  const [viewAttendedOf, setViewAttendedOf] = useState(null);
   const [batchForm, setBatchForm] = useState(null); // { practice_id, tbl_batch, tbl_phase, start_date, end_date }
   const [editRow, setEditRow] = useState(null); // { batch_assignment_id, tbl_batch, tbl_phase, start_date, end_date }
 
@@ -983,6 +987,24 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                               <i className="ph ph-plus text-12" />
                               Assign Batch
                             </button>
+                            {p.batch_assignments?.length > 0 && (
+                              <>
+                                <button
+                                  className="btn btn-sm btn-info rounded-pill flex-align gap-4"
+                                  onClick={() => setViewQuestionsOf(p)}
+                                >
+                                  <i className="ph ph-list-dashes text-11" />{" "}
+                                  View Questions
+                                </button>
+                                <button
+                                  className="btn btn-sm btn-success rounded-pill flex-align gap-4"
+                                  onClick={() => setViewAttendedOf(p)}
+                                >
+                                  <i className="ph ph-users text-11" /> View
+                                  Attended
+                                </button>
+                              </>
+                            )}
                           </div>
                         </div>
 
@@ -1418,6 +1440,18 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
             </form>
           </div>
         </div>
+      )}
+      {viewQuestionsOf && (
+        <PracticeQuestionsModal
+          practice={viewQuestionsOf}
+          onClose={() => setViewQuestionsOf(null)}
+        />
+      )}
+      {viewAttendedOf && (
+        <PracticeAttendedModal
+          practice={viewAttendedOf}
+          onClose={() => setViewAttendedOf(null)}
+        />
       )}
     </>
   );
