@@ -438,7 +438,7 @@ function Solutions() {
       {showPdfModal && (
         <div className="modal-overlay" onClick={closePdfViewer}>
           <div
-            className="pdf-modal m-20"
+            className="pdf-modal"
             onClick={(e) => e.stopPropagation()}
             onContextMenu={disablePdfActions}
           >
@@ -552,41 +552,52 @@ function Solutions() {
       <style type="text/css">{`
         .modal-overlay {
           position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-          background-color: rgba(0,0,0,0.7);
+          background-color: rgba(0,0,0,0.75);
           display: flex; justify-content: center; align-items: center;
-          z-index: 1000; overflow: hidden;
+          z-index: 9999; padding: 12px; box-sizing: border-box;
         }
         .pdf-modal {
-          background: white; border-radius: 8px;
-          width: 90%; max-width: 900px; height: 90vh;
+          background: white; border-radius: 12px;
+          width: 100%; max-width: 960px;
+          height: calc(100vh - 24px);
           display: flex; flex-direction: column; overflow: hidden;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.4);
         }
         .pdf-modal-header {
           display: flex; justify-content: space-between; align-items: center;
-          padding: 10px 15px; background: #f8f9fa;
-          border-bottom: 1px solid #dee2e6; flex-shrink: 0; gap: 12px;
+          padding: 10px 16px; background: #f8fafc;
+          border-bottom: 1px solid #e2e8f0;
+          flex-shrink: 0; gap: 10px; min-height: 50px;
         }
-        .pdf-modal-title { flex: 1; }
-        .zoom-level { font-size: 14px; color: #555; }
-        .close-button { background: none; border: none; font-size: 20px; cursor: pointer; }
+        .pdf-modal-title { flex: 1; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .zoom-level { font-size: 13px; color: #64748b; white-space: nowrap; }
+        .close-button { background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px; line-height: 1; color: #64748b; flex-shrink: 0; }
+        .close-button:hover { color: #1e293b; }
         .pdf-modal-body {
-          flex: 1; overflow: auto; padding: 20px;
-          user-select: none; width: 100%;
+          flex: 1; overflow: auto; padding: 16px;
+          user-select: none; width: 100%; box-sizing: border-box;
+          -webkit-overflow-scrolling: touch;
         }
         .pdf-pages-container {
           display: flex; flex-direction: column;
-          align-items: center; width: fit-content; margin: 0 auto;
+          align-items: center; width: fit-content; min-width: 100%; margin: 0 auto;
         }
-        .pdf-page-wrapper { margin-bottom: 20px; display: flex; justify-content: center; }
+        .pdf-page-wrapper { margin-bottom: 16px; display: flex; justify-content: center; width: 100%; }
         .pdf-error { color: red; padding: 20px; text-align: center; }
-        .pdf-modal-body::-webkit-scrollbar { width: 6px; height: 6px; }
-        .pdf-modal-body::-webkit-scrollbar-thumb { background: #888; border-radius: 3px; }
-        .pdf-modal-body::-webkit-scrollbar-thumb:hover { background: #555; }
+        .pdf-modal-body::-webkit-scrollbar { width: 5px; height: 5px; }
+        .pdf-modal-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .pdf-modal-body::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .react-pdf__Page { display: flex; justify-content: center; }
-        @media (max-width: 768px) {
-          .pdf-modal { width: 95%; height: 95vh; }
-          .pdf-modal-body { padding: 10px; }
-          .react-pdf__Page__canvas { max-width: 100%; height: auto !important; }
+        .react-pdf__Page__canvas { max-width: 100% !important; height: auto !important; }
+        @media (max-width: 640px) {
+          .modal-overlay { padding: 0; }
+          .pdf-modal { border-radius: 0; height: 100vh; max-width: 100%; }
+          .pdf-modal-header { padding: 8px 12px; }
+          .pdf-modal-body { padding: 8px; }
+        }
+        @media (min-width: 641px) and (max-width: 1024px) {
+          .modal-overlay { padding: 8px; }
+          .pdf-modal { height: calc(100vh - 16px); }
         }
       `}</style>
     </>
