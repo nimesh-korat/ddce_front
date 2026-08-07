@@ -109,7 +109,7 @@ function Solutions() {
     const w = canvas.width,
       h = canvas.height;
     ctx.save();
-    ctx.font = `bold ${Math.max(14, w * 0.025)}px Arial`;
+    ctx.font = `bold ${Math.max(18, w * 0.04)}px Arial`;
     ctx.fillStyle = "rgba(180,180,180,0.28)";
     ctx.textAlign = "center";
     // Divide page into 2x3 grid — place one watermark randomly within each cell
@@ -571,8 +571,8 @@ function Solutions() {
         }
         .pdf-modal-title { flex: 1; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .zoom-level { font-size: 13px; color: #64748b; white-space: nowrap; }
-        .close-button { background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px; line-height: 1; color: #64748b; flex-shrink: 0; }
-        .close-button:hover { color: #1e293b; }
+        .close-button { background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px; line-height: 1; color: #64748b; flex-shrink: 0; min-width: 36px; min-height: 36px; display:flex; align-items:center; justify-content:center; border-radius: 6px; }
+        .close-button:hover { color: #1e293b; background: #f1f5f9; }
         .pdf-modal-body {
           flex: 1; overflow: auto; padding: 16px;
           user-select: none; width: 100%; box-sizing: border-box;
@@ -589,13 +589,21 @@ function Solutions() {
         .pdf-modal-body::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .react-pdf__Page { display: flex; justify-content: center; }
         .react-pdf__Page__canvas { max-width: 100% !important; height: auto !important; }
-        @media (max-width: 640px) {
-          .modal-overlay { padding: 0; }
-          .pdf-modal { border-radius: 0; height: 100vh; max-width: 100%; }
-          .pdf-modal-header { padding: 8px 12px; }
-          .pdf-modal-body { padding: 8px; }
+        @media (max-width: 768px) {
+          .modal-overlay { padding: 0; align-items: flex-start; }
+          .pdf-modal {
+            border-radius: 0; height: 100vh; height: 100dvh;
+            max-width: 100%; width: 100%;
+          }
+          .pdf-modal-header {
+            padding: 10px 14px; min-height: 54px;
+            position: sticky; top: 0; z-index: 10;
+          }
+          .pdf-modal-title { font-size: 13px; }
+          .zoom-level { display: none; }
+          .pdf-modal-body { padding: 6px; }
         }
-        @media (min-width: 641px) and (max-width: 1024px) {
+        @media (min-width: 769px) and (max-width: 1024px) {
           .modal-overlay { padding: 8px; }
           .pdf-modal { height: calc(100vh - 16px); }
         }
