@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import UserContext from "../../utils/UserContex";
 import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import { Link } from "react-router-dom";
@@ -14,6 +15,8 @@ function Solutions() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [selectedPdf, setSelectedPdf] = useState(null);
   const [pdfLabel, setPdfLabel] = useState(""); // "Material" or "Solution"
+  const { user } = useContext(UserContext);
+  const phoneNo = user?.Phone_Number || "";
   const [numPages, setNumPages] = useState(null);
   const [showPdfModal, setShowPdfModal] = useState(false);
   // eslint-disable-next-line
@@ -97,6 +100,44 @@ function Solutions() {
       setActualScale(n);
       setUserFacingScale(n);
     }
+  };
+
+  // Draw watermark on canvas after page renders
+  const drawWatermark = (canvas) => {
+    if (!canvas || !phoneNo) return;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width,
+      h = canvas.height;
+    ctx.save();
+    ctx.font = `bold ${Math.max(14, w * 0.025)}px Arial`;
+    ctx.fillStyle = "rgba(180,180,180,0.28)";
+    ctx.textAlign = "center";
+    // Divide page into 2x3 grid — place one watermark randomly within each cell
+    // This guarantees spread with no clustering
+    const cols = 2,
+      rows = 3;
+    const cellW = w / cols,
+      cellH = h / rows;
+    const padding = 0.15; // keep away from cell edges
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const x =
+          cellW * col +
+          cellW * padding +
+          Math.random() * cellW * (1 - 2 * padding);
+        const y =
+          cellH * row +
+          cellH * padding +
+          Math.random() * cellH * (1 - 2 * padding);
+        const angle = ((Math.random() * 70 - 35) * Math.PI) / 180;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        ctx.fillText(phoneNo, 0, 0);
+        ctx.restore();
+      }
+    }
+    ctx.restore();
   };
 
   const onDocumentLoadSuccess = ({ numPages }) => {
@@ -327,63 +368,58 @@ function Solutions() {
                     <div className="card-body">
                       <div className="row g-2">
                         {filtered.map((item) => (
-                          <div className="col-lg-6" key={item.id}>
-                            <div className="payment-method payment-method-two form-check form-radio d-flex align-items-center justify-content-between mb-16 rounded-16 bg-main-50 p-20 cursor-pointer position-relative transition-2">
-                              <div className="flex-align align-items-start gap-16 col-12">
-                                <div className="col-12">
-                                  <h6 className="title mb-0">{item.title}</h6>
-                                  {item.description && (
-                                    <span className="d-block text-14 text-gray-600 mt-4">
-                                      {item.description}
-                                    </span>
-                                  )}
-                                  {/* Action buttons */}
-                                  <div className="text-13 d-flex justify-content-between mt-12 pt-12 border-top border-gray-100">
-                                    {/* Material button */}
-                                    {item.material_url ? (
-                                      <button
-                                        onClick={() =>
-                                          openPdfViewer(
-                                            item.material_url,
-                                            "Material",
-                                          )
-                                        }
-                                        className="text-gray-900 hover-text-main-600 btn btn-link p-0"
-                                      >
-                                        <span>Material</span>
-                                        <i className="ph ph-file-pdf ms-4" />
-                                      </button>
-                                    ) : (
-                                      <span className="text-gray-400 text-13">
-                                        Material not available
-                                      </span>
-                                    )}
+                          <div className="col-lg-6 d-flex" key={item.id}>
+                            <div
+                              className="payment-method payment-method-two form-check form-radio d-flex align-items-start justify-content-between mb-16 rounded-16 bg-main-50 p-20 cursor-pointer position-relative transition-2 w-100"
+                              style={{ flexDirection: "column" }}
+                            >
+                              {/* Title + description */}
+                              <div className="col-12" style={{ flex: 1 }}>
+                                <h6 className="title mb-0">{item.title}</h6>
+                                {item.description && (
+                                  <span className="d-block text-14 text-gray-600 mt-4">
+                                    {item.description}
+                                  </span>
+                                )}
+                              </div>
 
-                                    {/* Solution button — opens PDF if visible, popup if locked */}
-                                    {item.solution_available ? (
-                                      <button
-                                        onClick={() =>
-                                          openPdfViewer(
-                                            item.solution_url,
-                                            "Solution",
-                                          )
-                                        }
-                                        className="text-gray-900 hover-text-main-600 btn btn-link p-0"
-                                      >
-                                        <span>Solution</span>
-                                        <i className="ph ph-file-pdf ms-4" />
-                                      </button>
-                                    ) : (
-                                      <button
-                                        onClick={handleLockedSolution}
-                                        className="text-gray-400 hover-text-main-600 btn btn-link p-0"
-                                      >
-                                        <i className="ph ph-lock me-4" />
-                                        <span>Solution</span>
-                                      </button>
-                                    )}
-                                  </div>
-                                </div>
+                              {/* Action buttons — always at bottom */}
+                              <div className="text-13 d-flex justify-content-between w-100 pt-12 mt-12 border-top border-gray-100">
+                                {/* Material button */}
+                                {item.material_url ? (
+                                  <button
+                                    onClick={() =>
+                                      openPdfViewer(
+                                        item.material_url,
+                                        "Material",
+                                      )
+                                    }
+                                    className="text-gray-900 hover-text-main-600 btn btn-link p-0"
+                                  >
+                                    <span>Material</span>
+                                    <i className="ph ph-file-pdf ms-4" />
+                                  </button>
+                                ) : (
+                                  <span className="text-gray-400 text-13">
+                                    Material not available
+                                  </span>
+                                )}
+
+                                {/* Solution button — only show if available for this batch */}
+                                {item.solution_available ? (
+                                  <button
+                                    onClick={() =>
+                                      openPdfViewer(
+                                        item.solution_available,
+                                        "Solution",
+                                      )
+                                    }
+                                    className="text-gray-900 hover-text-main-600 btn btn-link p-0"
+                                  >
+                                    <span>Solution</span>
+                                    <i className="ph ph-file-pdf ms-4" />
+                                  </button>
+                                ) : null}
                               </div>
                             </div>
                           </div>
@@ -415,8 +451,46 @@ function Solutions() {
               </span>
               {isMobile ? null : (
                 <>
-                  <button onClick={zoomIn}>Zoom In</button>
-                  <button onClick={zoomOut}>Zoom Out</button>
+                  <button
+                    onClick={zoomIn}
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background: "#f1f5f9",
+                      border: "1px solid #e2e8f0",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "18px",
+                      fontWeight: 700,
+                      color: "#374151",
+                      lineHeight: 1,
+                    }}
+                  >
+                    +
+                  </button>
+                  <button
+                    onClick={zoomOut}
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background: "#f1f5f9",
+                      border: "1px solid #e2e8f0",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "18px",
+                      fontWeight: 700,
+                      color: "#374151",
+                      lineHeight: 1,
+                    }}
+                  >
+                    −
+                  </button>
                 </>
               )}
               <button onClick={closePdfViewer} className="close-button">
@@ -458,6 +532,12 @@ function Solutions() {
                           renderAnnotationLayer={false}
                           className="pdf-page"
                           width={isMobile ? null : undefined}
+                          onRenderSuccess={() => {
+                            const wrapper = document.querySelectorAll(
+                              ".pdf-page-wrapper canvas",
+                            );
+                            if (wrapper[index]) drawWatermark(wrapper[index]);
+                          }}
                         />
                       </div>
                     ))}

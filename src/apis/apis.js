@@ -1566,3 +1566,44 @@ export async function getQuestionStudentAnswers(question_id, params) {
     throw error;
   }
 }
+
+//?==================== MATERIAL ASSIGNMENTS ====================
+export async function getAdminMaterials() {
+  try {
+    const r = await axiosInstance.get("/admin/materials/list");
+    return r.data;
+  } catch (e) {
+    console.error("getAdminMaterials error", e);
+    throw e;
+  }
+}
+
+export async function assignMaterialToBatch(data) {
+  try {
+    const r = await axiosInstance.post("/admin/materials/assign", data);
+    return r.data;
+  } catch (e) {
+    console.error("assignMaterialToBatch error", e);
+    throw e;
+  }
+}
+
+export async function updateMaterialAssignment(id, data) {
+  try {
+    const r = await axiosInstance.put(`/admin/materials/assign/${id}`, data);
+    return r.data;
+  } catch (e) {
+    console.error("updateMaterialAssignment error", e);
+    throw e;
+  }
+}
+
+export async function removeMaterialAssignment(id) {
+  try {
+    const r = await axiosInstance.delete(`/admin/materials/assign/${id}`);
+    return r.data;
+  } catch (e) {
+    console.error("removeMaterialAssignment error", e);
+    throw e;
+  }
+}

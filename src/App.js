@@ -41,7 +41,7 @@ import AssignBatchToTest from "./admin/AssignBatchToTest";
 import AddSession from "./admin/AddSessions";
 import ShowSession from "./admin/ShowSession";
 import AssignSessionToBatch from "./admin/AssignSessionToBatch";
-// import Solutions from "./modules/solutions";
+import Solutions from "./modules/solutions";
 import ViewGivenExamData from "./admin/ViewGivenExamData";
 import StudentWiseExamData from "./admin/StudentWiseExamData";
 import CollgePredication from "./modules/college_predication";
@@ -163,14 +163,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-          {/* <Route
+          <Route
             path="/solutions"
             element={
               <ProtectedRoute>
                 <Solutions />
               </ProtectedRoute>
             }
-          /> */}
+          />
           {/* <Route path="/mentors" element={<Mentor />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/messages" element={<Messages />} />
