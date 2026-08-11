@@ -647,7 +647,7 @@ export default function Attendance() {
                               onClick={(e) => e.stopPropagation()}
                             >
                               <button
-                                className="btn btn-sm btn-outline-danger rounded-pill"
+                                className="btn btn-sm btn-danger rounded-pill"
                                 onClick={() =>
                                   handleDelete(
                                     u.upload_batch_id,
@@ -675,7 +675,7 @@ export default function Attendance() {
                         {batchStudents.length !== 1 ? "s" : ""} in this upload
                       </p>
                       <button
-                        className="btn btn-sm btn-outline-secondary rounded-pill text-12"
+                        className="btn btn-sm btn-secondary rounded-pill text-12"
                         onClick={() => setSelectedBatch(null)}
                       >
                         Close <i className="ph ph-x ms-4 text-11" />
