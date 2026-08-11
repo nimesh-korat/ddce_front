@@ -17,6 +17,171 @@ import {
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
+function SearchableSelect({
+  options,
+  value,
+  onChange,
+  placeholder = "Select...",
+  labelKey = "label",
+  valueKey = "value",
+}) {
+  const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState("");
+  const ref = React.useRef(null);
+  const filtered = options.filter((o) =>
+    String(o[labelKey] || "")
+      .toLowerCase()
+      .includes(search.toLowerCase()),
+  );
+  const selected = options.find((o) => String(o[valueKey]) === String(value));
+  React.useEffect(() => {
+    const h = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, []);
+  return (
+    <div ref={ref} style={{ position: "relative", width: "100%" }}>
+      <div
+        onClick={() => {
+          setOpen((o) => !o);
+          setSearch("");
+        }}
+        className="form-control d-flex align-items-center justify-content-between"
+        style={{
+          cursor: "pointer",
+          userSelect: "none",
+          minHeight: "38px",
+          fontSize: "14px",
+        }}
+      >
+        <span className={selected ? "text-gray-800" : "text-gray-400"}>
+          {selected ? selected[labelKey] : placeholder}
+        </span>
+        <i
+          className={`ph ph-caret-${open ? "up" : "down"} text-gray-400 text-13`}
+        />
+      </div>
+      {open && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 4px)",
+            left: 0,
+            right: 0,
+            background: "#fff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "10px",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+            zIndex: 9999,
+            overflow: "hidden",
+          }}
+        >
+          <div style={{ padding: "7px", borderBottom: "1px solid #f1f5f9" }}>
+            <div className="position-relative">
+              <i
+                className="ph ph-magnifying-glass position-absolute text-gray-400"
+                style={{
+                  top: "50%",
+                  left: "8px",
+                  transform: "translateY(-50%)",
+                  fontSize: "13px",
+                  pointerEvents: "none",
+                }}
+              />
+              <input
+                autoFocus
+                type="text"
+                className="form-control form-control-sm"
+                style={{ paddingLeft: "28px", fontSize: "13px" }}
+                placeholder="Search..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </div>
+          <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+            <div
+              onClick={() => {
+                onChange("");
+                setOpen(false);
+              }}
+              style={{
+                padding: "8px 12px",
+                fontSize: "13px",
+                cursor: "pointer",
+                color: "#94a3b8",
+                fontStyle: "italic",
+                background: !value ? "#f8fafc" : "transparent",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "#f8fafc")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = !value
+                  ? "#f8fafc"
+                  : "transparent")
+              }
+            >
+              {placeholder}
+            </div>
+            {filtered.length === 0 && (
+              <div
+                style={{
+                  padding: "12px",
+                  fontSize: "13px",
+                  color: "#94a3b8",
+                  textAlign: "center",
+                }}
+              >
+                No results
+              </div>
+            )}
+            {filtered.map((o) => (
+              <div
+                key={o[valueKey]}
+                onClick={() => {
+                  onChange(String(o[valueKey]));
+                  setOpen(false);
+                  setSearch("");
+                }}
+                style={{
+                  padding: "8px 12px",
+                  fontSize: "13px",
+                  cursor: "pointer",
+                  background:
+                    String(o[valueKey]) === String(value)
+                      ? "#ede9fe"
+                      : "transparent",
+                  color:
+                    String(o[valueKey]) === String(value)
+                      ? "#6366f1"
+                      : "#374151",
+                  fontWeight: String(o[valueKey]) === String(value) ? 600 : 400,
+                }}
+                onMouseEnter={(e) => {
+                  if (String(o[valueKey]) !== String(value))
+                    e.currentTarget.style.background = "#f8fafc";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background =
+                    String(o[valueKey]) === String(value)
+                      ? "#ede9fe"
+                      : "transparent";
+                }}
+              >
+                {o[labelKey]}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Attendance() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const queryClient = useQueryClient();
@@ -659,20 +824,17 @@ export default function Attendance() {
                       >
                         Batch *
                       </label>
-                      <select
-                        className="form-select rounded-8"
+                      <SearchableSelect
+                        options={batches.map((b) => ({
+                          label: b.batch_title,
+                          value: b.id,
+                        }))}
                         value={report.batch_id}
-                        onChange={(e) =>
-                          setReport((r) => ({ ...r, batch_id: e.target.value }))
+                        onChange={(v) =>
+                          setReport((r) => ({ ...r, batch_id: v }))
                         }
-                      >
-                        <option value="">Select Batch</option>
-                        {batches.map((b) => (
-                          <option key={b.id} value={b.id}>
-                            {b.batch_title}
-                          </option>
-                        ))}
-                      </select>
+                        placeholder="Select Batch"
+                      />
                     </div>
                     <div className="col-lg-2 col-md-6">
                       <label
@@ -681,20 +843,17 @@ export default function Attendance() {
                       >
                         Phase
                       </label>
-                      <select
-                        className="form-select rounded-8"
+                      <SearchableSelect
+                        options={phases.map((p) => ({
+                          label: p.title,
+                          value: p.Id,
+                        }))}
                         value={report.phase_id}
-                        onChange={(e) =>
-                          setReport((r) => ({ ...r, phase_id: e.target.value }))
+                        onChange={(v) =>
+                          setReport((r) => ({ ...r, phase_id: v }))
                         }
-                      >
-                        <option value="">All Phases</option>
-                        {phases.map((p) => (
-                          <option key={p.Id} value={p.Id}>
-                            {p.title}
-                          </option>
-                        ))}
-                      </select>
+                        placeholder="All Phases"
+                      />
                     </div>
                     <div className="col-lg-2 col-md-6">
                       <label
