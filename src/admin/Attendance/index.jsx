@@ -41,7 +41,6 @@ export default function Attendance() {
     batch_id: "",
     phase_id: "",
     search: "",
-    include_practice: false,
   });
   const [downloading, setDownloading] = useState(false);
 
@@ -138,7 +137,6 @@ export default function Attendance() {
         batch_id: report.batch_id,
         phase_id: report.phase_id || undefined,
         search: report.search || undefined,
-        include_practice: report.include_practice ? "true" : "false",
       });
       toast.success("Report downloaded!");
     } catch {
@@ -148,14 +146,17 @@ export default function Attendance() {
     }
   };
 
-  const fmtDate = (d) =>
-    d
-      ? new Date(d).toLocaleDateString("en-IN", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        })
-      : "—";
+  const fmtDate = (d) => {
+    if (!d) return "—";
+    // Parse as local date to avoid UTC midnight timezone shift
+    const [year, month, day] = String(d).split("T")[0].split("-");
+    const dt = new Date(+year, +month - 1, +day);
+    return dt.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
   const fmtDateTime = (d) =>
     d
       ? new Date(d).toLocaleString("en-IN", {
@@ -713,20 +714,6 @@ export default function Attendance() {
                       />
                     </div>
                     <div className="col-lg-2 col-md-6 d-flex align-items-end gap-12 flex-wrap">
-                      <label className="d-flex align-items-center gap-8 mb-0 cursor-pointer text-13 text-gray-600">
-                        <input
-                          type="checkbox"
-                          className="form-check-input mt-0"
-                          checked={report.include_practice}
-                          onChange={(e) =>
-                            setReport((r) => ({
-                              ...r,
-                              include_practice: e.target.checked,
-                            }))
-                          }
-                        />
-                        Include Practice
-                      </label>
                       <button
                         className="btn btn-main rounded-8 flex-align gap-8"
                         onClick={handleDownload}
@@ -739,7 +726,7 @@ export default function Attendance() {
                           </>
                         ) : (
                           <>
-                            <i className="ph ph-download-simple" /> Download CSV
+                            <i className="ph ph-file-xls" /> Download Excel
                           </>
                         )}
                       </button>
