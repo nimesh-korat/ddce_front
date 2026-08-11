@@ -1607,3 +1607,81 @@ export async function removeMaterialAssignment(id) {
     throw e;
   }
 }
+
+//?==================== ATTENDANCE ====================
+export async function uploadAttendanceCSV(formData) {
+  try {
+    const r = await axiosInstance.post("/admin/attendance/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return r.data;
+  } catch (e) {
+    console.error("uploadAttendanceCSV error", e);
+    throw e;
+  }
+}
+
+export async function getAttendanceUploads() {
+  try {
+    const r = await axiosInstance.get("/admin/attendance/uploads");
+    return r.data;
+  } catch (e) {
+    console.error("getAttendanceUploads error", e);
+    throw e;
+  }
+}
+
+export async function getAttendanceBatch(batch_id, params) {
+  try {
+    const q = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const r = await axiosInstance.get(
+      `/admin/attendance/batch/${batch_id}?${q}`,
+    );
+    return r.data;
+  } catch (e) {
+    console.error("getAttendanceBatch error", e);
+    throw e;
+  }
+}
+
+export async function deleteAttendanceBatch(batch_id) {
+  try {
+    const r = await axiosInstance.delete(`/admin/attendance/batch/${batch_id}`);
+    return r.data;
+  } catch (e) {
+    console.error("deleteAttendanceBatch error", e);
+    throw e;
+  }
+}
+
+export async function downloadAttendanceReport(params) {
+  try {
+    const q = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const r = await axiosInstance.get(`/admin/attendance/report?${q}`, {
+      responseType: "blob",
+    });
+    const url = window.URL.createObjectURL(new Blob([r.data]));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `attendance_report.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (e) {
+    console.error("downloadAttendanceReport error", e);
+    throw e;
+  }
+}
