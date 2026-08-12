@@ -9,7 +9,11 @@ import ProgressStatistics from "./components/ProgressStatistics";
 import MostActivity from "./components/MostActivity";
 import Preloader from "../../utils/preloader/Preloader";
 import { useQuery } from "@tanstack/react-query";
-import { getDashboardCounts, getStudentAnswers } from "../../apis/apis";
+import {
+  getDashboardCounts,
+  getStudentAnswers,
+  getStudentCount,
+} from "../../apis/apis";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
 import Marquee from "react-fast-marquee";
 
@@ -335,6 +339,14 @@ function Home() {
     setIsSidebarActive(false);
   };
 
+  const { data: studentCountData } = useQuery({
+    queryKey: ["studentCount"],
+    queryFn: getStudentCount,
+    staleTime: 5 * 60 * 1000,
+  });
+  const offlineCount = studentCountData?.data?.offline_count ?? 0;
+  const onlineCount = studentCountData?.data?.online_count ?? 0;
+
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["dashboardCounts"],
     queryFn: getDashboardCounts,
@@ -552,15 +564,14 @@ function Home() {
                     bgColor={"bg-main-two-600 "}
                     img="ph-fill ph-graduation-cap"
                     title="Offline Students"
-                    count="106"
+                    count={offlineCount}
                     isLocked={false}
                   />
                   <HomeWidgets
                     bgColor={"bg-purple-600"}
                     img="ph-fill ph-users-four"
                     title="Online Students"
-                    // count={data?.data?.total_users || 0}
-                    count={45}
+                    count={onlineCount}
                     isLocked={false}
                   />
                   <HomeWidgets

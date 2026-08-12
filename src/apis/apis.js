@@ -35,14 +35,7 @@ axiosInstance.interceptors.response.use(
 
         toast.error("Session Expired! Please login again.", {
           onClose: () => {
-            [
-              "user",
-              "token",
-              "session",
-              "activeDoodle",
-              "admin",
-              "mentor",
-            ].forEach((k) => localStorage.removeItem(k));
+            localStorage.clear();
             window.location.href = "/signin";
           },
         });
@@ -1529,43 +1522,6 @@ export async function getPracticeAttendedList(practice_id, params) {
     throw e;
   }
 }
-//?==================== QUESTION ANALYTICS ====================
-export async function getQuestionAnalytics(params) {
-  try {
-    const query = new URLSearchParams(
-      Object.fromEntries(
-        Object.entries(params || {}).filter(
-          ([, v]) => v !== "" && v !== null && v !== undefined,
-        ),
-      ),
-    ).toString();
-    const response = await axiosInstance.get(
-      `/admin/questionAnalytics?${query}`,
-    );
-    return response.data;
-  } catch (error) {
-    console.error("getQuestionAnalytics() error", error);
-    throw error;
-  }
-}
-export async function getQuestionStudentAnswers(question_id, params) {
-  try {
-    const query = new URLSearchParams(
-      Object.fromEntries(
-        Object.entries(params || {}).filter(
-          ([, v]) => v !== "" && v !== null && v !== undefined,
-        ),
-      ),
-    ).toString();
-    const response = await axiosInstance.get(
-      `/admin/questionStudentAnswers/${question_id}?${query}`,
-    );
-    return response.data;
-  } catch (error) {
-    console.error("getQuestionStudentAnswers() error", error);
-    throw error;
-  }
-}
 
 //?==================== MATERIAL ASSIGNMENTS ====================
 export async function getAdminMaterials() {
@@ -1615,49 +1571,157 @@ export async function uploadAttendanceCSV(formData) {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return r.data;
-  } catch (e) { console.error("uploadAttendanceCSV error", e); throw e; }
+  } catch (e) {
+    console.error("uploadAttendanceCSV error", e);
+    throw e;
+  }
 }
 
 export async function getAttendanceUploads() {
   try {
     const r = await axiosInstance.get("/admin/attendance/uploads");
     return r.data;
-  } catch (e) { console.error("getAttendanceUploads error", e); throw e; }
+  } catch (e) {
+    console.error("getAttendanceUploads error", e);
+    throw e;
+  }
 }
 
 export async function getAttendanceBatch(batch_id, params) {
   try {
     const q = new URLSearchParams(
-      Object.fromEntries(Object.entries(params||{}).filter(([,v])=>v!==""&&v!==null&&v!==undefined))
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
     ).toString();
-    const r = await axiosInstance.get(`/admin/attendance/batch/${batch_id}?${q}`);
+    const r = await axiosInstance.get(
+      `/admin/attendance/batch/${batch_id}?${q}`,
+    );
     return r.data;
-  } catch (e) { console.error("getAttendanceBatch error", e); throw e; }
+  } catch (e) {
+    console.error("getAttendanceBatch error", e);
+    throw e;
+  }
 }
 
 export async function deleteAttendanceBatch(batch_id) {
   try {
     const r = await axiosInstance.delete(`/admin/attendance/batch/${batch_id}`);
     return r.data;
-  } catch (e) { console.error("deleteAttendanceBatch error", e); throw e; }
+  } catch (e) {
+    console.error("deleteAttendanceBatch error", e);
+    throw e;
+  }
 }
 
 export async function downloadAttendanceReport(params) {
   try {
     const q = new URLSearchParams(
-      Object.fromEntries(Object.entries(params||{}).filter(([,v])=>v!==""&&v!==null&&v!==undefined))
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
     ).toString();
-    const r = await axiosInstance.get(`/admin/attendance/report?${q}`, { responseType: "blob" });
+    const r = await axiosInstance.get(`/admin/attendance/report?${q}`, {
+      responseType: "blob",
+    });
     const mimeType = r.headers["content-type"] || "";
-    const isExcel  = mimeType.includes("spreadsheet") || mimeType.includes("excel");
-    const ext      = isExcel ? "xlsx" : "csv";
+    const isExcel =
+      mimeType.includes("spreadsheet") || mimeType.includes("excel");
+    const ext = isExcel ? "xlsx" : "csv";
     const url = window.URL.createObjectURL(new Blob([r.data]));
-    const a   = document.createElement("a");
-    a.href    = url;
+    const a = document.createElement("a");
+    a.href = url;
     a.download = `attendance_report.${ext}`;
     document.body.appendChild(a);
     a.click();
     a.remove();
     window.URL.revokeObjectURL(url);
-  } catch (e) { console.error("downloadAttendanceReport error", e); throw e; }
+  } catch (e) {
+    console.error("downloadAttendanceReport error", e);
+    throw e;
+  }
+}
+
+//?==================== STUDENT COUNT ====================
+export async function getStudentCounts() {
+  try {
+    const r = await axiosInstance.get("/admin/studentCount");
+    return r.data;
+  } catch (e) {
+    console.error("getStudentCounts error", e);
+    throw e;
+  }
+}
+
+export async function upsertStudentCount(data) {
+  try {
+    const r = await axiosInstance.post("/admin/studentCount", data);
+    return r.data;
+  } catch (e) {
+    console.error("upsertStudentCount error", e);
+    throw e;
+  }
+}
+
+export async function deleteStudentCount(id) {
+  try {
+    const r = await axiosInstance.delete(`/admin/studentCount/${id}`);
+    return r.data;
+  } catch (e) {
+    console.error("deleteStudentCount error", e);
+    throw e;
+  }
+}
+
+export async function getStudentCount() {
+  try {
+    const r = await axiosInstance.get("/studentCount");
+    return r.data;
+  } catch (e) {
+    console.error("getStudentCount error", e);
+    throw e;
+  }
+}
+
+//?==================== QUESTION ANALYTICS ====================
+export async function getQuestionAnalytics(params) {
+  try {
+    const query = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const response = await axiosInstance.get(
+      `/admin/questionAnalytics?${query}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("getQuestionAnalytics() error", error);
+    throw error;
+  }
+}
+
+export async function getQuestionStudentAnswers(question_id, params) {
+  try {
+    const query = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const response = await axiosInstance.get(
+      `/admin/questionStudentAnswers/${question_id}?${query}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("getQuestionStudentAnswers() error", error);
+    throw error;
+  }
 }

@@ -53,6 +53,9 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/doodle":
         setActiveItem("Doodle / Occasions");
         break;
+      case "/admin/studentCount":
+        setActiveItem("Student Count");
+        break;
       case "/admin/attendance":
         setActiveItem("Attendance");
         break;
@@ -109,33 +112,6 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-squares-four" />
                   </span>
                   <span className="text">Dashboard</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Question Analytics" ? "activePage" : ""
-                } `}
-              >
-                <Link
-                  to="/admin/questionAnalytics"
-                  className="sidebar-menu__link "
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-chart-pie" />
-                  </span>
-                  <span className="text">Question Analytics</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Attendance" ? "activePage" : ""
-                } `}
-              >
-                <Link to="/admin/attendance" className="sidebar-menu__link ">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-student" />
-                  </span>
-                  <span className="text">Student Attendance</span>
                 </Link>
               </li>
               <li
@@ -237,13 +213,9 @@ function AdminSidebar({ isActive, closeSidebar }) {
                   <span className="text">Show Quiz</span>
                 </Link>
               </li>
-              <li
-                className={`sidebar-menu__item ${activeItem === "Quiz Results" ? "activePage" : ""} `}
-              >
+              <li className={`sidebar-menu__item ${activeItem === "Quiz Results" ? "activePage" : ""} `}>
                 <Link to="/admin/quizResults" className="sidebar-menu__link ">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-chart-bar" />
-                  </span>
+                  <span className="icon d-flex align-items-center"><i className="ph ph-chart-bar" /></span>
                   <span className="text">Quiz Results</span>
                 </Link>
               </li>
@@ -343,6 +315,30 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-shield-check" />
                   </span>
                   <span className="text">Batch Access</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Student Count" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/studentCount" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-users-three" />
+                  </span>
+                  <span className="text">Student Count</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Attendance" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/attendance" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-calendar-check" />
+                  </span>
+                  <span className="text">Attendance</span>
                 </Link>
               </li>
             </ul>
