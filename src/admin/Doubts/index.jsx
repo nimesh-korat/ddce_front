@@ -401,11 +401,24 @@ export default function Doubts() {
                         <input
                           type="file"
                           accept="image/*,application/pdf"
-                          className="form-control rounded-8 mb-12"
-                          onChange={(e) =>
-                            setAnswerImage(e.target.files[0] || null)
-                          }
+                          className="form-control rounded-8 mb-4"
+                          onChange={(e) => {
+                            const f = e.target.files[0];
+                            if (f && f.size > 10 * 1024 * 1024) {
+                              toast.error(
+                                "File too large. Maximum allowed size is 10MB.",
+                              );
+                              e.target.value = "";
+                              setAnswerImage(null);
+                              return;
+                            }
+                            setAnswerImage(f || null);
+                          }}
                         />
+                        <p className="text-12 text-gray-400 mb-10">
+                          <i className="ph ph-info me-4" />
+                          Max 10MB. Images or PDF accepted
+                        </p>
                         <div className="flex-align gap-8">
                           <button
                             className="btn btn-success rounded-8 px-20 flex-align gap-6"

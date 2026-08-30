@@ -198,10 +198,23 @@ function Doubts() {
                         type="file"
                         accept="image/*,application/pdf"
                         className="form-control rounded-8"
-                        onChange={(e) =>
-                          setImageFile(e.target.files[0] || null)
-                        }
+                        onChange={(e) => {
+                          const f = e.target.files[0];
+                          if (f && f.size > 10 * 1024 * 1024) {
+                            toast.error(
+                              "File too large. Maximum allowed size is 10MB.",
+                            );
+                            e.target.value = "";
+                            setImageFile(null);
+                            return;
+                          }
+                          setImageFile(f || null);
+                        }}
                       />
+                      <p className="text-12 text-gray-400 mt-4 mb-0">
+                        <i className="ph ph-info me-4" />
+                        Max file size: 10MB. Accepted: Images, PDF
+                      </p>
                     </div>
 
                     <div className="col-12">
