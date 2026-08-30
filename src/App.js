@@ -61,6 +61,8 @@ import StudNotifyToast from "./common/StudNotifyToast";
 import QuestionAnalytics from "./admin/QuestionAnalytics";
 import Attendance from "./admin/Attendance";
 import StudentCount from "./admin/StudentCount";
+import AdminDoubts from "./admin/Doubts";
+import MentorSubjects from "./admin/MentorSubjects";
 
 function App() {
   return (
@@ -342,6 +344,22 @@ function App() {
             element={
               <AdminRoutes>
                 <StudentAnswers />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/doubts"
+            element={
+              <AdminRoutes>
+                <AdminDoubts />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/mentorSubjects"
+            element={
+              <AdminRoutes>
+                <MentorSubjects />
               </AdminRoutes>
             }
           />

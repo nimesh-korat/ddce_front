@@ -56,6 +56,12 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/studentCount":
         setActiveItem("Student Count");
         break;
+      case "/admin/doubts":
+        setActiveItem("Doubts");
+        break;
+      case "/admin/mentorSubjects":
+        setActiveItem("Mentor Subjects");
+        break;
       case "/admin/attendance":
         setActiveItem("Attendance");
         break;
@@ -344,6 +350,33 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-calendar-check" />
                   </span>
                   <span className="text">Attendance</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Doubts" ? "activePage" : ""
+                } `}
+              >
+                <Link to="/admin/doubts" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-question" />
+                  </span>
+                  <span className="text">Doubts</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${
+                  activeItem === "Mentor Subjects" ? "activePage" : ""
+                } `}
+              >
+                <Link
+                  to="/admin/mentorSubjects"
+                  className="sidebar-menu__link "
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-chalkboard-teacher" />
+                  </span>
+                  <span className="text">Mentor Subjects</span>
                 </Link>
               </li>
             </ul>

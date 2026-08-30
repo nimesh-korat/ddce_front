@@ -1725,3 +1725,85 @@ export async function getQuestionStudentAnswers(question_id, params) {
     throw error;
   }
 }
+
+//?==================== DOUBTS ====================
+export async function submitDoubt(formData) {
+  try {
+    const r = await axiosInstance.post("/doubt", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return r.data;
+  } catch (e) {
+    console.error("submitDoubt error", e);
+    throw e;
+  }
+}
+
+export async function getMyDoubts() {
+  try {
+    const r = await axiosInstance.get("/doubt");
+    return r.data;
+  } catch (e) {
+    console.error("getMyDoubts error", e);
+    throw e;
+  }
+}
+
+export async function getAdminDoubts(params) {
+  try {
+    const q = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const r = await axiosInstance.get(`/admin/doubts?${q}`);
+    return r.data;
+  } catch (e) {
+    console.error("getAdminDoubts error", e);
+    throw e;
+  }
+}
+
+export async function solveDoubt(id, formData) {
+  try {
+    const r = await axiosInstance.put(`/admin/doubts/${id}/solve`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return r.data;
+  } catch (e) {
+    console.error("solveDoubt error", e);
+    throw e;
+  }
+}
+
+export async function getMentorSubjects() {
+  try {
+    const r = await axiosInstance.get("/admin/mentorSubjects");
+    return r.data;
+  } catch (e) {
+    console.error("getMentorSubjects error", e);
+    throw e;
+  }
+}
+
+export async function assignMentorSubject(data) {
+  try {
+    const r = await axiosInstance.post("/admin/mentorSubjects", data);
+    return r.data;
+  } catch (e) {
+    console.error("assignMentorSubject error", e);
+    throw e;
+  }
+}
+
+export async function removeMentorSubject(id) {
+  try {
+    const r = await axiosInstance.delete(`/admin/mentorSubjects/${id}`);
+    return r.data;
+  } catch (e) {
+    console.error("removeMentorSubject error", e);
+    throw e;
+  }
+}
