@@ -26,6 +26,7 @@ function Practice() {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
   const toggleSidebar = () => setIsSidebarActive((p) => !p);
   const closeSidebar = () => setIsSidebarActive(false);
@@ -140,7 +141,12 @@ function Practice() {
       !search || s.title?.toLowerCase().includes(search.toLowerCase());
     const matchSubject =
       !subjectFilter || (s.subjects || []).includes(subjectFilter);
-    return matchSearch && matchSubject;
+    const matchStatus =
+      !statusFilter ||
+      (statusFilter === "pending" && s.attempted === 0) ||
+      (statusFilter === "ongoing" && s.attempted > 0 && s.remaining > 0) ||
+      (statusFilter === "completed" && s.remaining === 0 && s.attempted > 0);
+    return matchSearch && matchSubject && matchStatus;
   });
   const question = questionData?.data;
   const setCompleted =
@@ -219,7 +225,7 @@ function Practice() {
                 </div>
               )}
 
-              {!setsLoading && sets.length === 0 && (
+              {!setsLoading && allSets.length === 0 && (
                 <div className="card">
                   <div className="card-body text-center py-64">
                     <i className="ph ph-barbell text-72 text-gray-200 d-block mb-20" />
@@ -239,8 +245,7 @@ function Practice() {
                 <div className="card border border-gray-100 mb-24 shadow-sm">
                   <div className="card-body p-16">
                     <div className="row g-12 align-items-center">
-                   
-                      <div className="col-lg-5 col-md-6">
+                      <div className="col-lg-3 col-md-6 mb-5">
                         <label
                           className="text-12 fw-semibold text-gray-500 text-uppercase mb-6 d-block"
                           style={{ letterSpacing: "0.5px" }}
@@ -293,7 +298,7 @@ function Practice() {
                         </div>
                       </div>
 
-                      <div className="col-lg-4 col-md-6">
+                      <div className="col-lg-3 col-md-6 mb-5">
                         <label
                           className="text-12 fw-semibold text-gray-500 text-uppercase mb-6 d-block"
                           style={{ letterSpacing: "0.5px" }}
@@ -334,47 +339,76 @@ function Practice() {
                         </div>
                       </div>
 
-                      <div
-                        className="col-lg-3 col-md-12 d-flex align-items-end gap-10 justify-content-lg-end"
-                        style={{ paddingTop: "24px" }}
-                      >
-                        {search || subjectFilter ? (
-                          <>
-                            <span className="text-13 text-main-600 fw-semibold bg-main-50 py-6 px-12 rounded-pill">
-                              {sets.length} of {allSets.length} sets
-                            </span>
-                            <button
-                              className="btn btn-sm rounded-8 flex-align gap-6 fw-medium"
-                              style={{
-                                background: "#eb6f6f",
-                                color: "#dc2626",
-                                border: "none",
-                                height: "34px",
-                                padding: "0 14px",
-                                fontSize: "13px",
-                              }}
-                              onClick={() => {
-                                setSearch("");
-                                setSubjectFilter("");
-                              }}
-                            >
-                              <i className="ph ph-x text-12" /> Clear
-                            </button>
-                          </>
-                        ) : (
-                          <span className="text-13 text-main-600 fw-semibold bg-main-50 py-6 px-12 rounded-pill">
-                            {sets.length} of {allSets.length} sets
-                          </span>
-                        )}
+                      <div className="col-lg-3 col-md-6 mb-5">
+                        <label
+                          className="text-12 fw-semibold text-gray-500 text-uppercase mb-6 d-block"
+                          style={{ letterSpacing: "0.5px" }}
+                        >
+                          Status
+                        </label>
+                        <div className="position-relative">
+                          <i
+                            className="ph ph-funnel position-absolute text-gray-400"
+                            style={{
+                              top: "50%",
+                              left: "12px",
+                              transform: "translateY(-50%)",
+                              fontSize: "15px",
+                              pointerEvents: "none",
+                            }}
+                          />
+                          <select
+                            className="form-select rounded-8"
+                            style={{
+                              paddingLeft: "34px",
+                              height: "40px",
+                              fontSize: "14px",
+                              border: "1.5px solid #e2e8f0",
+                              background: "#f8fafc",
+                              appearance: "auto",
+                            }}
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                          >
+                            <option value="">All</option>
+                            <option value="pending">
+                              Pending (Not Started)
+                            </option>
+                            <option value="ongoing">
+                              Ongoing (In Progress)
+                            </option>
+                            <option value="completed">Completed</option>
+                          </select>
+                        </div>
                       </div>
+
+                      {(search || subjectFilter || statusFilter) && (
+                        <div
+                          className="col-lg-2 col-md-6 d-flex align-items-end"
+                          style={{ paddingTop: "24px" }}
+                        >
+                          <button
+                            className="btn btn-sm rounded-pill flex-align fw-medium justify-content-center btn-danger"
+                           
+                            onClick={() => {
+                              setSearch("");
+                              setSubjectFilter("");
+                              setStatusFilter("");
+                            }}
+                          >
+                            <i className="ph ph-x text-12" /> Clear Filters
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               )} */}
 
               {!setsLoading &&
+                allSets.length > 0 &&
                 sets.length === 0 &&
-                (search || subjectFilter) && (
+                (search || subjectFilter || statusFilter) && (
                   <div className="card">
                     <div className="card-body text-center py-32">
                       <i className="ph ph-magnifying-glass text-48 text-gray-300 d-block mb-12" />
@@ -386,6 +420,7 @@ function Practice() {
                         onClick={() => {
                           setSearch("");
                           setSubjectFilter("");
+                          setStatusFilter("");
                         }}
                       >
                         Clear Filters

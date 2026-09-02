@@ -98,7 +98,8 @@ function SearchableSelect({
             position: "absolute",
             top: "calc(100% + 4px)",
             left: 0,
-            right: 0,
+            minWidth: "200px",
+            width: "100%",
             background: "#fff",
             border: "1px solid #e2e8f0",
             borderRadius: "10px",
@@ -915,7 +916,8 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                     {practices.map((p) => (
                       <div
                         key={p.id}
-                        className="border border-gray-100 rounded-10 overflow-hidden"
+                        className="border border-gray-100 rounded-10"
+                        style={{ overflow: "visible" }}
                       >
                         {/* Practice header */}
                         <div className="p-16 bg-gray-50 flex-between gap-8 flex-wrap">
@@ -1101,8 +1103,14 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
 
                         {/* Batch assignments table */}
                         {p.batch_assignments?.length > 0 ? (
-                          <div className="table-responsive">
-                            <table className="table table-sm mb-0">
+                          <div
+                            className="table-responsive"
+                            style={{ overflow: "visible" }}
+                          >
+                            <table
+                              className="table table-sm mb-0"
+                              style={{ overflow: "visible" }}
+                            >
                               <thead className="bg-gray-50">
                                 <tr>
                                   <th className="text-12 text-gray-500 fw-medium px-14 py-10">
@@ -1135,7 +1143,13 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                     ba.batch_assignment_id ? (
                                       /* Edit row */
                                       <>
-                                        <td className="px-14">
+                                        <td
+                                          className="px-14"
+                                          style={{
+                                            overflow: "visible",
+                                            position: "relative",
+                                          }}
+                                        >
                                           <SearchableSelect
                                             options={batches.map((b) => ({
                                               label: b.batch_title,
@@ -1151,7 +1165,12 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                             placeholder="Select Batch"
                                           />
                                         </td>
-                                        <td>
+                                        <td
+                                          style={{
+                                            overflow: "visible",
+                                            position: "relative",
+                                          }}
+                                        >
                                           <SearchableSelect
                                             options={phases.map((ph) => ({
                                               label: ph.title,
