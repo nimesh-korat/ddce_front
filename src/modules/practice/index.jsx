@@ -241,7 +241,7 @@ function Practice() {
               )}
 
               {/* ── Filter Bar ── */}
-              {/* {!setsLoading && allSets.length > 0 && (
+              {!setsLoading && allSets.length > 0 && (
                 <div className="card border border-gray-100 mb-24 shadow-sm">
                   <div className="card-body p-16">
                     <div className="row g-12 align-items-center">
@@ -403,7 +403,7 @@ function Practice() {
                     </div>
                   </div>
                 </div>
-              )} */}
+              )}
 
               {!setsLoading &&
                 allSets.length > 0 &&
