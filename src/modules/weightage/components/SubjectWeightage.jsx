@@ -59,12 +59,12 @@ function SubjectWeightage() {
                     ...pieBarOptions,
                     labels: paper.Subjects.map(
                       (subject) =>
-                        `${subject.Subject} -<strong> ${subject.SubjectWeightage}% </strong>`
+                        `${subject.Subject} -<strong> ${subject.SubjectWeightage}% </strong>`,
                     ),
                   }}
                   series={[
                     ...paper.Subjects.map(
-                      (subject) => subject.SubjectWeightage
+                      (subject) => subject.SubjectWeightage,
                     ),
                   ]}
                   type="pie"

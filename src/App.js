@@ -20,6 +20,7 @@ import AdminRoutes from "./utils/AdminRoutes";
 import ShowQuestions from "./admin/ShowQuestions";
 import CreateTest from "./admin/CreateTest";
 import ShowTests from "./admin/ShowTest";
+import QuestionAnalytics from "./admin/QuestionAnalytics";
 import QuizResultsTab from "./admin/QuizResults";
 import AddQuizQuestions from "./admin/AddQuizQuestion";
 import Exam from "./modules/exams";
@@ -58,11 +59,13 @@ import StudentProfile from "./admin/StudentProfile";
 import DoodleAdmin from "./admin/Doodle";
 import StudNotifyAdmin from "./admin/StudNotify";
 import StudNotifyToast from "./common/StudNotifyToast";
-import QuestionAnalytics from "./admin/QuestionAnalytics";
 import Attendance from "./admin/Attendance";
 import StudentCount from "./admin/StudentCount";
 import AdminDoubts from "./admin/Doubts";
 import MentorSubjects from "./admin/MentorSubjects";
+import ExamType from "./admin/ExamType";
+import ExamAssign from "./admin/ExamAssign";
+import TopicGroups from "./admin/TopicGroups";
 
 function App() {
   return (
@@ -171,9 +174,7 @@ function App() {
             path="/solutions"
             element={
               <ProtectedRoute>
-                <AccessGuard feature="solutions">
-                  <Solutions />
-                </AccessGuard>
+                <Solutions />
               </ProtectedRoute>
             }
           />
@@ -347,22 +348,6 @@ function App() {
               </AdminRoutes>
             }
           />
-          <Route
-            path="/admin/doubts"
-            element={
-              <AdminRoutes>
-                <AdminDoubts />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/mentorSubjects"
-            element={
-              <AdminRoutes>
-                <MentorSubjects />
-              </AdminRoutes>
-            }
-          />
           {/* ── Student Practice Route ── */}
           <Route
             path="/practice"
@@ -414,6 +399,71 @@ function App() {
               </AdminRoutes>
             }
           />
+          <Route
+            path="/admin/questionAnalytics"
+            element={
+              <AdminRoutes>
+                <QuestionAnalytics />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/attendance"
+            element={
+              <AdminRoutes>
+                <Attendance />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/studentCount"
+            element={
+              <AdminRoutes>
+                <StudentCount />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/doubts"
+            element={
+              <AdminRoutes>
+                <AdminDoubts />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/mentorSubjects"
+            element={
+              <AdminRoutes>
+                <MentorSubjects />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/examType"
+            element={
+              <AdminRoutes>
+                <ExamType />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/examAssign"
+            element={
+              <AdminRoutes>
+                <ExamAssign />
+              </AdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/topicGroups"
+            element={
+              <AdminRoutes>
+                <TopicGroups />
+              </AdminRoutes>
+            }
+          />
+          <Route path="/admin/placeholder-end" element={<></>} />
           <Route
             path="/admin/showTests"
             element={
@@ -523,30 +573,6 @@ function App() {
             element={
               <AdminRoutes>
                 <DoodleAdmin />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/questionAnalytics"
-            element={
-              <AdminRoutes>
-                <QuestionAnalytics />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/attendance"
-            element={
-              <AdminRoutes>
-                <Attendance />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/studentCount"
-            element={
-              <AdminRoutes>
-                <StudentCount />
               </AdminRoutes>
             }
           />

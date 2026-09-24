@@ -1,120 +1,104 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Chart from "../../../utils/Charts";
 import { getSyllabus } from "../../../apis/apis";
 import { useQuery } from "@tanstack/react-query";
 import Preloader from "../../../utils/preloader/Preloader";
-function TopicWeightage() {
-  const [selectedSubject, setSelectedSubject] = useState(null); // Selected subject
+import UserContext from "../../../utils/UserContex";
 
-  // Use React Query's `useQuery` hook to fetch data
-  const { data, isLoading, isError, error } = useQuery({
+function TopicWeightage() {
+  const { user } = useContext(UserContext);
+  const isJEE = user?.exam_type_id === 2;
+
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [yearRange, setYearRange] = useState("all");
+
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["syllabus"],
     queryFn: getSyllabus,
   });
 
-  useEffect(() => {
-    if (data && data.data.length > 0) {
-      // Find the "Mathematics" subject in the data
-      const mathematicsSubject = data.data.find(
-        (subject) => subject.Subject === "Mathematics"
-      );
-
-      if (mathematicsSubject) {
-        setSelectedSubject(mathematicsSubject.Subject); // Set "Mathematics" as the selected subject
-      } else {
-        // Fallback if "Mathematics" is not found (optional)
-        setSelectedSubject(data.data[0].Subject);
-      }
+  // Filter subjects relevant to the student's exam type
+  // Backend already filters by exam_type_id, so just show all returned subjects
+  // For DDCET: only show subjects with TopicWeightage > 0 to avoid empty charts
+  const availableSubjects = React.useMemo(() => {
+    if (!data?.data) return [];
+    if (isJEE) {
+      // JEE: show all subjects returned by API (already filtered by backend)
+      return data.data;
     }
-  }, [data]); // Run only when `data` is updated
+    // DDCET: show subjects that have at least one topic with TopicWeightage > 0
+    return data.data.filter((s) =>
+      s.Topics?.some((t) => parseFloat(t.TopicWeightage) > 0),
+    );
+  }, [data, isJEE]);
 
-  if (isError) {
-    // console.log(error);
-    return <div>Error loading data</div>;
-  }
+  useEffect(() => {
+    if (availableSubjects.length > 0) {
+      setSelectedSubject(availableSubjects[0].Subject);
+      setSelectedGroup(null);
+    }
+  }, [availableSubjects]);
 
-  // Handle selecting a subject
   const handleSubjectChange = (e) => {
     setSelectedSubject(e.target.value);
+    setSelectedGroup(null);
   };
 
-  // Find the subject data for the selected subject
   const selectedSubjectData = selectedSubject
-    ? data.data.find((subject) => subject.Subject === selectedSubject)
+    ? availableSubjects.find((s) => s.Subject === selectedSubject)
     : null;
 
-  // If there's a selected subject, we want to display topics and their weightages
-  const topics = selectedSubjectData ? selectedSubjectData.Topics : [];
+  const hasGroups = selectedSubjectData?.Groups?.length > 0;
 
-  // Calculate the column width based on the number of categories
-  const calculateColumnWidth = () => {
-    const numCategories = topics.length;
-    if (numCategories === 1) {
-      return "20%"; // Smaller width when there is only one bar
-    } else if (numCategories <= 3) {
-      return "40%"; // Wider columns when there are fewer categories
-    } else {
-      return "60%"; // Default width for more categories
+  const getTopics = () => {
+    if (!selectedSubjectData) return [];
+    if (hasGroups) {
+      const groups = selectedSubjectData.Groups;
+      const activeGroup = selectedGroup
+        ? groups.find((g) => String(g.GroupId) === String(selectedGroup))
+        : groups[0];
+      return activeGroup?.Topics || [];
     }
+    return selectedSubjectData.Topics || [];
+  };
+
+  const topics = getTopics();
+
+  const getTopicWeightage = (topic) => {
+    if (isJEE) {
+      const now = new Date().getFullYear();
+      const yw = topic.YearWeightage || [];
+      const filtered =
+        yearRange === "all"
+          ? yw
+          : yw.filter((w) => w.year >= now - parseInt(yearRange) + 1);
+      return parseFloat(
+        filtered.reduce((s, w) => s + (w.weightage || 0), 0).toFixed(2),
+      );
+    }
+    return parseFloat(topic.TopicWeightage) || 0;
   };
 
   const chartOptions = {
-    chart: {
-      id: "topic-weightage-chart",
-      toolbar: {
-        show: false, // Disable the toolbar (which includes download options)
-      },
-    },
+    chart: { id: "topic-weightage-chart", toolbar: { show: false } },
     plotOptions: {
-      bar: {
-        borderRadius: 4,
-        columnWidth: calculateColumnWidth(), // Dynamically set column widthrelative to the available space
-        distributed: true,
-      },
+      bar: { borderRadius: 4, columnWidth: "60%", distributed: true },
     },
-    xaxis: {
-      categories: topics.map((topic) => topic.Topic),
-      labels: {
-        show: false,
-        style: {
-          colors: "#333",
-          fontSize: "12px",
-        },
-      },
-    },
-    // xaxis: {
-    //   labels: {
-    //     show: false,
-    //     style: {
-    //       colors: "#333",
-    //       fontSize: "12px",
-    //     },
-    //   },
-    // },
-    legend: {
-      show: false, // Hide the legend
-    },
+    xaxis: { categories: topics.map((t) => t.Topic), labels: { show: false } },
+    legend: { show: false },
     yaxis: {
       min: 0,
-      max: Math.max(...topics.map((topic) => topic.TopicWeightage)) + 2,
-    },
-    title: {
-      align: "center",
-      style: {
-        fontSize: "16px",
-        fontWeight: "bold",
-        color: "#ff44ffff",
-      },
+      max: Math.max(...topics.map((t) => getTopicWeightage(t)), 1) + 2,
     },
     dataLabels: {
       enabled: true,
-      style: {
-        fontSize: "12px",
-        colors: ["#333"],
-      },
+      style: { fontSize: "12px", colors: ["#333"] },
       formatter: (val) => `${val}%`,
     },
   };
+
+  if (isError) return <div>Error loading data</div>;
 
   return (
     <>
@@ -127,35 +111,75 @@ function TopicWeightage() {
               <div className="col-md-6">
                 <h4>Topic Weightage</h4>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 d-flex gap-8 flex-wrap align-items-center">
+                {/* JEE year range */}
+                {isJEE && (
+                  <select
+                    className="form-select form-select-sm"
+                    style={{ width: "auto" }}
+                    value={yearRange}
+                    onChange={(e) => setYearRange(e.target.value)}
+                  >
+                    <option value="1">Last Year</option>
+                    <option value="3">Last 3 Years</option>
+                    <option value="5">Last 5 Years</option>
+                    <option value="10">Last 10 Years</option>
+                    <option value="all">All Years</option>
+                  </select>
+                )}
+
+                {/* Subject dropdown */}
                 <select
                   className="form-select"
                   value={selectedSubject || ""}
                   onChange={handleSubjectChange}
                 >
-                  {data.data.map((subject, index) => (
-                    <option key={index} value={subject.Subject}>
-                      {subject.Subject}
+                  {availableSubjects.map((s, i) => (
+                    <option key={i} value={s.Subject}>
+                      {s.Subject}
                     </option>
                   ))}
                 </select>
+
+                {/* Group dropdown — only for subjects with groups (e.g. Chemistry) */}
+                {hasGroups && (
+                  <select
+                    className="form-select"
+                    value={
+                      selectedGroup ||
+                      selectedSubjectData.Groups[0]?.GroupId ||
+                      ""
+                    }
+                    onChange={(e) => setSelectedGroup(e.target.value)}
+                  >
+                    {selectedSubjectData.Groups.map((g) => (
+                      <option key={g.GroupId} value={g.GroupId}>
+                        {g.GroupName}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             </div>
 
-            {selectedSubject && (
-              <div className="col-md-12 mt-4 ">
+            {topics.length > 0 ? (
+              <div className="col-md-12 mt-4">
                 <Chart
                   type="bar"
                   options={chartOptions}
                   series={[
                     {
                       name: "Weightage",
-                      data: topics.map((topic) => topic.TopicWeightage), // Weightages of the topics
+                      data: topics.map((t) => getTopicWeightage(t)),
                     },
                   ]}
                   width={600}
                   height={400}
                 />
+              </div>
+            ) : (
+              <div className="text-center py-32 text-gray-400">
+                No weightage data available for selected subject.
               </div>
             )}
           </div>

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import UserContext from "../../utils/UserContex";
 import Sidebar from "../../common/sidebar";
 import Header from "../../common/header/Header";
 import { Link } from "react-router-dom";
@@ -7,6 +8,8 @@ import TopicWeightage from "./components/TopicWeightage";
 import Footer from "../../common/footer";
 
 function Weightage() {
+  const { user } = useContext(UserContext);
+  const isJEE = user?.exam_type_id === 2;
   const [isSidebarActive, setIsSidebarActive] = useState(false);
 
   const toggleSidebar = () => {
@@ -46,7 +49,7 @@ function Weightage() {
             </ul>
           </div>
           <div className="container-fluid dashboard-content">
-            <SubjectWeightage />
+            {!isJEE && <SubjectWeightage />}
             <TopicWeightage />
           </div>
         </div>

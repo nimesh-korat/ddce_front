@@ -56,12 +56,6 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/studentCount":
         setActiveItem("Student Count");
         break;
-      case "/admin/doubts":
-        setActiveItem("Doubts");
-        break;
-      case "/admin/mentorSubjects":
-        setActiveItem("Mentor Subjects");
-        break;
       case "/admin/attendance":
         setActiveItem("Attendance");
         break;
@@ -70,6 +64,24 @@ function AdminSidebar({ isActive, closeSidebar }) {
         break;
       case "/admin/studentAnswers":
         setActiveItem("Student Answers");
+        break;
+      case "/admin/doubts":
+        setActiveItem("Doubts");
+        break;
+      case "/admin/mentorSubjects":
+        setActiveItem("Mentor Subjects");
+        break;
+      case "/admin/examType":
+        setActiveItem("Exam Types");
+        break;
+      case "/admin/examAssign":
+        setActiveItem("Assign Exam Type");
+        break;
+      case "/admin/topicGroups":
+        setActiveItem("Topic Groups");
+        break;
+      case "/admin/quizResults":
+        setActiveItem("Quiz Results");
         break;
 
       default:
@@ -353,9 +365,17 @@ function AdminSidebar({ isActive, closeSidebar }) {
                 </Link>
               </li>
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Doubts" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Topic Groups" ? "activePage" : ""} `}
+              >
+                <Link to="/admin/topicGroups" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-folders" />
+                  </span>
+                  <span className="text">Topic Groups</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${activeItem === "Doubts" ? "activePage" : ""} `}
               >
                 <Link to="/admin/doubts" className="sidebar-menu__link ">
                   <span className="icon d-flex align-items-center">
@@ -365,9 +385,7 @@ function AdminSidebar({ isActive, closeSidebar }) {
                 </Link>
               </li>
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Mentor Subjects" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Mentor Subjects" ? "activePage" : ""} `}
               >
                 <Link
                   to="/admin/mentorSubjects"
@@ -377,6 +395,26 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-chalkboard-teacher" />
                   </span>
                   <span className="text">Mentor Subjects</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${activeItem === "Exam Types" ? "activePage" : ""} `}
+              >
+                <Link to="/admin/examType" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-exam" />
+                  </span>
+                  <span className="text">Exam Types</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${activeItem === "Assign Exam Type" ? "activePage" : ""} `}
+              >
+                <Link to="/admin/examAssign" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-user-gear" />
+                  </span>
+                  <span className="text">Assign Exam Type</span>
                 </Link>
               </li>
             </ul>

@@ -1807,3 +1807,178 @@ export async function removeMentorSubject(id) {
     throw e;
   }
 }
+
+//?==================== EXAM TYPE ====================
+export async function getExamTypes() {
+  try {
+    const r = await axiosInstance.get("/examTypes");
+    return r.data;
+  } catch (e) {
+    console.error("getExamTypes error", e);
+    throw e;
+  }
+}
+
+export async function adminGetExamTypes() {
+  try {
+    const r = await axiosInstance.get("/admin/examTypes");
+    return r.data;
+  } catch (e) {
+    console.error("adminGetExamTypes error", e);
+    throw e;
+  }
+}
+
+export async function createExamType(data) {
+  try {
+    const r = await axiosInstance.post("/admin/examTypes", data);
+    return r.data;
+  } catch (e) {
+    console.error("createExamType error", e);
+    throw e;
+  }
+}
+
+export async function updateExamType(id, data) {
+  try {
+    const r = await axiosInstance.put(`/admin/examTypes/${id}`, data);
+    return r.data;
+  } catch (e) {
+    console.error("updateExamType error", e);
+    throw e;
+  }
+}
+
+export async function deleteExamType(id) {
+  try {
+    const r = await axiosInstance.delete(`/admin/examTypes/${id}`);
+    return r.data;
+  } catch (e) {
+    console.error("deleteExamType error", e);
+    throw e;
+  }
+}
+
+export async function getStudentsForAssign(params) {
+  try {
+    const q = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const r = await axiosInstance.get(`/admin/examAssign/students?${q}`);
+    return r.data;
+  } catch (e) {
+    console.error("getStudentsForAssign error", e);
+    throw e;
+  }
+}
+
+export async function bulkAssignExamType(data) {
+  try {
+    const r = await axiosInstance.post("/admin/examAssign/bulk", data);
+    return r.data;
+  } catch (e) {
+    console.error("bulkAssignExamType error", e);
+    throw e;
+  }
+}
+
+//?==================== TOPIC WEIGHTAGE ====================
+export async function getTopicWeightage(topic_id) {
+  try {
+    const r = await axiosInstance.get(`/admin/topicWeightage/${topic_id}`);
+    return r.data;
+  } catch (e) {
+    console.error("getTopicWeightage error", e);
+    throw e;
+  }
+}
+
+export async function upsertTopicWeightage(topic_id, data) {
+  try {
+    const r = await axiosInstance.post(
+      `/admin/topicWeightage/${topic_id}`,
+      data,
+    );
+    return r.data;
+  } catch (e) {
+    console.error("upsertTopicWeightage error", e);
+    throw e;
+  }
+}
+
+export async function deleteTopicWeightage(id) {
+  try {
+    const r = await axiosInstance.delete(`/admin/topicWeightage/${id}`);
+    return r.data;
+  } catch (e) {
+    console.error("deleteTopicWeightage error", e);
+    throw e;
+  }
+}
+
+export async function getTopicWeightageForStudent(topic_id, range) {
+  try {
+    const r = await axiosInstance.get(
+      `/syllabus/topicWeightage?topic_id=${topic_id}&range=${range || "all"}`,
+    );
+    return r.data;
+  } catch (e) {
+    console.error("getTopicWeightageForStudent error", e);
+    throw e;
+  }
+}
+//?==================== TOPIC GROUPS ====================
+export async function getTopicGroups(subject_id) {
+  try {
+    const q = subject_id ? `?subject_id=${subject_id}` : "";
+    const r = await axiosInstance.get(`/admin/topicGroups${q}`);
+    return r.data;
+  } catch (e) {
+    console.error("getTopicGroups error", e);
+    throw e;
+  }
+}
+
+export async function createTopicGroup(data) {
+  try {
+    const r = await axiosInstance.post("/admin/topicGroups", data);
+    return r.data;
+  } catch (e) {
+    console.error("createTopicGroup error", e);
+    throw e;
+  }
+}
+
+export async function updateTopicGroup(id, data) {
+  try {
+    const r = await axiosInstance.put(`/admin/topicGroups/${id}`, data);
+    return r.data;
+  } catch (e) {
+    console.error("updateTopicGroup error", e);
+    throw e;
+  }
+}
+
+export async function deleteTopicGroup(id) {
+  try {
+    const r = await axiosInstance.delete(`/admin/topicGroups/${id}`);
+    return r.data;
+  } catch (e) {
+    console.error("deleteTopicGroup error", e);
+    throw e;
+  }
+}
+
+export async function assignTopicToGroup(data) {
+  try {
+    const r = await axiosInstance.post("/admin/topicGroups/assign", data);
+    return r.data;
+  } catch (e) {
+    console.error("assignTopicToGroup error", e);
+    throw e;
+  }
+}
