@@ -1982,3 +1982,157 @@ export async function assignTopicToGroup(data) {
     throw e;
   }
 }
+
+// ─── FEES REMINDER — Admin ────────────────────────────────────────────────
+
+export async function getFeesReminders() {
+  try {
+    const r = await axiosInstance.get("/admin/feesReminder");
+    return r.data;
+  } catch (e) {
+    console.error("getFeesReminders error", e);
+    throw e;
+  }
+}
+
+export async function createFeesReminder(formData) {
+  try {
+    const r = await axiosInstance.post("/admin/feesReminder", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return r.data;
+  } catch (e) {
+    console.error("createFeesReminder error", e);
+    throw e;
+  }
+}
+
+export async function updateFeesReminder(id, formData) {
+  try {
+    const r = await axiosInstance.put(`/admin/feesReminder/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return r.data;
+  } catch (e) {
+    console.error("updateFeesReminder error", e);
+    throw e;
+  }
+}
+
+export async function deleteFeesReminder(id) {
+  try {
+    const r = await axiosInstance.delete(`/admin/feesReminder/${id}`);
+    return r.data;
+  } catch (e) {
+    console.error("deleteFeesReminder error", e);
+    throw e;
+  }
+}
+
+export async function assignFeesReminder(id, data) {
+  try {
+    const r = await axiosInstance.post(
+      `/admin/feesReminder/${id}/assign`,
+      data,
+    );
+    return r.data;
+  } catch (e) {
+    console.error("assignFeesReminder error", e);
+    throw e;
+  }
+}
+
+export async function getFeesReminderStudents(id, params) {
+  try {
+    const query = new URLSearchParams(
+      Object.fromEntries(
+        Object.entries(params || {}).filter(
+          ([, v]) => v !== "" && v !== null && v !== undefined,
+        ),
+      ),
+    ).toString();
+    const r = await axiosInstance.get(
+      `/admin/feesReminder/${id}/students?${query}`,
+    );
+    return r.data;
+  } catch (e) {
+    console.error("getFeesReminderStudents error", e);
+    throw e;
+  }
+}
+
+export async function markPaidFeesReminder(id, data) {
+  try {
+    const r = await axiosInstance.put(
+      `/admin/feesReminder/${id}/markPaid`,
+      data,
+    );
+    return r.data;
+  } catch (e) {
+    console.error("markPaidFeesReminder error", e);
+    throw e;
+  }
+}
+
+export async function bulkMarkPaidFeesReminder(id, data) {
+  try {
+    const r = await axiosInstance.put(
+      `/admin/feesReminder/${id}/bulkMarkPaid`,
+      data,
+    );
+    return r.data;
+  } catch (e) {
+    console.error("bulkMarkPaidFeesReminder error", e);
+    throw e;
+  }
+}
+
+export async function removeFeesAssignment(reminder_id, user_id) {
+  try {
+    const r = await axiosInstance.delete(
+      `/admin/feesReminder/${reminder_id}/student/${user_id}`,
+    );
+    return r.data;
+  } catch (e) {
+    console.error("removeFeesAssignment error", e);
+    throw e;
+  }
+}
+
+export async function updateFeesAssignment(reminder_id, user_id, data) {
+  try {
+    const r = await axiosInstance.put(
+      `/admin/feesReminder/${reminder_id}/student/${user_id}`,
+      data,
+    );
+    return r.data;
+  } catch (e) {
+    console.error("updateFeesAssignment error", e);
+    throw e;
+  }
+}
+
+export async function bulkUpdateFeesAssignment(reminder_id, data) {
+  try {
+    const r = await axiosInstance.put(
+      `/admin/feesReminder/${reminder_id}/bulkUpdate`,
+      data,
+    );
+    return r.data;
+  } catch (e) {
+    console.error("bulkUpdateFeesAssignment error", e);
+    throw e;
+  }
+}
+
+// ─── FEES REMINDER — Student ──────────────────────────────────────────────
+
+export async function getFeesRemindersForStudent() {
+  try {
+    const r = await axiosInstance.get("/feesReminder");
+    return r.data;
+  } catch (e) {
+    console.error("getFeesRemindersForStudent error", e);
+    throw e;
+  }
+}

@@ -83,6 +83,9 @@ function AdminSidebar({ isActive, closeSidebar }) {
       case "/admin/quizResults":
         setActiveItem("Quiz Results");
         break;
+      case "/admin/feesReminder":
+        setActiveItem("Fees Reminder");
+        break;
 
       default:
         setActiveItem("");
@@ -415,6 +418,16 @@ function AdminSidebar({ isActive, closeSidebar }) {
                     <i className="ph ph-user-gear" />
                   </span>
                   <span className="text">Assign Exam Type</span>
+                </Link>
+              </li>
+              <li
+                className={`sidebar-menu__item ${activeItem === "Fees Reminder" ? "activePage" : ""} `}
+              >
+                <Link to="/admin/feesReminder" className="sidebar-menu__link ">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-money" />
+                  </span>
+                  <span className="text">Fees Reminder</span>
                 </Link>
               </li>
             </ul>

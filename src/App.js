@@ -66,26 +66,31 @@ import MentorSubjects from "./admin/MentorSubjects";
 import ExamType from "./admin/ExamType";
 import ExamAssign from "./admin/ExamAssign";
 import TopicGroups from "./admin/TopicGroups";
+import FeesReminder from "./admin/FeesReminder";
+import FeesLockProvider from "./utils/FeesLockProvider";
+import { FeesLockContextProvider } from "./utils/FeesLockContext";
 
 function App() {
   return (
     <>
       <ToastContainer autoClose={1500} stacked />
       <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          {/* <Route path="/home2" element={<HomeTwo />} />
+        <FeesLockContextProvider>
+          <FeesLockProvider />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            {/* <Route path="/home2" element={<HomeTwo />} />
           <Route path="/home3" element={<Home />} />*/}
-          {/* <Route path="/schedule" element={<Schedule />} /> */}
-          {/* <Route path="/mentor_course" element={<StudentCourse />} />  */}
-          {/* <Route
+            {/* <Route path="/schedule" element={<Schedule />} /> */}
+            {/* <Route path="/mentor_course" element={<StudentCourse />} />  */}
+            {/* <Route
             path="/students"
             element={
               <ProtectedRoute>
@@ -93,97 +98,97 @@ function App() {
               </ProtectedRoute>
             }
           /> */}
-          <Route
-            path="/exams"
-            element={
-              <ProtectedRoute>
-                <AccessGuard feature="exams">
-                  <Exam />
-                </AccessGuard>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/exam-result"
-            element={
-              <ProtectedRoute>
-                <ExamResult />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/test"
-            element={
-              <ProtectedRoute>
-                <GiveExam />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/testTopicListing" element={<TestTopicListing />} />
-          <Route
-            path="/syllabus"
-            element={
-              <ProtectedRoute>
-                <AccessGuard feature="syllabus">
-                  <Syllabus />
-                </AccessGuard>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/weightage"
-            element={
-              <ProtectedRoute>
-                <AccessGuard feature="weightage">
-                  <Weightage />
-                </AccessGuard>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/analytics"
-            element={
-              <ProtectedRoute>
-                <AccessGuard feature="analytics">
-                  <Analytics />
-                </AccessGuard>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/accuracyMatrix"
-            element={
-              <ProtectedRoute>
-                <AccessGuard feature="accuracy_matrix">
-                  <MasteryMatrix />
-                </AccessGuard>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/doubts"
-            element={
-              <ProtectedRoute>
-                <AccessGuard feature="doubts">
-                  <Doubts />
-                </AccessGuard>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/solutions"
-            element={
-              <ProtectedRoute>
-                <Solutions />
-              </ProtectedRoute>
-            }
-          />
-          {/* <Route path="/mentors" element={<Mentor />} />
+            <Route
+              path="/exams"
+              element={
+                <ProtectedRoute>
+                  <AccessGuard feature="exams">
+                    <Exam />
+                  </AccessGuard>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/exam-result"
+              element={
+                <ProtectedRoute>
+                  <ExamResult />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/test"
+              element={
+                <ProtectedRoute>
+                  <GiveExam />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/testTopicListing" element={<TestTopicListing />} />
+            <Route
+              path="/syllabus"
+              element={
+                <ProtectedRoute>
+                  <AccessGuard feature="syllabus">
+                    <Syllabus />
+                  </AccessGuard>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/weightage"
+              element={
+                <ProtectedRoute>
+                  <AccessGuard feature="weightage">
+                    <Weightage />
+                  </AccessGuard>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute>
+                  <AccessGuard feature="analytics">
+                    <Analytics />
+                  </AccessGuard>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/accuracyMatrix"
+              element={
+                <ProtectedRoute>
+                  <AccessGuard feature="accuracy_matrix">
+                    <MasteryMatrix />
+                  </AccessGuard>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/doubts"
+              element={
+                <ProtectedRoute>
+                  <AccessGuard feature="doubts">
+                    <Doubts />
+                  </AccessGuard>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/solutions"
+              element={
+                <ProtectedRoute>
+                  <Solutions />
+                </ProtectedRoute>
+              }
+            />
+            {/* <Route path="/mentors" element={<Mentor />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/events" element={<Events />} />
           <Route path="/library" element={<Library />} />*/}
-          {/* <Route
+            {/* <Route
             path="/pricing"
             element={
               <ProtectedRoute>
@@ -191,32 +196,32 @@ function App() {
               </ProtectedRoute>
             }
           /> */}
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/quizdetail"
-            element={
-              <ProtectedRoute>
-                <StudentQuizDetails />
-              </ProtectedRoute>
-            }
-          />
-          {/* Protect signin and signup routes */}
-          <Route
-            path="/signin"
-            element={
-              <PrivateRoute>
-                <SignIn />
-              </PrivateRoute>
-            }
-          />
-          {/* <Route
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/quizdetail"
+              element={
+                <ProtectedRoute>
+                  <StudentQuizDetails />
+                </ProtectedRoute>
+              }
+            />
+            {/* Protect signin and signup routes */}
+            <Route
+              path="/signin"
+              element={
+                <PrivateRoute>
+                  <SignIn />
+                </PrivateRoute>
+              }
+            />
+            {/* <Route
             path="/signup"
             element={
               <PrivateRoute>
@@ -224,370 +229,379 @@ function App() {
               </PrivateRoute>`
             }
           /> */}
-          <Route
-            path="/forget_password"
-            element={
-              <PrivateRoute>
-                <ForgetPassword />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/reset_password"
-            element={
-              <PrivateRoute>
-                <ResetPassword />
-              </PrivateRoute>
-            }
-          />
-          {/* <Route
+            <Route
+              path="/forget_password"
+              element={
+                <PrivateRoute>
+                  <ForgetPassword />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/reset_password"
+              element={
+                <PrivateRoute>
+                  <ResetPassword />
+                </PrivateRoute>
+              }
+            />
+            {/* <Route
             path="/two_step_verification"
             element={<TwoStepVerification />}
           /> */}
-          {/* <Route path="/live_class" element={<LiveClass />} /> */}
-          {/* Admin Routes */}
-          <Route
-            path="/admin/login"
-            element={
-              <PrivateRoute>
-                <AdminLogin />
-              </PrivateRoute>
-            }
-          />{" "}
-          <Route
-            path="/mentor/login"
-            element={
-              <PrivateRoute>
-                <MentorLogin />
-              </PrivateRoute>
-            }
-          />
-          {/* ── Mentor Routes ── */}
-          <Route
-            path="/mentor/dashboard"
-            element={
-              <MentorRoutes>
-                <MentorDashboard />
-              </MentorRoutes>
-            }
-          />
-          <Route
-            path="/mentor/addQuestion"
-            element={
-              <MentorRoutes>
-                <MentorAddQuestion />
-              </MentorRoutes>
-            }
-          />
-          <Route
-            path="/mentor/showQuestions"
-            element={
-              <MentorRoutes>
-                <MentorShowQuestions />
-              </MentorRoutes>
-            }
-          />
-          <Route
-            path="/mentor/assignPractice"
-            element={
-              <MentorRoutes>
-                <AssignPractice
-                  Sidebar={require("./common/MentorSidebar").default}
-                  basePath="/mentor"
-                  headerText="Assign Practice"
-                />
-              </MentorRoutes>
-            }
-          />
-          <Route
-            path="/mentor/myAssignments"
-            element={
-              <MentorRoutes>
-                <MyAssignments
-                  Sidebar={require("./common/MentorSidebar").default}
-                />
-              </MentorRoutes>
-            }
-          />
-          {/* ── Admin Practice Routes ── */}
-          <Route
-            path="/admin/assignPractice"
-            element={
-              <AdminRoutes>
-                <AssignPractice
-                  Sidebar={require("./common/AdminSidebar").default}
-                  basePath="/admin"
-                  headerText="Assign Practice (Admin)"
-                />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/practiceAssignments"
-            element={
-              <AdminRoutes>
-                <MyAssignments
-                  Sidebar={require("./common/AdminSidebar").default}
-                />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/batchAccess"
-            element={
-              <AdminRoutes>
-                <BatchAccess />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/studentAnswers"
-            element={
-              <AdminRoutes>
-                <StudentAnswers />
-              </AdminRoutes>
-            }
-          />
-          {/* ── Student Practice Route ── */}
-          <Route
-            path="/practice"
-            element={
-              <ProtectedRoute>
-                <AccessGuard feature="practice">
-                  <Practice />
-                </AccessGuard>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/dashboard"
-            element={
-              <AdminRoutes>
-                <AdminDashboard />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/materials"
-            element={
-              <AdminRoutes>
-                <AdminMaterials />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/addQuestion"
-            element={
-              <AdminRoutes>
-                <AddQuestion />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/showQuestions"
-            element={
-              <AdminRoutes>
-                <ShowQuestions />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/createTest"
-            element={
-              <AdminRoutes>
-                <CreateTest />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/questionAnalytics"
-            element={
-              <AdminRoutes>
-                <QuestionAnalytics />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/attendance"
-            element={
-              <AdminRoutes>
-                <Attendance />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/studentCount"
-            element={
-              <AdminRoutes>
-                <StudentCount />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/doubts"
-            element={
-              <AdminRoutes>
-                <AdminDoubts />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/mentorSubjects"
-            element={
-              <AdminRoutes>
-                <MentorSubjects />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/examType"
-            element={
-              <AdminRoutes>
-                <ExamType />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/examAssign"
-            element={
-              <AdminRoutes>
-                <ExamAssign />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/topicGroups"
-            element={
-              <AdminRoutes>
-                <TopicGroups />
-              </AdminRoutes>
-            }
-          />
-          <Route path="/admin/placeholder-end" element={<></>} />
-          <Route
-            path="/admin/showTests"
-            element={
-              <AdminRoutes>
-                <ShowTests />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/quizResults"
-            element={
-              <AdminRoutes>
-                <QuizResultsTab />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/addQuizQuestions"
-            element={
-              <AdminRoutes>
-                <AddQuizQuestions />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/viewQuizQuestions"
-            element={
-              <AdminRoutes>
-                <ViewQuizQuestions />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/questionVerification"
-            element={
-              <AdminRoutes>
-                <QuestionVerification />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/assignBatch"
-            element={
-              <AdminRoutes>
-                <AssignBatchToTest />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/addSession"
-            element={
-              <AdminRoutes>
-                <AddSession />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/showSession"
-            element={
-              <AdminRoutes>
-                <ShowSession />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/assignSessionToBatch"
-            element={
-              <AdminRoutes>
-                <AssignSessionToBatch />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/viewGivenExamData"
-            element={
-              <AdminRoutes>
-                <ViewGivenExamData />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/viewStudentWiseGivenExamData"
-            element={
-              <AdminRoutes>
-                <StudentWiseExamData />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/test/:slug"
-            element={
-              <AdminRoutes>
-                <ShowTests />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/studNotify"
-            element={
-              <AdminRoutes>
-                <StudNotifyAdmin />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/doodle"
-            element={
-              <AdminRoutes>
-                <DoodleAdmin />
-              </AdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/studentProfile/:student_id"
-            element={
-              <AdminRoutes>
-                <StudentProfile />
-              </AdminRoutes>
-            }
-          />
-          <Route path="/college-prediction" element={<CollgePredication />} />
-          <Route path="*" element={<Error404 />} />
-        </Routes>
-        <StudNotifyToast />
+            {/* <Route path="/live_class" element={<LiveClass />} /> */}
+            {/* Admin Routes */}
+            <Route
+              path="/admin/login"
+              element={
+                <PrivateRoute>
+                  <AdminLogin />
+                </PrivateRoute>
+              }
+            />{" "}
+            <Route
+              path="/mentor/login"
+              element={
+                <PrivateRoute>
+                  <MentorLogin />
+                </PrivateRoute>
+              }
+            />
+            {/* ── Mentor Routes ── */}
+            <Route
+              path="/mentor/dashboard"
+              element={
+                <MentorRoutes>
+                  <MentorDashboard />
+                </MentorRoutes>
+              }
+            />
+            <Route
+              path="/mentor/addQuestion"
+              element={
+                <MentorRoutes>
+                  <MentorAddQuestion />
+                </MentorRoutes>
+              }
+            />
+            <Route
+              path="/mentor/showQuestions"
+              element={
+                <MentorRoutes>
+                  <MentorShowQuestions />
+                </MentorRoutes>
+              }
+            />
+            <Route
+              path="/mentor/assignPractice"
+              element={
+                <MentorRoutes>
+                  <AssignPractice
+                    Sidebar={require("./common/MentorSidebar").default}
+                    basePath="/mentor"
+                    headerText="Assign Practice"
+                  />
+                </MentorRoutes>
+              }
+            />
+            <Route
+              path="/mentor/myAssignments"
+              element={
+                <MentorRoutes>
+                  <MyAssignments
+                    Sidebar={require("./common/MentorSidebar").default}
+                  />
+                </MentorRoutes>
+              }
+            />
+            {/* ── Admin Practice Routes ── */}
+            <Route
+              path="/admin/assignPractice"
+              element={
+                <AdminRoutes>
+                  <AssignPractice
+                    Sidebar={require("./common/AdminSidebar").default}
+                    basePath="/admin"
+                    headerText="Assign Practice (Admin)"
+                  />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/practiceAssignments"
+              element={
+                <AdminRoutes>
+                  <MyAssignments
+                    Sidebar={require("./common/AdminSidebar").default}
+                  />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/batchAccess"
+              element={
+                <AdminRoutes>
+                  <BatchAccess />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/studentAnswers"
+              element={
+                <AdminRoutes>
+                  <StudentAnswers />
+                </AdminRoutes>
+              }
+            />
+            {/* ── Student Practice Route ── */}
+            <Route
+              path="/practice"
+              element={
+                <ProtectedRoute>
+                  <AccessGuard feature="practice">
+                    <Practice />
+                  </AccessGuard>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard"
+              element={
+                <AdminRoutes>
+                  <AdminDashboard />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/materials"
+              element={
+                <AdminRoutes>
+                  <AdminMaterials />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/addQuestion"
+              element={
+                <AdminRoutes>
+                  <AddQuestion />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/showQuestions"
+              element={
+                <AdminRoutes>
+                  <ShowQuestions />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/createTest"
+              element={
+                <AdminRoutes>
+                  <CreateTest />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/questionAnalytics"
+              element={
+                <AdminRoutes>
+                  <QuestionAnalytics />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/attendance"
+              element={
+                <AdminRoutes>
+                  <Attendance />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/studentCount"
+              element={
+                <AdminRoutes>
+                  <StudentCount />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/doubts"
+              element={
+                <AdminRoutes>
+                  <AdminDoubts />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/mentorSubjects"
+              element={
+                <AdminRoutes>
+                  <MentorSubjects />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/examType"
+              element={
+                <AdminRoutes>
+                  <ExamType />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/examAssign"
+              element={
+                <AdminRoutes>
+                  <ExamAssign />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/topicGroups"
+              element={
+                <AdminRoutes>
+                  <TopicGroups />
+                </AdminRoutes>
+              }
+            />
+            <Route path="/admin/placeholder-end" element={<></>} />
+            <Route
+              path="/admin/showTests"
+              element={
+                <AdminRoutes>
+                  <ShowTests />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/quizResults"
+              element={
+                <AdminRoutes>
+                  <QuizResultsTab />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/addQuizQuestions"
+              element={
+                <AdminRoutes>
+                  <AddQuizQuestions />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/viewQuizQuestions"
+              element={
+                <AdminRoutes>
+                  <ViewQuizQuestions />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/questionVerification"
+              element={
+                <AdminRoutes>
+                  <QuestionVerification />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/assignBatch"
+              element={
+                <AdminRoutes>
+                  <AssignBatchToTest />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/addSession"
+              element={
+                <AdminRoutes>
+                  <AddSession />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/showSession"
+              element={
+                <AdminRoutes>
+                  <ShowSession />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/assignSessionToBatch"
+              element={
+                <AdminRoutes>
+                  <AssignSessionToBatch />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/viewGivenExamData"
+              element={
+                <AdminRoutes>
+                  <ViewGivenExamData />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/viewStudentWiseGivenExamData"
+              element={
+                <AdminRoutes>
+                  <StudentWiseExamData />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/test/:slug"
+              element={
+                <AdminRoutes>
+                  <ShowTests />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/studNotify"
+              element={
+                <AdminRoutes>
+                  <StudNotifyAdmin />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/doodle"
+              element={
+                <AdminRoutes>
+                  <DoodleAdmin />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/studentProfile/:student_id"
+              element={
+                <AdminRoutes>
+                  <StudentProfile />
+                </AdminRoutes>
+              }
+            />
+            <Route
+              path="/admin/feesReminder"
+              element={
+                <AdminRoutes>
+                  <FeesReminder />
+                </AdminRoutes>
+              }
+            />
+            <Route path="/college-prediction" element={<CollgePredication />} />
+            <Route path="*" element={<Error404 />} />
+          </Routes>
+          <StudNotifyToast />
+        </FeesLockContextProvider>
       </BrowserRouter>
     </>
   );

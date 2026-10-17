@@ -16,6 +16,7 @@ import {
 } from "../../apis/apis";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
 import Marquee from "react-fast-marquee";
+import FeesBanner from "../../common/FeesBanner";
 
 const mathConfig = {
   tex2jax: {
@@ -530,6 +531,7 @@ function Home() {
           <Preloader />
         ) : (
           <div className="dashboard-body">
+            <FeesBanner />
             <Marquee
               speed={60}
               pauseOnHover={true}

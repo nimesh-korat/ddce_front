@@ -1,7 +1,7 @@
+import React from "react";
 import { Navigate } from "react-router-dom";
+import { useFeesLock } from "./FeesLockContext";
 
-// A simple utility to check for the token
-// This routes will be for logged in users
 const ProtectedRoute = ({ children }) => {
   const token =
     localStorage.getItem("token") ||
@@ -13,12 +13,16 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/admin" />;
   }
 
-  if (!token || user.Role !== 0) {
-    // If the user is not logged in, redirect them to the sign-in page
+  if (!token || user?.Role !== 0) {
     return <Navigate to="/signin" />;
   }
 
-  // If the user is logged in, render the requested protected route
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { isLoading, locked } = useFeesLock();
+
+  if (isLoading) return null; // blank screen while checking — no page flash
+  if (locked) return null; // locked — overlay from FeesLockProvider covers it
+
   return children;
 };
 

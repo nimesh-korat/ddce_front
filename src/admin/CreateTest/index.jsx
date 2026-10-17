@@ -21,7 +21,7 @@ registerPlugin(
   FilePondPluginImageExifOrientation,
   FilePondPluginImagePreview,
   FilePondPluginFileValidateType,
-  FilePondPluginFileValidateSize
+  FilePondPluginFileValidateSize,
 );
 
 // Validation Schema
@@ -51,7 +51,7 @@ const schema = yup.object().shape({
     .typeError("Start date is required")
     .min(
       new Date(new Date().setHours(0, 0, 0, 0)),
-      "Start date cannot be in the past"
+      "Start date cannot be in the past",
     ),
   test_end_date: yup
     .date()
@@ -68,7 +68,7 @@ const schema = yup.object().shape({
           return differenceInHours >= 1; // Ensure the difference is at least 1 hour
         }
         return true;
-      }
+      },
     )
     .test(
       "duration-check",
@@ -82,7 +82,7 @@ const schema = yup.object().shape({
           return differenceInMinutes >= test_duration; // Ensure end date is greater than or equal to duration
         }
         return true; // Pass if dates are not set yet
-      }
+      },
     ),
   test_difficulty: yup.string().required("Difficulty is required"),
   isFake: yup.string().required("Fake test is required"),
@@ -108,6 +108,11 @@ function CreateTest() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      test_neg_marks: 0.5,
+      test_difficulty: "Easy",
+      isFake: "0",
+    },
   });
   const toggleSidebar = () => {
     setIsSidebarActive((prevState) => !prevState);
