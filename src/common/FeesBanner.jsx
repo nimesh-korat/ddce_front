@@ -161,7 +161,7 @@ function Banner({ r }) {
                   color: past ? "#c0392b" : "#856404",
                 }}
               >
-                {left}
+                ⏰ {left}
               </span>
             </div>
 
@@ -223,7 +223,7 @@ function Banner({ r }) {
                     fontWeight: 600,
                   }}
                 >
-                  Pay Now via Link→
+                  Pay Now →
                 </a>
               )}
               {r.qr_code && (
@@ -240,7 +240,7 @@ function Banner({ r }) {
                     cursor: "pointer",
                   }}
                 >
-                  Pay Now via QR
+                  📷 Scan QR
                 </button>
               )}
             </div>
@@ -276,11 +276,6 @@ export default function FeesBanner() {
     staleTime: 5 * 60 * 1000,
     refetchInterval: 5 * 60 * 1000,
   });
-
-  // Debug: log what came back so you can check the browser console
-  if (process.env.NODE_ENV === "development") {
-    console.log("[FeesBanner] query data:", data, "error:", error);
-  }
 
   if (isError) {
     console.error("[FeesBanner] failed to fetch reminders:", error);

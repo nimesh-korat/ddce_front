@@ -27,7 +27,10 @@ import {
 
 function fmtDT(dt) {
   if (!dt) return "—";
-  return new Date(dt).toLocaleString("en-IN", {
+  // Replace space separator with T so the string is parsed as local time, not UTC.
+  // "2026-10-27 23:59:00" → new Date("2026-10-27T23:59:00") = local IST, not UTC.
+  const d = new Date(typeof dt === "string" ? dt.replace(" ", "T") : dt);
+  return d.toLocaleString("en-IN", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -38,6 +41,30 @@ function fmtDT(dt) {
 }
 
 const TABS = ["Create / Edit", "Assign", "Manage"];
+
+// Convert a DB datetime string ("2026-10-27 23:59:00") to the "YYYY-MM-DDTHH:mm"
+// format that datetime-local inputs expect, treating the value as local IST time.
+// Replacing the space with T makes ECMAScript parse it as local time, not UTC.
+function toInputDT(dt) {
+  if (!dt) return "";
+  try {
+    const d = new Date(typeof dt === "string" ? dt.replace(" ", "T") : dt);
+    const pad = (n) => String(n).padStart(2, "0");
+    return (
+      d.getFullYear() +
+      "-" +
+      pad(d.getMonth() + 1) +
+      "-" +
+      pad(d.getDate()) +
+      "T" +
+      pad(d.getHours()) +
+      ":" +
+      pad(d.getMinutes())
+    );
+  } catch {
+    return "";
+  }
+}
 
 // ─── Searchable Single-Select Dropdown ────────────────────────────────────
 function SearchSelect({
@@ -706,11 +733,8 @@ function AssignTab() {
                         className="btn btn-sm btn-warning"
                         onClick={() => {
                           try {
-                            setDeadline(
-                              new Date(existingData.deadline)
-                                .toISOString()
-                                .slice(0, 16),
-                            );
+                            // Use toInputDT so the deadline is treated as local IST, not UTC
+                            setDeadline(toInputDT(existingData.deadline));
                           } catch {
                             /* noop */
                           }
@@ -932,28 +956,6 @@ function ManageTab() {
     deadline: "",
     lock_after_minutes: "",
   });
-
-  const toInputDT = (dt) => {
-    if (!dt) return "";
-    try {
-      const d = new Date(dt);
-      // datetime-local needs local time, not UTC — pad to "YYYY-MM-DDTHH:mm"
-      const pad = (n) => String(n).padStart(2, "0");
-      return (
-        d.getFullYear() +
-        "-" +
-        pad(d.getMonth() + 1) +
-        "-" +
-        pad(d.getDate()) +
-        "T" +
-        pad(d.getHours()) +
-        ":" +
-        pad(d.getMinutes())
-      );
-    } catch {
-      return "";
-    }
-  };
 
   const { data: remindersData } = useQuery({
     queryKey: ["feesReminders"],
