@@ -414,7 +414,10 @@ function ReminderForm({ editing, onClose }) {
             )}
           </button>
           {editing && (
-            <button className="btn btn-secondary px-20" onClick={onClose}>
+            <button
+              className="btn btn-outline-secondary px-20"
+              onClick={onClose}
+            >
               Cancel
             </button>
           )}
@@ -584,7 +587,7 @@ function AssignTab() {
         ].map((m) => (
           <button
             key={m.key}
-            className={`btn d-flex align-items-center gap-8 px-20 py-10 fw-medium ${mode === m.key ? "btn-main" : "btn-secondary"}`}
+            className={`btn d-flex align-items-center gap-8 px-20 py-10 fw-medium ${mode === m.key ? "btn-main" : "btn-outline-secondary"}`}
             style={{ borderRadius: 8 }}
             onClick={() => {
               setMode(m.key);
@@ -730,7 +733,7 @@ function AssignTab() {
                     <div className="mt-6">
                       <button
                         type="button"
-                        className="btn btn-sm btn-warning"
+                        className="btn btn-sm btn-outline-warning"
                         onClick={() => {
                           try {
                             // Use toInputDT so the deadline is treated as local IST, not UTC
@@ -769,7 +772,7 @@ function AssignTab() {
                 </div>
                 {selectedIds.length > 0 && (
                   <button
-                    className="btn btn-sm btn-secondary"
+                    className="btn btn-sm btn-outline-secondary"
                     onClick={() => setSelectedIds([])}
                   >
                     Clear selection
@@ -1237,7 +1240,7 @@ function ManageTab() {
                   ✓ All Paid
                 </button>
                 <button
-                  className="btn btn-sm btn-danger"
+                  className="btn btn-sm btn-outline-danger"
                   style={{ whiteSpace: "nowrap" }}
                   onClick={() => confirmBulk(false)}
                   disabled={bulkMut.isPending}
@@ -1334,7 +1337,7 @@ function ManageTab() {
                     {selectedIds.length !== 1 ? "s" : ""} selected
                   </span>
                   <button
-                    className="btn btn-sm btn-secondary"
+                    className="btn btn-sm btn-outline-secondary"
                     onClick={() => {
                       setSelectedIds([]);
                       setBulkEditOpen(false);
@@ -1344,7 +1347,7 @@ function ManageTab() {
                   </button>
                   <div className="ms-auto d-flex gap-2 flex-wrap align-items-center">
                     <button
-                      className={`btn btn-sm ${bulkEditOpen ? "btn-primary" : "btn-primary"}`}
+                      className={`btn btn-sm ${bulkEditOpen ? "btn-primary" : "btn-outline-primary"}`}
                       onClick={() => setBulkEditOpen((v) => !v)}
                     >
                       ✏ Bulk Edit Deadline
@@ -1420,7 +1423,7 @@ function ManageTab() {
                             : `Save for ${selectedIds.length} student${selectedIds.length !== 1 ? "s" : ""}`}
                         </button>
                         <button
-                          className="btn btn-sm btn-secondary"
+                          className="btn btn-sm btn-outline-secondary"
                           onClick={() => {
                             setBulkEditOpen(false);
                             setBulkEditForm({
@@ -1553,7 +1556,7 @@ function ManageTab() {
                             <td>
                               <div className="d-flex gap-1 flex-wrap">
                                 <button
-                                  className={`btn btn-sm ${s.is_paid ? "btn-danger" : "btn-success"}`}
+                                  className={`btn btn-sm ${s.is_paid ? "btn-outline-danger" : "btn-success"}`}
                                   style={{ whiteSpace: "nowrap" }}
                                   onClick={() =>
                                     markMut.mutate({
@@ -1566,7 +1569,7 @@ function ManageTab() {
                                   {s.is_paid ? "✗ Unpaid" : "✓ Paid"}
                                 </button>
                                 <button
-                                  className={`btn btn-sm ${isEditing ? "btn-primary" : "btn-primary"}`}
+                                  className={`btn btn-sm ${isEditing ? "btn-primary" : "btn-outline-primary"}`}
                                   title="Edit deadline / lock"
                                   onClick={() => {
                                     if (isEditing) {
@@ -1584,7 +1587,7 @@ function ManageTab() {
                                   ✏
                                 </button>
                                 <button
-                                  className="btn btn-sm btn-danger"
+                                  className="btn btn-sm btn-outline-danger"
                                   title="Remove assignment"
                                   onClick={() =>
                                     Swal.fire({
@@ -1667,7 +1670,7 @@ function ManageTab() {
                                       {updateMut.isPending ? "Saving…" : "Save"}
                                     </button>
                                     <button
-                                      className="btn btn-sm btn-secondary"
+                                      className="btn btn-sm btn-outline-secondary"
                                       onClick={() => setEditRow(null)}
                                     >
                                       Cancel
@@ -1882,7 +1885,7 @@ export default function FeesReminder() {
                                       </div>
                                     </div>
                                     <button
-                                      className="btn btn-sm btn-danger flex-shrink-0"
+                                      className="btn btn-sm btn-outline-danger flex-shrink-0"
                                       style={{ padding: "4px 8px" }}
                                       onClick={(e) => {
                                         e.stopPropagation();

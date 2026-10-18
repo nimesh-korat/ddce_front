@@ -97,7 +97,7 @@ function QRModal({ qr, title, onClose }) {
 }
 
 // ─── Single Banner ────────────────────────────────────────────────────────
-function Banner({ r }) {
+function Banner({ r, onDismiss }) {
   const [qrOpen, setQrOpen] = useState(false);
   const pct = getProgressPct(r.assigned_at, r.deadline);
   const color = barColor(pct);
@@ -108,6 +108,7 @@ function Banner({ r }) {
     <>
       <div
         style={{
+          position: "relative",
           background: "#fff8e1",
           border: "1.5px solid #ffe082",
           borderRadius: 10,
@@ -116,7 +117,37 @@ function Banner({ r }) {
           boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
         }}
       >
-        <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+        {/* Dismiss button */}
+        <button
+          onClick={onDismiss}
+          title="Dismiss"
+          style={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            color: "#aaa",
+            fontSize: 16,
+            lineHeight: 1,
+            padding: "2px 5px",
+            borderRadius: 4,
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#555")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "#aaa")}
+        >
+          ✕
+        </button>
+
+        <div
+          style={{
+            display: "flex",
+            gap: 12,
+            alignItems: "flex-start",
+            paddingRight: 20,
+          }}
+        >
           <span style={{ fontSize: 22, flexShrink: 0, marginTop: 2 }}>💰</span>
           <div style={{ flex: 1, minWidth: 0 }}>
             {/* Title row */}
@@ -265,6 +296,29 @@ function Banner({ r }) {
 export default function FeesBanner() {
   // Re-check lock state every minute without refetch
   const [, setTick] = useState(0);
+  // IDs dismissed this login session — keyed by user ID so logging out and
+  // back in clears them. Stored in localStorage so navigation doesn't re-show them.
+  const storageKey = (() => {
+    try {
+      const u = JSON.parse(localStorage.getItem("user"));
+      return u?.Id ? `feesBannerDismissed_${u.Id}` : null;
+    } catch {
+      return null;
+    }
+  })();
+  const [dismissed, setDismissed] = useState(() => {
+    if (!storageKey) return [];
+    try {
+      // Only restore dismissals from the current login token so re-login resets them
+      const token = localStorage.getItem("token") || "";
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
+      if (!saved || saved.token !== token) return [];
+      return saved.ids || [];
+    } catch {
+      return [];
+    }
+  });
+
   useEffect(() => {
     const id = setInterval(() => setTick((t) => t + 1), 60000);
     return () => clearInterval(id);
@@ -283,14 +337,34 @@ export default function FeesBanner() {
   }
 
   const reminders = data?.data || [];
-  const unpaid = reminders.filter((r) => !r.is_paid);
+  const unpaid = reminders.filter(
+    (r) => !r.is_paid && !dismissed.includes(r.id),
+  );
 
   if (!unpaid.length) return null;
 
   return (
     <div style={{ padding: "0 0 4px" }}>
       {unpaid.map((r) => (
-        <Banner key={r.id} r={r} />
+        <Banner
+          key={r.id}
+          r={r}
+          onDismiss={() =>
+            setDismissed((prev) => {
+              const next = [...prev, r.id];
+              try {
+                if (storageKey) {
+                  const token = localStorage.getItem("token") || "";
+                  localStorage.setItem(
+                    storageKey,
+                    JSON.stringify({ token, ids: next }),
+                  );
+                }
+              } catch {}
+              return next;
+            })
+          }
+        />
       ))}
     </div>
   );
