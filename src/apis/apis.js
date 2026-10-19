@@ -439,20 +439,19 @@ export async function adminGetParagraph(data) {
 
 //?==================== GET QUESTIONS API ====================
 
-export const adminGetQuestions = async ({ pageParam = 1 }) => {
+export const adminGetQuestions = async ({ pageParam = 1, queryKey }) => {
+  const [, filters = {}] = queryKey || [];
   try {
-    const response = await axiosInstance.get(`/admin/questions`, {
-      params: {
-        page: pageParam,
-        limit: 10,
-      },
-    });
+    const params = { page: pageParam, limit: 10 };
+    if (filters.subject_id) params.subject_id = filters.subject_id;
+    if (filters.topic_id) params.topic_id = filters.topic_id;
+    if (filters.subtopic_id) params.subtopic_id = filters.subtopic_id;
 
-    if (!response.data || !response.data.data) {
-      throw new Error("Invalid response format");
-    }
+    const response = await axiosInstance.get(`/admin/questions`, { params });
 
-    return response.data;
+    if (!response.data) throw new Error("Invalid response format");
+    // backend now returns [] with success:true when no questions match filters
+    return { ...response.data, data: response.data.data || [] };
   } catch (error) {
     if (error.response) {
       console.error("Error response from server:", error.response);
@@ -464,6 +463,21 @@ export const adminGetQuestions = async ({ pageParam = 1 }) => {
       throw new Error("Error in the request setup");
     }
   }
+};
+
+export const fetchSubjectsForFilter = async () => {
+  const res = await axiosInstance.get("/getSubjects");
+  return res.data.data || [];
+};
+
+export const fetchTopicsForFilter = async (subjectId) => {
+  const res = await axiosInstance.post("/getTopics", { subjectId });
+  return res.data.data || [];
+};
+
+export const fetchSubtopicsForFilter = async (topicId) => {
+  const res = await axiosInstance.post("/getSubTopics", { topicId });
+  return res.data.data || [];
 };
 
 //?==================== ADMIN ADD TEST API ====================
@@ -796,6 +810,19 @@ export async function getUserMaterials() {
 }
 
 //?==================== QUESTIONS — EDIT / DELETE ====================
+export async function adminPreviewUpdateQuestion(id, params) {
+  try {
+    const response = await axiosInstance.get(
+      `/admin/questions/${id}/preview-update`,
+      { params },
+    );
+    return response.data;
+  } catch (error) {
+    console.error("adminPreviewUpdateQuestion() error", error);
+    throw error;
+  }
+}
+
 export async function adminUpdateQuestion(id, data) {
   try {
     const response = await axiosInstance.put(`/admin/questions/${id}`, data);

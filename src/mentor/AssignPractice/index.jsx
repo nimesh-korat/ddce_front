@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Header from "../../common/header/Header";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createPractice,
@@ -229,6 +230,9 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
   });
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [practiceSearch, setPracticeSearch] = useState("");
+  const [filterSubject, setFilterSubject] = useState("");
+  const [filterTopic, setFilterTopic] = useState("");
+  const [filterSubtopic, setFilterSubtopic] = useState("");
 
   const [qFilters, setQFilters] = useState({
     subject_id: "",
@@ -313,11 +317,69 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
   }, [questionsData, qFilters.page]);
 
   const allPractices = practicesData?.data || [];
-  const practices = practiceSearch
-    ? allPractices.filter((p) =>
-        p.title?.toLowerCase().includes(practiceSearch.toLowerCase()),
+
+  // Derive unique subjects/topics/subtopics across all practices for filter dropdowns
+  const allSubjectsForFilter = [];
+  const allTopicsForFilter = [];
+  const allSubtopicsForFilter = [];
+  allPractices.forEach((p) => {
+    (p.subjects || []).forEach((s) => {
+      if (!allSubjectsForFilter.some((x) => x.id === s.id))
+        allSubjectsForFilter.push(s);
+    });
+    (p.topics || []).forEach((t) => {
+      if (!allTopicsForFilter.some((x) => x.id === t.id))
+        allTopicsForFilter.push(t);
+    });
+    (p.subtopics || []).forEach((s) => {
+      if (!allSubtopicsForFilter.some((x) => x.id === s.id))
+        allSubtopicsForFilter.push(s);
+    });
+  });
+  // Cascade: filter topics by selected subject, subtopics by selected topic
+  const visibleTopics = filterSubject
+    ? allTopicsForFilter.filter(
+        (t) => String(t.subject_id) === String(filterSubject),
       )
-    : allPractices;
+    : allTopicsForFilter;
+  const visibleSubtopics = filterTopic
+    ? allSubtopicsForFilter.filter(
+        (s) => String(s.topic_id) === String(filterTopic),
+      )
+    : allSubtopicsForFilter;
+
+  const practices = allPractices.filter((p) => {
+    if (
+      practiceSearch &&
+      !p.title?.toLowerCase().includes(practiceSearch.toLowerCase())
+    )
+      return false;
+    if (
+      filterSubject &&
+      !(p.subjects || []).some((s) => String(s.id) === String(filterSubject))
+    )
+      return false;
+    if (
+      filterTopic &&
+      !(p.topics || []).some((t) => String(t.id) === String(filterTopic))
+    )
+      return false;
+    if (
+      filterSubtopic &&
+      !(p.subtopics || []).some((s) => String(s.id) === String(filterSubtopic))
+    )
+      return false;
+    return true;
+  });
+
+  const hasFilter =
+    practiceSearch || filterSubject || filterTopic || filterSubtopic;
+  const clearFilters = () => {
+    setPracticeSearch("");
+    setFilterSubject("");
+    setFilterTopic("");
+    setFilterSubtopic("");
+  };
   const batches = batchData || [];
   const phases = phaseData || [];
   const subjects = subjectsData?.data || [];
@@ -575,11 +637,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
     <>
       <Sidebar isActive={isSidebarActive} closeSidebar={closeSidebar} />
       <div className="dashboard-main-wrapper">
-        <div className="dashboard-header d-flex align-items-center gap-16 p-16 border-bottom border-gray-100">
-          <button className="sidebar-toggle d-xl-none" onClick={toggleSidebar}>
-            <i className="ph ph-list text-24 text-gray-600" />
-          </button>
-        </div>
+        <Header toggleSidebar={toggleSidebar} />
         <div className="dashboard-body">
           <div className="breadcrumb mb-24">
             <ul className="flex-align gap-4">
@@ -828,7 +886,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
             <div className="col-lg-8">
               <div className="card">
                 <div className="card-body">
-                  <div className="flex-between flex-wrap gap-10 mb-16">
+                  <div className="flex-between flex-wrap gap-10 mb-12">
                     <h6 className="fw-semibold mb-0 text-main-600">
                       <i className="ph ph-clipboard-text me-8" />
                       My Practices
@@ -838,46 +896,106 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                         </span>
                       )}
                     </h6>
-                    <div
-                      className="position-relative"
-                      style={{ minWidth: "220px" }}
-                    >
-                      <i
-                        className="ph ph-magnifying-glass position-absolute text-gray-400"
-                        style={{
-                          top: "50%",
-                          left: "10px",
-                          transform: "translateY(-50%)",
-                          fontSize: "14px",
-                          pointerEvents: "none",
-                        }}
-                      />
-                      <input
-                        type="text"
-                        className="form-control form-control-sm rounded-pill"
-                        style={{ paddingLeft: "32px" }}
-                        placeholder="Search practices..."
-                        value={practiceSearch}
-                        onChange={(e) => setPracticeSearch(e.target.value)}
-                      />
-                      {practiceSearch && (
-                        <button
-                          onClick={() => setPracticeSearch("")}
+                    {hasFilter && (
+                      <button
+                        className="btn btn-sm btn-danger rounded-pill flex-align gap-6"
+                        onClick={clearFilters}
+                      >
+                        <i className="ph ph-x text-11" /> Clear Filters
+                      </button>
+                    )}
+                  </div>
+
+                  {/* ── Filter Bar ── */}
+                  <div className="row g-8 mb-16">
+                    {/* Search */}
+                    <div className="col-md-3 col-sm-6">
+                      <div className="position-relative">
+                        <i
+                          className="ph ph-magnifying-glass position-absolute text-gray-400"
                           style={{
-                            position: "absolute",
-                            right: "10px",
                             top: "50%",
+                            left: "10px",
                             transform: "translateY(-50%)",
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
-                            color: "#94a3b8",
-                            padding: 0,
+                            fontSize: "13px",
+                            pointerEvents: "none",
                           }}
-                        >
-                          <i className="ph ph-x text-12" />
-                        </button>
-                      )}
+                        />
+                        <input
+                          type="text"
+                          className="form-control form-control-sm rounded-8"
+                          style={{
+                            paddingLeft: "30px",
+                            fontSize: "13px",
+                            border: "1.5px solid #e2e8f0",
+                            background: "#f8fafc",
+                          }}
+                          placeholder="Search by title..."
+                          value={practiceSearch}
+                          onChange={(e) => setPracticeSearch(e.target.value)}
+                        />
+                        {practiceSearch && (
+                          <button
+                            onClick={() => setPracticeSearch("")}
+                            style={{
+                              position: "absolute",
+                              right: "8px",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              background: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              color: "#94a3b8",
+                              padding: 0,
+                            }}
+                          >
+                            <i className="ph ph-x text-11" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Subject */}
+                    <div className="col-md-3 col-sm-6">
+                      <SearchableSelect
+                        options={[...allSubjectsForFilter]
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((s) => ({ label: s.name, value: String(s.id) }))}
+                        value={filterSubject}
+                        onChange={(val) => {
+                          setFilterSubject(val);
+                          setFilterTopic("");
+                          setFilterSubtopic("");
+                        }}
+                        placeholder="All Subjects"
+                      />
+                    </div>
+
+                    {/* Topic */}
+                    <div className="col-md-3 col-sm-6">
+                      <SearchableSelect
+                        options={[...visibleTopics]
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((t) => ({ label: t.name, value: String(t.id) }))}
+                        value={filterTopic}
+                        onChange={(val) => {
+                          setFilterTopic(val);
+                          setFilterSubtopic("");
+                        }}
+                        placeholder="All Topics"
+                      />
+                    </div>
+
+                    {/* Subtopic */}
+                    <div className="col-md-3 col-sm-6">
+                      <SearchableSelect
+                        options={[...visibleSubtopics]
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((s) => ({ label: s.name, value: String(s.id) }))}
+                        value={filterSubtopic}
+                        onChange={(val) => setFilterSubtopic(val)}
+                        placeholder="All Subtopics"
+                      />
                     </div>
                   </div>
 
@@ -901,13 +1019,13 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                       <div className="text-center py-32">
                         <i className="ph ph-magnifying-glass text-48 text-gray-300 d-block mb-12" />
                         <p className="text-gray-500 text-14">
-                          No practices match "<strong>{practiceSearch}</strong>"
+                          No practices match the selected filters.
                         </p>
                         <button
                           className="btn btn-sm btn-secondary rounded-pill mt-8"
-                          onClick={() => setPracticeSearch("")}
+                          onClick={clearFilters}
                         >
-                          Clear search
+                          Clear Filters
                         </button>
                       </div>
                     )}

@@ -137,7 +137,316 @@ function RingChart({
   );
 }
 
-const TABS = ["Overview", "Quiz Results", "Practice Results", "Activity"];
+// ── Analysis helpers ─────────────────────────────────────────
+
+function accColor(pct) {
+  return pct >= 75 ? "#22c55e" : pct >= 50 ? "#f59e0b" : "#ef4444";
+}
+
+// A single horizontal bar row used inside the drill-down chart
+function DrillBar({ label, accuracy, attempted, correct, incorrect }) {
+  const color = accColor(accuracy);
+  const barW = Math.max(2, accuracy);
+  return (
+    <div
+      style={{
+        borderRadius: "12px",
+        padding: "14px 18px",
+        marginBottom: "10px",
+        background: "#fff",
+        border: "1.5px solid #f1f5f9",
+      }}
+    >
+      {/* Top row: label + stats + accuracy badge */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: "10px",
+          gap: "12px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            minWidth: 0,
+          }}
+        >
+          <span
+            style={{
+              fontSize: "14px",
+              fontWeight: 600,
+              color: "#334155",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {label}
+          </span>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "14px",
+            flexShrink: 0,
+          }}
+        >
+          <span style={{ fontSize: "12px", color: "#94a3b8" }}>
+            <span style={{ color: "#22c55e", fontWeight: 600 }}>{correct}</span>
+            <span style={{ margin: "0 3px" }}>/</span>
+            <span style={{ color: "#ef4444" }}>{incorrect}</span>
+            <span style={{ margin: "0 3px", color: "#cbd5e1" }}>|</span>
+            {attempted} Q
+          </span>
+          <span
+            style={{
+              fontSize: "13px",
+              fontWeight: 700,
+              background: `${color}18`,
+              color,
+              borderRadius: "20px",
+              padding: "3px 12px",
+            }}
+          >
+            {accuracy}%
+          </span>
+        </div>
+      </div>
+      {/* Bar */}
+      <div
+        style={{
+          height: "8px",
+          background: "#f1f5f9",
+          borderRadius: "99px",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            width: `${barW}%`,
+            height: "100%",
+            borderRadius: "99px",
+            background: `linear-gradient(90deg,${color}88,${color})`,
+            transition: "width 0.9s ease",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function AnalysisTab({ subjects, topics, subtopics }) {
+  const [selSubjectId, setSelSubjectId] = useState("all");
+  const [selTopicId, setSelTopicId] = useState("all");
+
+  // topics available for selected subject
+  const topicsForSubject =
+    selSubjectId === "all"
+      ? []
+      : topics.filter((t) => String(t.subject_id) === String(selSubjectId));
+
+  // bars to show
+  const showSubjectBars = selSubjectId === "all";
+  const showTopicBars = selSubjectId !== "all" && selTopicId === "all";
+  const showSubtopicBars = selSubjectId !== "all" && selTopicId !== "all";
+
+  const barsToRender = showSubjectBars
+    ? subjects
+    : showTopicBars
+      ? topicsForSubject
+      : subtopics.filter((s) => String(s.topic_id) === String(selTopicId));
+
+  const noData = subjects.length === 0;
+
+  const handleSubjectChange = (e) => {
+    setSelSubjectId(e.target.value);
+    setSelTopicId("all");
+  };
+
+  // label for bar
+  const barLabel = (row) =>
+    showSubjectBars
+      ? row.subject_name
+      : showTopicBars
+        ? row.topic_name
+        : row.subtopic_name;
+
+  // heading text
+  const heading = showSubjectBars
+    ? "Subject-wise Analysis"
+    : showTopicBars
+      ? `Topics — ${subjects.find((s) => String(s.subject_id) === String(selSubjectId))?.subject_name || ""}`
+      : `Subtopics — ${topics.find((t) => String(t.topic_id) === String(selTopicId))?.topic_name || ""}`;
+
+  return (
+    <div className="card">
+      <div className="card-body p-24">
+        {/* ── Dropdowns row ── */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: "20px",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* Subject dropdown */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+            <label
+              style={{
+                fontSize: "11px",
+                color: "#94a3b8",
+                fontWeight: 600,
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
+              }}
+            >
+              Subject
+            </label>
+            <select
+              value={selSubjectId}
+              onChange={handleSubjectChange}
+              style={{
+                border: "1.5px solid #e2e8f0",
+                borderRadius: "10px",
+                padding: "8px 14px",
+                fontSize: "13px",
+                fontWeight: 500,
+                color: "#334155",
+                background: "#fff",
+                cursor: "pointer",
+                minWidth: "180px",
+                outline: "none",
+              }}
+            >
+              <option value="all">All Subjects</option>
+              {subjects.map((s) => (
+                <option key={s.subject_id} value={s.subject_id}>
+                  {s.subject_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Topic dropdown — only when a subject is selected */}
+          {selSubjectId !== "all" && (
+            <>
+              <i
+                className="ph ph-caret-right"
+                style={{
+                  color: "#cbd5e1",
+                  fontSize: "16px",
+                  marginTop: "18px",
+                }}
+              />
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+              >
+                <label
+                  style={{
+                    fontSize: "11px",
+                    color: "#94a3b8",
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  Topic
+                </label>
+                <select
+                  value={selTopicId}
+                  onChange={(e) => setSelTopicId(e.target.value)}
+                  style={{
+                    border: "1.5px solid #e2e8f0",
+                    borderRadius: "10px",
+                    padding: "8px 14px",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    color: "#334155",
+                    background: "#fff",
+                    cursor: "pointer",
+                    minWidth: "180px",
+                    outline: "none",
+                  }}
+                >
+                  <option value="all">All Topics</option>
+                  {topicsForSubject.map((t) => (
+                    <option key={t.topic_id} value={t.topic_id}>
+                      {t.topic_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </>
+          )}
+
+          {/* Heading / breadcrumb */}
+          <div style={{ marginLeft: "auto", marginTop: "16px" }}>
+            <span
+              style={{ fontSize: "13px", fontWeight: 600, color: "#6366f1" }}
+            >
+              {heading}
+            </span>
+          </div>
+        </div>
+
+        {/* ── No data ── */}
+        {noData && (
+          <div
+            style={{ textAlign: "center", padding: "48px 0", color: "#94a3b8" }}
+          >
+            <i
+              className="ph ph-chart-bar"
+              style={{
+                fontSize: "48px",
+                display: "block",
+                marginBottom: "12px",
+              }}
+            />
+            No analysis data available yet
+          </div>
+        )}
+
+        {/* ── Bars ── */}
+        {!noData && barsToRender.length === 0 && (
+          <div
+            style={{ textAlign: "center", padding: "32px 0", color: "#94a3b8" }}
+          >
+            No data for this selection
+          </div>
+        )}
+
+        {!noData &&
+          barsToRender.map((row, i) => (
+            <DrillBar
+              key={i}
+              label={barLabel(row)}
+              accuracy={row.accuracy}
+              attempted={row.attempted}
+              correct={row.correct}
+              incorrect={row.incorrect}
+              clickable={false}
+              onClick={() => {}}
+            />
+          ))}
+      </div>
+    </div>
+  );
+}
+
+const TABS = [
+  "Overview",
+  "Quiz Results",
+  "Practice Results",
+  "Activity",
+  "Analysis",
+];
 
 export default function StudentProfile() {
   const { student_id } = useParams();
@@ -235,6 +544,8 @@ export default function StudentProfile() {
                 profile,
                 stats,
                 subjects,
+                topics = [],
+                subtopics = [],
                 strongest,
                 weakest,
                 quiz_results,
@@ -918,6 +1229,15 @@ export default function StudentProfile() {
                         )}
                       </div>
                     </div>
+                  )}
+
+                  {/* ══ ANALYSIS ══ */}
+                  {tab === "Analysis" && (
+                    <AnalysisTab
+                      subjects={subjects}
+                      topics={topics}
+                      subtopics={subtopics}
+                    />
                   )}
 
                   {/* ══ ACTIVITY ══ */}

@@ -9,8 +9,11 @@ import { getQuizResults, getAllBatch, getAllPhase } from "../../apis/apis";
 function QuizResultsTab() {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [testId, setTestId] = useState("");
+  const [testSearch, setTestSearch] = useState("");
+  const [testDropdownOpen, setTestDropdownOpen] = useState(false);
   const [batchId, setBatchId] = useState("");
   const [phaseId, setPhaseId] = useState("");
+  const [notAttempted, setNotAttempted] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 25;
 
@@ -35,12 +38,13 @@ function QuizResultsTab() {
   });
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ["quizResults", testId, batchId, phaseId, page],
+    queryKey: ["quizResults", testId, batchId, phaseId, notAttempted, page],
     queryFn: () =>
       getQuizResults({
         test_id: testId,
         batch_id: batchId,
         phase_id: phaseId,
+        not_attempted: notAttempted ? "1" : undefined,
         page,
         limit,
       }),
@@ -51,6 +55,7 @@ function QuizResultsTab() {
 
   const tests = testsData?.tests || [];
   const rows = data?.data || [];
+  const isNotAttemptedMode = data?.not_attempted === true;
   const { total = 0, totalPages = 1 } = data?.pagination || {};
 
   // Batches/phases specifically assigned this test
@@ -96,10 +101,19 @@ function QuizResultsTab() {
 
   const handleTestChange = (val) => {
     setTestId(val);
+    setTestSearch("");
     setBatchId("");
     setPhaseId("");
+    setNotAttempted(false);
     setPage(1);
   };
+
+  const uniqueTests = [...new Map(tests.map((t) => [t.id, t])).values()];
+  const filteredTests = testSearch
+    ? uniqueTests.filter((t) =>
+        t.test_name.toLowerCase().includes(testSearch.toLowerCase()),
+      )
+    : uniqueTests;
 
   return (
     <>
@@ -174,26 +188,120 @@ function QuizResultsTab() {
                   >
                     Quiz / Test
                   </label>
-                  <select
-                    className="form-select rounded-8"
-                    style={{
-                      height: "40px",
-                      fontSize: "14px",
-                      border: "1.5px solid #e2e8f0",
-                      background: "#f8fafc",
-                    }}
-                    value={testId}
-                    onChange={(e) => handleTestChange(e.target.value)}
-                  >
-                    <option value="">Select a quiz...</option>
-                    {[...new Map(tests.map((t) => [t.id, t])).values()].map(
-                      (t) => (
-                        <option key={t.id} value={t.id}>
-                          {t.test_name}
-                        </option>
-                      ),
+                  <div style={{ position: "relative" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        border: "1.5px solid #e2e8f0",
+                        borderRadius: "8px",
+                        background: "#f8fafc",
+                        height: "40px",
+                        padding: "0 10px",
+                        gap: "6px",
+                      }}
+                    >
+                      <i className="ph ph-magnifying-glass text-gray-400 text-14" />
+                      <input
+                        type="text"
+                        placeholder={
+                          testId
+                            ? uniqueTests.find((t) => String(t.id) === testId)
+                                ?.test_name || "Search quiz..."
+                            : "Search quiz..."
+                        }
+                        value={testSearch}
+                        onChange={(e) => {
+                          setTestSearch(e.target.value);
+                          setTestDropdownOpen(true);
+                        }}
+                        onFocus={() => {
+                          if (testId) {
+                            setTestId("");
+                            setTestSearch("");
+                          }
+                          setTestDropdownOpen(true);
+                        }}
+                        onBlur={() =>
+                          setTimeout(() => setTestDropdownOpen(false), 150)
+                        }
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          outline: "none",
+                          flex: 1,
+                          fontSize: "14px",
+                          color: "#374151",
+                        }}
+                      />
+                      {(testSearch || testId) && (
+                        <button
+                          onClick={() => {
+                            setTestId("");
+                            setTestSearch("");
+                            setBatchId("");
+                            setPhaseId("");
+                            setPage(1);
+                          }}
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                            padding: 0,
+                            color: "#9ca3af",
+                          }}
+                        >
+                          <i className="ph ph-x text-12" />
+                        </button>
+                      )}
+                    </div>
+                    {testDropdownOpen && !testId && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "44px",
+                          left: 0,
+                          right: 0,
+                          background: "#fff",
+                          border: "1.5px solid #e2e8f0",
+                          borderRadius: "8px",
+                          zIndex: 100,
+                          maxHeight: "220px",
+                          overflowY: "auto",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                        }}
+                      >
+                        {filteredTests.length === 0 ? (
+                          <div className="text-13 text-gray-400 px-12 py-10">
+                            No quizzes found
+                          </div>
+                        ) : (
+                          filteredTests.map((t) => (
+                            <div
+                              key={t.id}
+                              onMouseDown={() => handleTestChange(String(t.id))}
+                              style={{
+                                padding: "9px 12px",
+                                fontSize: "13px",
+                                cursor: "pointer",
+                                borderBottom: "1px solid #f1f5f9",
+                                color: "#374151",
+                              }}
+                              onMouseEnter={(e) =>
+                                (e.currentTarget.style.background = "#f8fafc")
+                              }
+                              onMouseLeave={(e) =>
+                                (e.currentTarget.style.background =
+                                  "transparent")
+                              }
+                            >
+                              {t.test_name}
+                            </div>
+                          ))
+                        )}
+                      </div>
                     )}
-                  </select>
+                  </div>
                 </div>
                 <div className="col-lg-3 col-md-6">
                   <label
@@ -260,8 +368,34 @@ function QuizResultsTab() {
                     )}
                   </select>
                 </div>
-                {(batchId || phaseId) && (
-                  <div className="col-auto">
+                <div className="col-auto d-flex align-items-end gap-8">
+                  {/* Not Attempted toggle */}
+                  {testId && (
+                    <button
+                      className="btn rounded-8 fw-medium"
+                      style={{
+                        height: "40px",
+                        background: notAttempted ? "#fef3c7" : "#f1f5f9",
+                        color: notAttempted ? "#b45309" : "#64748b",
+                        border: notAttempted
+                          ? "1.5px solid #fbbf24"
+                          : "1.5px solid #e2e8f0",
+                        fontSize: "13px",
+                        padding: "0 16px",
+                        whiteSpace: "nowrap",
+                      }}
+                      onClick={() => {
+                        setNotAttempted((p) => !p);
+                        setPage(1);
+                      }}
+                    >
+                      <i
+                        className={`ph ${notAttempted ? "ph-eye-slash" : "ph-user-minus"} me-6`}
+                      />
+                      Not Attempted
+                    </button>
+                  )}
+                  {(batchId || phaseId) && (
                     <button
                       className="btn rounded-8 fw-medium"
                       style={{
@@ -271,7 +405,6 @@ function QuizResultsTab() {
                         border: "none",
                         fontSize: "13px",
                         padding: "0 16px",
-                        marginTop: "22px",
                       }}
                       onClick={() => {
                         setBatchId("");
@@ -281,8 +414,8 @@ function QuizResultsTab() {
                     >
                       <i className="ph ph-x me-4 text-12" /> Clear
                     </button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -306,6 +439,14 @@ function QuizResultsTab() {
                 <p className="text-14 text-gray-600 mb-0">
                   {isFetching && !isLoading ? (
                     <span className="text-gray-400">Updating...</span>
+                  ) : notAttempted ? (
+                    <>
+                      <strong>{total.toLocaleString()}</strong> student
+                      {total !== 1 ? "s" : ""}{" "}
+                      <span className="text-warning-600 fw-semibold">
+                        not attempted
+                      </span>
+                    </>
                   ) : (
                     <>
                       <strong>{total.toLocaleString()}</strong> student
@@ -321,76 +462,145 @@ function QuizResultsTab() {
               <div style={{ overflowX: "auto" }}>
                 <table className="table table-hover mb-0">
                   <thead className="bg-gray-50">
-                    <tr>
-                      <th className="text-12 text-gray-500 fw-medium py-12 px-16">
-                        #
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12">
-                        Student
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12">
-                        College
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12">
-                        Batch
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12">
-                        Phase
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12 text-center">
-                        Correct
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12 text-center">
-                        Wrong
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12 text-center">
-                        Skipped
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12 text-center">
-                        Marks
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12 text-center">
-                        Score %
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12 text-center">
-                        Accuracy
-                      </th>
-                      <th className="text-12 text-gray-500 fw-medium py-12">
-                        Submitted
-                      </th>
-                    </tr>
+                    {notAttempted ? (
+                      <tr>
+                        <th className="text-12 text-gray-500 fw-medium py-12 px-16">
+                          #
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12">
+                          Student
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12">
+                          College
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12">
+                          Batch
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12">
+                          Phase
+                        </th>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <th className="text-12 text-gray-500 fw-medium py-12 px-16">
+                          #
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12">
+                          Student
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12">
+                          College
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12">
+                          Batch
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12">
+                          Phase
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12 text-center">
+                          Correct
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12 text-center">
+                          Wrong
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12 text-center">
+                          Skipped
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12 text-center">
+                          Marks
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12 text-center">
+                          Score %
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12 text-center">
+                          Accuracy
+                        </th>
+                        <th className="text-12 text-gray-500 fw-medium py-12">
+                          Submitted
+                        </th>
+                      </tr>
+                    )}
                   </thead>
                   <tbody>
                     {isLoading &&
                       Array.from({ length: 8 }).map((_, i) => (
                         <tr key={i}>
-                          {Array.from({ length: 12 }).map((__, j) => (
-                            <td key={j} className="py-12 px-16">
-                              <div
-                                className="bg-gray-100 rounded"
-                                style={{
-                                  height: "14px",
-                                  width: j === 0 ? "24px" : "80%",
-                                }}
-                              />
-                            </td>
-                          ))}
+                          {Array.from({ length: notAttempted ? 5 : 12 }).map(
+                            (__, j) => (
+                              <td key={j} className="py-12 px-16">
+                                <div
+                                  className="bg-gray-100 rounded"
+                                  style={{
+                                    height: "14px",
+                                    width: j === 0 ? "24px" : "80%",
+                                  }}
+                                />
+                              </td>
+                            ),
+                          )}
                         </tr>
                       ))}
 
                     {!isLoading && rows.length === 0 && (
                       <tr>
                         <td
-                          colSpan={12}
+                          colSpan={notAttempted ? 5 : 12}
                           className="text-center text-gray-400 py-48"
                         >
                           <i className="ph ph-users text-48 d-block mb-12 text-gray-300" />
-                          No results found for selected filters
+                          {notAttempted
+                            ? "All assigned students have attempted this quiz"
+                            : "No results found for selected filters"}
                         </td>
                       </tr>
                     )}
 
                     {!isLoading &&
+                      notAttempted &&
+                      rows.map((row, i) => (
+                        <tr
+                          key={row.std_id}
+                          className={isFetching ? "opacity-50" : ""}
+                        >
+                          <td className="text-13 text-gray-400 fw-medium py-12 px-16">
+                            {(page - 1) * limit + i + 1}
+                          </td>
+                          <td className="py-12">
+                            <div className="text-13 fw-semibold text-gray-800">
+                              {row.student_name}
+                            </div>
+                            {row.mobile_no && (
+                              <div className="text-12 text-gray-400 mt-2">
+                                {row.mobile_no}
+                              </div>
+                            )}
+                          </td>
+                          <td
+                            className="text-13 text-gray-500 py-12"
+                            style={{
+                              maxWidth: "160px",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {row.college || "—"}
+                          </td>
+                          <td className="py-12">
+                            <span className="text-12 bg-main-50 text-main-700 py-2 px-8 rounded-pill fw-medium">
+                              {row.batch_title || "—"}
+                            </span>
+                          </td>
+                          <td className="py-12">
+                            <span className="text-12 bg-info-50 text-info-700 py-2 px-8 rounded-pill fw-medium">
+                              {row.phase_title || "—"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+
+                    {!isLoading &&
+                      !notAttempted &&
                       rows.map((row, i) => (
                         <tr
                           key={row.id}
@@ -399,8 +609,15 @@ function QuizResultsTab() {
                           <td className="text-13 text-gray-400 fw-medium py-12 px-16">
                             {total - ((page - 1) * limit + i)}
                           </td>
-                          <td className="text-13 fw-semibold text-gray-800 py-12">
-                            {row.student_name}
+                          <td className="py-12">
+                            <div className="text-13 fw-semibold text-gray-800">
+                              {row.student_name}
+                            </div>
+                            {row.mobile_no && (
+                              <div className="text-12 text-gray-400 mt-2">
+                                {row.mobile_no}
+                              </div>
+                            )}
                           </td>
                           <td
                             className="text-13 text-gray-500 py-12"

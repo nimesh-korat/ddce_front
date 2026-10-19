@@ -123,41 +123,52 @@ function AdminSidebar({ isActive, closeSidebar }) {
         <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
           <div className="p-20 pt-10">
             <ul className="sidebar-menu">
+              {/* Dashboard */}
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Dashboard" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Dashboard" ? "activePage" : ""}`}
               >
-                <Link to="/admin/dashboard" className="sidebar-menu__link ">
+                <Link to="/admin/dashboard" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-squares-four" />
                   </span>
                   <span className="text">Dashboard</span>
                 </Link>
               </li>
+
+              {/* Students */}
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Student Answers" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Students" ? "activePage" : ""}`}
               >
                 <Link
-                  to="/admin/studentAnswers"
-                  className="sidebar-menu__link "
+                  to="/admin/viewStudentWiseGivenExamData"
+                  className="sidebar-menu__link"
                 >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-users" />
+                  </span>
+                  <span className="text">Students</span>
+                </Link>
+              </li>
+
+              {/* Student Answers */}
+              <li
+                className={`sidebar-menu__item ${activeItem === "Student Answers" ? "activePage" : ""}`}
+              >
+                <Link to="/admin/studentAnswers" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-table" />
                   </span>
                   <span className="text">Student Answers</span>
                 </Link>
               </li>
+
+              {/* Question Analytics */}
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Question Analytics" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Question Analytics" ? "activePage" : ""}`}
               >
                 <Link
                   to="/admin/questionAnalytics"
-                  className="sidebar-menu__link "
+                  className="sidebar-menu__link"
                 >
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-chart-pie" />
@@ -165,165 +176,60 @@ function AdminSidebar({ isActive, closeSidebar }) {
                   <span className="text">Question Analytics</span>
                 </Link>
               </li>
+
+              {/* Add Questions */}
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Doodle / Occasions" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Add Questions" ? "activePage" : ""}`}
               >
-                <Link to="/admin/doodle" className="sidebar-menu__link ">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-paint-brush" />
-                  </span>
-                  <span className="text">Doodle / Occasions</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Student Notifications" ? "activePage" : ""
-                } `}
-              >
-                <Link to="/admin/studNotify" className="sidebar-menu__link ">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-bell-ringing" />
-                  </span>
-                  <span className="text">Student Notifications</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Materials" ? "activePage" : ""
-                } `}
-              >
-                <Link to="/admin/materials" className="sidebar-menu__link ">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-files" />
-                  </span>
-                  <span className="text">Materials</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Add Questions" ? "activePage" : ""
-                } `}
-              >
-                <Link to="/admin/addQuestion" className="sidebar-menu__link ">
+                <Link to="/admin/addQuestion" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-question-mark" />
                   </span>
-                  <span className="text">Add Question</span>
+                  <span className="text">Add Questions</span>
                 </Link>
               </li>
+
+              {/* Create Quiz */}
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Show Questions" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Add Test" ? "activePage" : ""}`}
               >
-                <Link to="/admin/showQuestions" className="sidebar-menu__link ">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-list-bullets" />
-                  </span>
-                  <span className="text">Show Questions</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Add Test" ? "activePage" : ""
-                } `}
-              >
-                <Link to="/admin/createTest" className="sidebar-menu__link ">
+                <Link to="/admin/createTest" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-article-ny-times" />
                   </span>
                   <span className="text">Create Quiz</span>
                 </Link>
               </li>
+
+              {/* Show Quiz */}
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Show Test" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Show Test" ? "activePage" : ""}`}
               >
-                <Link to="/admin/showTests" className="sidebar-menu__link ">
+                <Link to="/admin/showTests" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-blueprint" />
                   </span>
                   <span className="text">Show Quiz</span>
                 </Link>
               </li>
+
+              {/* Quiz Results */}
               <li
-                className={`sidebar-menu__item ${activeItem === "Quiz Results" ? "activePage" : ""} `}
+                className={`sidebar-menu__item ${activeItem === "Quiz Results" ? "activePage" : ""}`}
               >
-                <Link to="/admin/quizResults" className="sidebar-menu__link ">
+                <Link to="/admin/quizResults" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-chart-bar" />
                   </span>
                   <span className="text">Quiz Results</span>
                 </Link>
               </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Add Session" ? "activePage" : ""
-                } `}
-              >
-                <Link to="/admin/addSession" className="sidebar-menu__link ">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-blueprint" />
-                  </span>
-                  <span className="text">Add Session</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Show Session" ? "activePage" : ""
-                } `}
-              >
-                <Link to="/admin/showSession" className="sidebar-menu__link ">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-blueprint" />
-                  </span>
-                  <span className="text">Show Session</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Given Exam Data" ? "activePage" : ""
-                } `}
-              >
-                <Link
-                  to="/admin/viewGivenExamData"
-                  className="sidebar-menu__link "
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-blueprint" />
-                  </span>
-                  <span className="text">Given Exam Data</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Students" ? "activePage" : ""
-                } `}
-              >
-                <Link
-                  to="/admin/viewStudentWiseGivenExamData"
-                  className="sidebar-menu__link "
-                >
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-blueprint" />
-                  </span>
-                  <span className="text">Students</span>
-                </Link>
-              </li>
 
-              {/* Practice — Admin */}
+              {/* Manage Practice */}
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Assign Practice" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Assign Practice" ? "activePage" : ""}`}
               >
-                <Link
-                  to="/admin/assignPractice"
-                  className="sidebar-menu__link "
-                >
+                <Link to="/admin/assignPractice" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-barbell" />
                   </span>
@@ -331,103 +237,198 @@ function AdminSidebar({ isActive, closeSidebar }) {
                 </Link>
               </li>
 
+              {/* Doodle / Occasions */}
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Batch Access" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Doodle / Occasions" ? "activePage" : ""}`}
               >
-                <Link to="/admin/batchAccess" className="sidebar-menu__link ">
+                <Link to="/admin/doodle" className="sidebar-menu__link">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-paint-brush" />
+                  </span>
+                  <span className="text">Doodle / Occasions</span>
+                </Link>
+              </li>
+
+              {/* Student Notifications */}
+              <li
+                className={`sidebar-menu__item ${activeItem === "Student Notifications" ? "activePage" : ""}`}
+              >
+                <Link to="/admin/studNotify" className="sidebar-menu__link">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-bell-ringing" />
+                  </span>
+                  <span className="text">Student Notifications</span>
+                </Link>
+              </li>
+
+              {/* Show Questions */}
+              <li
+                className={`sidebar-menu__item ${activeItem === "Show Questions" ? "activePage" : ""}`}
+              >
+                <Link to="/admin/showQuestions" className="sidebar-menu__link">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-list-bullets" />
+                  </span>
+                  <span className="text">Show Questions</span>
+                </Link>
+              </li>
+
+              {/* Fees Reminder */}
+              <li
+                className={`sidebar-menu__item ${activeItem === "Fees Reminder" ? "activePage" : ""}`}
+              >
+                <Link to="/admin/feesReminder" className="sidebar-menu__link">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-money" />
+                  </span>
+                  <span className="text">Fees Reminder</span>
+                </Link>
+              </li>
+
+              {/* Materials */}
+              <li
+                className={`sidebar-menu__item ${activeItem === "Materials" ? "activePage" : ""}`}
+              >
+                <Link to="/admin/materials" className="sidebar-menu__link">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-files" />
+                  </span>
+                  <span className="text">Material</span>
+                </Link>
+              </li>
+
+              {/* Add Session */}
+              <li
+                className={`sidebar-menu__item ${activeItem === "Add Session" ? "activePage" : ""}`}
+              >
+                <Link to="/admin/addSession" className="sidebar-menu__link">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-plus-circle" />
+                  </span>
+                  <span className="text">Add Session</span>
+                </Link>
+              </li>
+
+              {/* Show Session */}
+              <li
+                className={`sidebar-menu__item ${activeItem === "Show Session" ? "activePage" : ""}`}
+              >
+                <Link to="/admin/showSession" className="sidebar-menu__link">
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-list-dashes" />
+                  </span>
+                  <span className="text">Show Session</span>
+                </Link>
+              </li>
+
+              {/* Given Exam Data */}
+              <li
+                className={`sidebar-menu__item ${activeItem === "Given Exam Data" ? "activePage" : ""}`}
+              >
+                <Link
+                  to="/admin/viewGivenExamData"
+                  className="sidebar-menu__link"
+                >
+                  <span className="icon d-flex align-items-center">
+                    <i className="ph ph-clipboard-text" />
+                  </span>
+                  <span className="text">Given Exam Data</span>
+                </Link>
+              </li>
+
+              {/* Batch Access */}
+              <li
+                className={`sidebar-menu__item ${activeItem === "Batch Access" ? "activePage" : ""}`}
+              >
+                <Link to="/admin/batchAccess" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-shield-check" />
                   </span>
                   <span className="text">Batch Access</span>
                 </Link>
               </li>
+
+              {/* Student Count */}
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Student Count" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Student Count" ? "activePage" : ""}`}
               >
-                <Link to="/admin/studentCount" className="sidebar-menu__link ">
+                <Link to="/admin/studentCount" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-users-three" />
                   </span>
                   <span className="text">Student Count</span>
                 </Link>
               </li>
+
+              {/* Attendance */}
               <li
-                className={`sidebar-menu__item ${
-                  activeItem === "Attendance" ? "activePage" : ""
-                } `}
+                className={`sidebar-menu__item ${activeItem === "Attendance" ? "activePage" : ""}`}
               >
-                <Link to="/admin/attendance" className="sidebar-menu__link ">
+                <Link to="/admin/attendance" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-calendar-check" />
                   </span>
                   <span className="text">Attendance</span>
                 </Link>
               </li>
+
+              {/* Topic Groups */}
               <li
-                className={`sidebar-menu__item ${activeItem === "Topic Groups" ? "activePage" : ""} `}
+                className={`sidebar-menu__item ${activeItem === "Topic Groups" ? "activePage" : ""}`}
               >
-                <Link to="/admin/topicGroups" className="sidebar-menu__link ">
+                <Link to="/admin/topicGroups" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-folders" />
                   </span>
                   <span className="text">Topic Groups</span>
                 </Link>
               </li>
+
+              {/* Doubts */}
               <li
-                className={`sidebar-menu__item ${activeItem === "Doubts" ? "activePage" : ""} `}
+                className={`sidebar-menu__item ${activeItem === "Doubts" ? "activePage" : ""}`}
               >
-                <Link to="/admin/doubts" className="sidebar-menu__link ">
+                <Link to="/admin/doubts" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-question" />
                   </span>
                   <span className="text">Doubts</span>
                 </Link>
               </li>
+
+              {/* Mentor Subjects */}
               <li
-                className={`sidebar-menu__item ${activeItem === "Mentor Subjects" ? "activePage" : ""} `}
+                className={`sidebar-menu__item ${activeItem === "Mentor Subjects" ? "activePage" : ""}`}
               >
-                <Link
-                  to="/admin/mentorSubjects"
-                  className="sidebar-menu__link "
-                >
+                <Link to="/admin/mentorSubjects" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-chalkboard-teacher" />
                   </span>
                   <span className="text">Mentor Subjects</span>
                 </Link>
               </li>
+
+              {/* Exam Types */}
               <li
-                className={`sidebar-menu__item ${activeItem === "Exam Types" ? "activePage" : ""} `}
+                className={`sidebar-menu__item ${activeItem === "Exam Types" ? "activePage" : ""}`}
               >
-                <Link to="/admin/examType" className="sidebar-menu__link ">
+                <Link to="/admin/examType" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-exam" />
                   </span>
                   <span className="text">Exam Types</span>
                 </Link>
               </li>
+
+              {/* Assign Exam Types */}
               <li
-                className={`sidebar-menu__item ${activeItem === "Assign Exam Type" ? "activePage" : ""} `}
+                className={`sidebar-menu__item ${activeItem === "Assign Exam Type" ? "activePage" : ""}`}
               >
-                <Link to="/admin/examAssign" className="sidebar-menu__link ">
+                <Link to="/admin/examAssign" className="sidebar-menu__link">
                   <span className="icon d-flex align-items-center">
                     <i className="ph ph-user-gear" />
                   </span>
-                  <span className="text">Assign Exam Type</span>
-                </Link>
-              </li>
-              <li
-                className={`sidebar-menu__item ${activeItem === "Fees Reminder" ? "activePage" : ""} `}
-              >
-                <Link to="/admin/feesReminder" className="sidebar-menu__link ">
-                  <span className="icon d-flex align-items-center">
-                    <i className="ph ph-money" />
-                  </span>
-                  <span className="text">Fees Reminder</span>
+                  <span className="text">Assign Exam Types</span>
                 </Link>
               </li>
             </ul>
