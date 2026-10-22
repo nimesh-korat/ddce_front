@@ -76,7 +76,7 @@ function AddSession() {
               <ul className="flex-align gap-4">
                 <li>
                   <Link
-                    to={"/admin"}
+                    to={"/admin/dashboard"}
                     className="text-gray-200 fw-normal text-15 hover-text-main-600"
                   >
                     Home

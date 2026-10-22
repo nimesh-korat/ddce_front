@@ -93,8 +93,8 @@ function ViewGivenExamData() {
             key === "obtained_marks"
               ? user.exam_data?.obtained_marks
               : key === "result_generated_on"
-              ? user.exam_data?.result_generated_on
-              : user[key];
+                ? user.exam_data?.result_generated_on
+                : user[key];
 
           if (userValue === undefined || userValue === null) return false;
 
@@ -205,7 +205,7 @@ function ViewGivenExamData() {
             <ul className="flex-align gap-4">
               <li>
                 <Link
-                  to={"/admin"}
+                  to={"/admin/dashboard"}
                   className="text-gray-200 fw-normal text-15 hover-text-main-600"
                 >
                   Home
@@ -299,7 +299,7 @@ function ViewGivenExamData() {
                                 onChange={(e) =>
                                   handleFilterChange(
                                     "phone_number",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                               />
@@ -314,7 +314,7 @@ function ViewGivenExamData() {
                                 onChange={(e) =>
                                   handleFilterChange(
                                     "whatsapp_number",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                               />
@@ -341,7 +341,7 @@ function ViewGivenExamData() {
                                 onChange={(e) =>
                                   handleFilterChange(
                                     "enrollment_no",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                               />
@@ -356,7 +356,7 @@ function ViewGivenExamData() {
                                 onChange={(e) =>
                                   handleFilterChange(
                                     "college_name",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                               />
@@ -371,7 +371,7 @@ function ViewGivenExamData() {
                                 onChange={(e) =>
                                   handleFilterChange(
                                     "branch_name",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                               />
@@ -398,7 +398,7 @@ function ViewGivenExamData() {
                                 onChange={(e) =>
                                   handleFilterChange(
                                     "registration_time",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                               />
@@ -413,7 +413,7 @@ function ViewGivenExamData() {
                                 onChange={(e) =>
                                   handleFilterChange(
                                     "isAttempted",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                               />
@@ -428,7 +428,7 @@ function ViewGivenExamData() {
                                 onChange={(e) =>
                                   handleFilterChange(
                                     "obtained_marks",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                               />
@@ -444,7 +444,7 @@ function ViewGivenExamData() {
                                 onChange={(e) =>
                                   handleFilterChange(
                                     "result_generated_on",
-                                    e.target.value
+                                    e.target.value,
                                   )
                                 }
                               />
@@ -473,7 +473,7 @@ function ViewGivenExamData() {
                                 <td>{user.semester || "N/A"}</td>
                                 <td>
                                   {new Date(
-                                    user.registration_time
+                                    user.registration_time,
                                   ).toLocaleString()}
                                 </td>
                                 <td className="text-center">
@@ -499,7 +499,7 @@ function ViewGivenExamData() {
                                 <td>
                                   {user.exam_data
                                     ? new Date(
-                                        user.exam_data.result_generated_on
+                                        user.exam_data.result_generated_on,
                                       ).toLocaleString()
                                     : "N/A"}
                                 </td>
