@@ -13,6 +13,7 @@ import {
   editPracticeBatchAssignment,
   togglePracticeVisibility,
   togglePracticeFeatured,
+  togglePracticeRandomized,
   deletePracticeBatchAssignment,
   getQuestionsForPractice,
   getMentorsList,
@@ -478,6 +479,16 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
       toast.error(err?.response?.data?.message || "Failed to toggle"),
   });
 
+  const toggleRandomizedMutation = useMutation({
+    mutationFn: (id) => togglePracticeRandomized(id),
+    onSuccess: (res) => {
+      toast.success(res.message);
+      queryClient.invalidateQueries(["practices"]);
+    },
+    onError: (err) =>
+      toast.error(err?.response?.data?.message || "Failed to toggle"),
+  });
+
   const deleteBatchMutation = useMutation({
     mutationFn: (id) => deletePracticeBatchAssignment(id),
     onSuccess: () => {
@@ -590,6 +601,7 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
         tbl_phase: editRow.tbl_phase || null,
         start_date: editRow.start_date || null,
         end_date: editRow.end_date || null,
+        is_randomized: editRow.is_randomized ? 1 : 0,
       },
     });
   };
@@ -1247,6 +1259,9 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                     Show to Students
                                   </th>
                                   <th className="text-12 text-gray-500 fw-medium py-10 text-center">
+                                    Randomize
+                                  </th>
+                                  <th className="text-12 text-gray-500 fw-medium py-10 text-center">
                                     Status
                                   </th>
                                   <th className="text-12 text-gray-500 fw-medium py-10 text-center">
@@ -1335,7 +1350,31 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                           />
                                         </td>
                                         <td />
-                                        <td />
+                                        {/* Randomize toggle in edit row */}
+                                        <td className="py-10 text-center">
+                                          <div className="form-check form-switch mb-0 d-flex justify-content-center">
+                                            <input
+                                              className="form-check-input"
+                                              type="checkbox"
+                                              role="switch"
+                                              checked={!!editRow?.is_randomized}
+                                              onChange={() =>
+                                                setEditRow((r) => ({
+                                                  ...r,
+                                                  is_randomized:
+                                                    !r.is_randomized,
+                                                }))
+                                              }
+                                            />
+                                          </div>
+                                          <span
+                                            className={`text-10 fw-medium ${editRow?.is_randomized ? "text-warning-600" : "text-gray-400"}`}
+                                          >
+                                            {editRow?.is_randomized
+                                              ? "On"
+                                              : "Off"}
+                                          </span>
+                                        </td>
                                         <td />
                                         <td className="text-center">
                                           <div className="flex-align gap-6 justify-content-center">
@@ -1410,6 +1449,37 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                               : "Off"}
                                           </span>
                                         </td>
+                                        {/* Randomize toggle */}
+                                        <td className="py-10 text-center">
+                                          <div className="form-check form-switch mb-0 d-flex justify-content-center">
+                                            <input
+                                              className="form-check-input"
+                                              type="checkbox"
+                                              role="switch"
+                                              checked={ba.is_randomized === 1}
+                                              onChange={() =>
+                                                toggleRandomizedMutation.mutate(
+                                                  ba.batch_assignment_id,
+                                                )
+                                              }
+                                              disabled={
+                                                toggleRandomizedMutation.isPending
+                                              }
+                                              title={
+                                                ba.is_randomized === 1
+                                                  ? "Disable randomization"
+                                                  : "Enable randomization"
+                                              }
+                                            />
+                                          </div>
+                                          <span
+                                            className={`text-10 fw-medium ${ba.is_randomized === 1 ? "text-warning-600" : "text-gray-400"}`}
+                                          >
+                                            {ba.is_randomized === 1
+                                              ? "On"
+                                              : "Off"}
+                                          </span>
+                                        </td>
                                         <td className="py-10 text-center">
                                           <span
                                             className={`text-11 py-2 px-8 rounded-pill fw-medium ${statusBadge(ba.status)}`}
@@ -1433,6 +1503,8 @@ function AssignPractice({ Sidebar, basePath = "/mentor" }) {
                                                   ),
                                                   start_date: ba.start_date,
                                                   end_date: ba.end_date,
+                                                  is_randomized:
+                                                    ba.is_randomized === 1,
                                                 })
                                               }
                                             >

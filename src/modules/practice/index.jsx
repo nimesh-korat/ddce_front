@@ -60,7 +60,8 @@ function Practice() {
     queryKey: ["wrongPracticeAnswers", activeSet?.batch_assignment_id],
     queryFn: () => getWrongPracticeAnswers(activeSet?.batch_assignment_id),
     enabled: view === "wrong" && !!activeSet?.batch_assignment_id,
-    staleTime: 30 * 1000,
+    staleTime: 0,
+    refetchOnMount: true,
   });
 
   // ── Submit answer mutation ───────────────────────────────────
@@ -68,6 +69,19 @@ function Practice() {
     mutationFn: (data) => submitPracticeAnswer(data),
     onSuccess: (res) => {
       setAnswerResult(res.data);
+      // Update activeSet stats in real time so the wrong-answer button
+      // and remaining count reflect the just-submitted answer immediately
+      const isCorrect = res.data?.is_correct === "1";
+      setActiveSet((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          attempted: (prev.attempted || 0) + 1,
+          remaining: Math.max(0, (prev.remaining || 1) - 1),
+          correct: (prev.correct || 0) + (isCorrect ? 1 : 0),
+          wrong: (prev.wrong || 0) + (isCorrect ? 0 : 1),
+        };
+      });
     },
     onError: (err) => {
       toast.error(err?.response?.data?.message || "Failed to submit answer");
@@ -96,6 +110,11 @@ function Practice() {
 
   const handleViewWrong = (set) => {
     setActiveSet(set);
+    // Invalidate so the wrong-answers list always loads fresh
+    queryClient.invalidateQueries([
+      "wrongPracticeAnswers",
+      set?.batch_assignment_id,
+    ]);
     setView("wrong");
   };
 
@@ -389,7 +408,6 @@ function Practice() {
                         >
                           <button
                             className="btn btn-sm rounded-pill flex-align fw-medium justify-content-center btn-danger"
-                           
                             onClick={() => {
                               setSearch("");
                               setSubjectFilter("");

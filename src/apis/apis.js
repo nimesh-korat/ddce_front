@@ -1254,6 +1254,18 @@ export async function togglePracticeFeatured(id) {
   }
 }
 
+export async function togglePracticeRandomized(id) {
+  try {
+    const response = await axiosInstance.put(
+      `/practice/assignments/${id}/toggle-randomized`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("togglePracticeRandomized() error", error);
+    throw error;
+  }
+}
+
 //?==================== BATCH ACCESS ====================
 export async function getBatchAccess(batch_id, phase_id = 1) {
   try {

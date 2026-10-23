@@ -60,10 +60,10 @@ function WrongAnswers({
     <MathJaxContext config={mathConfig}>
       <div className="d-flex flex-column gap-16">
         <div className="flex-between flex-wrap gap-8 col-sm-6 col-lg-2">
-          <p className="text-14 text-gray-600 mb-0">
+          {/* <p className="text-14 text-gray-600 mb-0">
             <strong>{data.length}</strong> wrong answer
             {data.length !== 1 ? "s" : ""}
-          </p>
+          </p> */}
         </div>
 
         {data.map((q, i) => (
