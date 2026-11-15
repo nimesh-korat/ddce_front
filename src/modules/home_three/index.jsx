@@ -257,7 +257,7 @@ function MyAnswersModal({ onClose }) {
                         style={{ whiteSpace: "nowrap" }}
                       >
                         {row.answered_on
-                          ? new Date(row.answered_on).toLocaleString("en-IN", {
+                          ? new Date(row.answered_on + " UTC").toLocaleString("en-IN", {
                               day: "2-digit",
                               month: "short",
                               hour: "2-digit",
